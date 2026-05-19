@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pai Pai Beauty | Club VIP</title>
+    <style>
+        :root {
+            --bg-principal: #121212;
+            --bg-card: #1E1E1E;
+            --fucsia-power: #FF007F;
+            --fucsia-glow: rgba(255, 0, 127, 0.3);
+            --texto-blanco: #FFFFFF;
+            --texto-mutado: #A0A0A0;
+            --borde: #2D2D2D;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-principal);
+            color: var(--texto-blanco);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 480px;
+            margin-bottom: 40px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0 20px 0;
+        }
+
+        header h1 {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        header h1 span {
+            color: var(--fucsia-power);
+            text-shadow: 0 0 10px var(--fucsia-glow);
+        }
+
+        header p {
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: 5px;
+            color: var(--texto-mutado);
+        }
+
+        .tabs {
+            display: flex;
+            background-color: var(--bg-card);
+            border: 1px solid var(--borde);
+            border-radius: 12px;
+            padding: 5px;
+            margin-bottom: 25px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            color: var(--texto-mutado);
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background-color: var(--fucsia-power);
+            color: var(--texto-blanco);
+            box-shadow: 0 4px 12px var(--fucsia-glow);
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .search-container {
+            background-color: var(--bg-card);
+            border: 1px solid var(--borde);
+            border-radius: 16px;
+            padding: 22px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+
+        .search-container h2 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .search-container p {
+            font-size: 13px;
+            color: var(--texto-mutado);
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .input-group input {
+            width: 100%;
+            background-color: var(--bg-principal);
+            border: 1px solid var(--borde);
+            border-radius: 10px;
+            padding: 14px 16px;
+            color: var(--texto-blanco);
+            font-size: 15px;
+            outline: none;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--fucsia-power);
+        }
+
+        .btn-buscar {
+            width: 100%;
+            background-color: var(--fucsia-power);
+            color: var(--texto-blanco);
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .loyalty-card {
+            display: none;
+            background-color: var(--bg-card);
+            border: 2px solid var(--fucsia-power);
+            border-radius: 20px;
+            padding: 25px 20px;
+            margin-top: 25px;
+            box-shadow: 0 0 20px var(--fucsia-glow);
+        }
+
+        .card-header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--borde);
+            padding-bottom: 15px;
+        }
+
+        .card-header .client-name {
+            font-size: 20px;
+            font-weight: 800;
+            text-transform: capitalize;
+        }
+
+        .card-header .status-tag {
+            display: inline-block;
+            background-color: rgba(255, 0, 127, 0.15);
+            color: var(--fucsia-power);
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-top: 5px;
+            letter-spacing: 1px;
+        }
+
+        .stamps-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stamp-slot {
+            aspect-ratio: 1;
+            background-color: var(--bg-principal);
+            border: 1px solid var(--borde);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            color: #444;
+            position: relative;
+        }
+
+        .stamp-slot.active {
+            border-color: var(--fucsia-power);
+            background-color: var(--fucsia-power);
+            color: var(--texto-blanco);
+            box-shadow: 0 0 10px var(--fucsia-glow);
+        }
+
+        .stamp-slot.active::before {
+            content: "✦";
+            font-size: 16px;
+        }
+
+        .stamp-slot.milestone {
+            border: 1px dashed var(--fucsia-power);
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--texto-mutado);
+        }
+
+        .progress-text strong {
+            color: var(--fucsia-power);
+        }
+
+        .error-message {
+            display: none;
+            color: #FF4D4D;
+            font-size: 13px;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .catalog-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .category-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--fucsia-power);
+            margin-top: 10px;
+            font-weight: 700;
+        }
+
+        .service-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--borde);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .service-info h3 {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .service-info p {
+            font-size: 12px;
+            color: var(--texto-mutado);
+            margin-top: 3px;
+        }
+
+        .service-price {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .agenda-footer {
+            background-color: var(--bg-card);
+            border: 1px solid var(--borde);
+            border-radius: 14px;
+            padding: 16px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .btn-whatsapp {
+            display: inline-block;
+            background-color: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            width: 100%;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        <header>
+            <h1>Pai Pai <span>Beauty</span></h1>
+            <p>Portal de Clientas</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('fidelizacion')">💖 Tarjeta VIP</button>
+            <button class="tab-btn" onclick="switchTab('catalogo')">✨ Menú & Turnos</button>
+        </div>
+
+        <div id="sec-fidelizacion" class="content-section active">
+            <div class="search-container">
+                <h2>Buscá tu Tarjeta Digital</h2>
+                <p>Ingresá tu nombre, apellido y los últimos 3 números de tu celu.</p>
+                
+                <div class="input-group">
+                    <input type="text" id="clientNameInput" placeholder="Ej: María Pérez 455">
+                    <div id="errorMessage" class="error-message"></div>
+                </div>
+                
+                <button class="btn-buscar" onclick="consultarProgreso()">Consultar</button>
+            </div>
+
+            <div id="loyaltyCard" class="loyalty-card">
+                <div class="card-header">
+                    <div class="client-name" id="displayClientName"></div>
+                    <div class="status-tag">Miembro Premium</div>
+                </div>
+                <div class="stamps-grid" id="stampsGrid"></div>
+                <div class="progress-text" id="progressText"></div>
+            </div>
+        </div>
+
+        <div id="sec-catalogo" class="content-section">
+            <div class="catalog-container">
+                <div class="category-title">Manicuría</div>
+                <div class="service-card"><div class="service-info"><h3>Esmaltado Semipermanente</h3><p>Limpieza de cutículas y color de larga duración.</p></div><div class="service-price">Consultar</div></div>
+                <div class="service-card"><div class="service-info"><h3>Soft Gel / Esculpidas</h3><p>Extensión estética con acabado ultra natural.</p></div><div class="service-price">Consultar</div></div>
+                <div class="category-title">Mirada</div>
+                <div class="service-card"><div class="service-info"><h3>Lash Lifting</h3><p>Curvatura y nutrición profunda para tus pestañas.</p></div><div class="service-price">Consultar</div></div>
+                
+                <div class="agenda-footer">
+                    <p>¿Querés agendar tu sesión para sumar un nuevo sello?</p>
+                    <a href="https://wa.me/5493804000000?text=Hola%20Dai!%20Quiero%20coordinar%20un%20turno." target="_blank" class="btn-whatsapp">Agendar por WhatsApp</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURACIÓN: Pegá acá tu ID largo de Google Sheets
+        const SHEET_ID = '1b2qrrO0enYZlhgYFZAnQr5fUcQpTavGNJ3rE28CGAw0'; 
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            if(tabName === 'fidelizacion') {
+                document.querySelectorAll('.tab-btn')[0].classList.add('active');
+                document.getElementById('sec-fidelizacion').classList.add('active');
+            } else {
+                document.querySelectorAll('.tab-btn')[1].classList.add('active');
+                document.getElementById('sec-catalogo').classList.add('active');
+            }
+        }
+
+        function normalizar(txt) {
+            return txt.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, ' ').trim();
+        }
+
+        async function consultarProgreso() {
+            const input = document.getElementById('clientNameInput').value;
+            const inputNorm = normalizar(input);
+            const errorElement = document.getElementById('errorMessage');
+            const cardElement = document.getElementById('loyaltyCard');
+
+            if(!inputNorm) {
+                errorElement.innerText = "Por favor, ingresá tus datos.";
+                errorElement.style.display = "block";
+                return;
+            }
+
+            errorElement.style.display = "none";
+            cardElement.style.display = "none";
+
+            try {
+                const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+                const response = await fetch(url);
+                if(!response.ok) throw new Error();
+                
+                const dataText = await response.text();
+                const filas = dataText.split('\n').map(f => f.split(','));
+                
+                let clientaEncontrada = null;
+
+                for(let i = 1; i < filas.length; i++) {
+                    if(!filas[i][0]) continue;
+                    let nombreSheet = filas[i][0].replace(/"/g, '');
+                    let sellosSheet = parseInt(filas[i][1].replace(/"/g, '')) || 0;
+
+                    if(normalizar(nombreSheet) === inputNorm) {
+                        clientaEncontrada = { nombre: nombreSheet, sellos: sellosSheet };
+                        break;
+                    }
+                }
+
+                if(clientaEncontrada) {
+                    document.getElementById('displayClientName').innerText = clientaEncontrada.nombre;
+                    renderCard(clientaEncontrada.sellos);
+                    cardElement.style.display = "block";
+                } else {
+                    errorElement.innerText = "Datos incorrectos. Recordá poner Nombre Apellido y los 3 números de tu celu. ¡O pedile a Dai que te dé de alta!";
+                    errorElement.style.display = "block";
+                }
+
+            } catch (e) {
+                errorElement.innerText = "Error de conexión. Intentá de nuevo en unos instantes.";
+                errorElement.style.display = "block";
+            }
+        }
+
+        function renderCard(sellos) {
+            const grid = document.getElementById('stampsGrid');
+            const txt = document.getElementById('progressText');
+            grid.innerHTML = "";
+
+            for(let i = 1; i <= 10; i++) {
+                const slot = document.createElement('div');
+                slot.classList.add('stamp-slot');
+                if(i === 5 || i === 10) slot.classList.add('milestone');
+                
+                if(i <= sellos) {
+                    slot.classList.add('active');
+                } else {
+                    slot.innerText = i;
+                }
+                grid.appendChild(slot);
+            }
+
+            if(sellos < 5) {
+                txt.innerHTML = `Llevás <strong>${sellos} de 10</strong> visitas.<br>¡Faltan ${5 - sellos} para tu mimo sorpresa intermedio!`;
+            } else if(sellos === 5) {
+                txt.innerHTML = `¡Llegaste al <strong>Hito 5</strong>!<br>Tenés un beneficio sorpresa listo para usar hoy. 🎁`;
+            } else if(sellos < 10) {
+                txt.innerHTML = `Llevás <strong>${sellos} de 10</strong> visitas.<br>Estás a ${10 - sellos} pasos de tu servicio GRATIS.`;
+            } else {
+                txt.innerHTML = `¡Tarjeta completa! 🌟<br>Reclamá tu <strong>Servicio GRATIS</strong> en tu visita de hoy.`;
+            }
+        }
+    </script>
+</body>
+</html>
