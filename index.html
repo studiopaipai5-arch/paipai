@@ -48,7 +48,7 @@
 
         header h1 {
             font-family: 'League Spartan', sans-serif;
-            font-size: 28px;
+            font-size: 30px;
             font-weight: 900;
             letter-spacing: 3px;
             text-transform: uppercase;
@@ -105,7 +105,7 @@
             flex: 1;
             background: none;
             border: none;
-            color: var(--texto-mutated);
+            color: var(--texto-mutado);
             padding: 14px;
             font-size: 12px;
             font-weight: 700;
@@ -244,26 +244,31 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 13px;
+            font-size: 14px;
             color: #3A3A3C;
-            font-weight: 600;
+            font-weight: 700;
+            transition: all 0.4s ease;
         }
 
+        /* Ajuste UX: Estrella gigante que abarca bien el círculo */
         .stamp-slot.active {
             border-color: var(--fucsia-power);
             background-color: var(--fucsia-power);
             color: var(--blanco-perla);
-            box-shadow: 0 0 12px var(--fucsia-glow);
+            box-shadow: 0 0 15px var(--fucsia-glow);
         }
 
         .stamp-slot.active::before {
-            content: "✦";
-            font-size: 16px;
+            content: "★";
+            font-size: 28px;
+            line-height: 1;
+            display: block;
+            margin-top: -2px;
         }
 
         .stamp-slot.gift-slot {
             border: 1px dashed var(--fucsia-power);
-            color: var(--fucsia-power);
+            font-size: 16px;
         }
 
         .progress-text {
@@ -540,6 +545,12 @@
             font-weight: 700;
         }
 
+        .breakdown-row style {
+            font-size: 11px; 
+            color: var(--texto-mutado); 
+            margin-top: 5px;
+        }
+
         .bank-details-card {
             border: 1px solid var(--borde);
             border-radius: 12px;
@@ -714,7 +725,7 @@
         <header>
             <h1>Pai Pai <span>Beauty</span></h1>
             <div class="ubi-badge">Zona Centro · 8 de Diciembre 1111, La Rioja</div><br>
-            <a href="https://maps.google.com/?q=8+de+Diciembre+1111,+La+Rioja,+Argentina" target="_blank" class="btn-gps">✦ Ver en mapa GPS</a>
+            <a href="https://maps.google.com/?q=8+de+Diciembre+1111,+F5300+La+Rioja" target="_blank" class="btn-gps">✦ Ver en mapa GPS</a>
         </header>
 
         <div class="tabs">
@@ -824,14 +835,14 @@
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxr4AHXTni_PlgC9v4iVOy1ZDsxQF4LFWnBoHrzgDSPosXR5bungwmAGrcz9Inn3zy2/exec';
         const WHATSAPP_BASE_URL = 'https://wa.me/message/F22HEMGFOBN6J1';
 
-        // BASE DE DATOS INYECTADA DE SERVICIOS Y FOTOS DIRECTAS (SIN ERRORES)
+        // BASE DE DATOS INYECTADA DE SERVICIOS - SEMI PIES UBICADO EN NAILS CORRECTAMENTE
         const baseServicios = [
             { cat: "NAILS", id: "softgel", name: "Soft Gel", price: 18500, time: 120, desc: "Incluye manicuría, aplicación de uñas soft gel, esmaltado semipermanente & diseño sencillo.", fotos: ["https://i.ibb.co/dSyvKSH/Softgelblanco.jpg", "https://i.ibb.co/YT4G2vPX/Softgel1.jpg", "https://i.ibb.co/0pfMQMkB/Softgel2.png", "https://i.ibb.co/0RDtRqw3/Softgel3.png", "https://i.ibb.co/m5jf27Jd/Softgel5.jpg"] },
             { cat: "NAILS", id: "capping", name: "Capping", price: 17500, time: 120, desc: "Incluye manicuría, Capping & esmaltado semipermanente con diseño sencillo. Tu uña natural, blindada. Protección de alta resistencia y brillo espejo.", fotos: ["https://i.ibb.co/QFd3k0Pd/Capping2.jpg", "https://i.ibb.co/7tCzy9Pp/Capping3.png", "https://i.ibb.co/x8tGD1W2/Capping.jpg"] },
             { cat: "NAILS", id: "semi", name: "Semi", price: 15000, time: 90, desc: "Color de alta gama y brillo duradero. Una manicuría técnica enfocada en la perfección del esmaltado para manos que buscan protagonismo diario.", fotos: ["https://i.ibb.co/JRjRkS6H/Semi4.jpg", "https://i.ibb.co/cPWrR3x/Semimanos1.png", "https://i.ibb.co/tMt107tz/Semi2.png", "https://i.ibb.co/gbN4d3v9/Semi3.jpg"] },
+            { cat: "NAILS", id: "semipies", name: "Semi pies", price: 15000, time: 90, desc: "Esmaltado de larga duración para pies impecables. Protección, color y un acabado profesional que resiste tu ritmo de vida.", fotos: ["https://i.ibb.co/Tqvy8Ycw/Semipies1.jpg"] },
             { cat: "NAILS", id: "presson", name: "Set Press on nails reutilizables", price: 16000, time: 5, desc: "Fácil aplicación (15 minutos). Ideales para cualquier tipo de evento. Duración hasta por 15 días. Sin reacciones alérgicas. Retiro súper fácil. Reutilizables.", fotos: ["https://i.ibb.co/DPfMbtbm/Presson2.jpg", "https://i.ibb.co/tp2vL9By/Presson4.jpg", "https://i.ibb.co/prGPW0nV/Presson1.jpg", "https://i.ibb.co/39kNwdVt/Presson3.jpg"] },
             
-            { cat: "REMOCIÓN", id: "semipies", name: "Semi pies", price: 15000, time: 90, desc: "Esmaltado de larga duración para pies impecables. Protección, color y un acabado profesional que resiste tu ritmo de vida.", fotos: ["https://i.ibb.co/Tqvy8Ycw/Semipies1.jpg"] },
             { cat: "REMOCIÓN", id: "retiradosemi", name: "Retirado de Semi/Capping", price: 6000, time: 25, desc: "Remoción técnica segura. Liberamos tu uña natural del producto anterior con suavidad, priorizando siempre la salud y nutrición de la placa.", fotos: ["https://i.ibb.co/k2zwqSP4/Retiradosemi.jpg"] },
             { cat: "REMOCIÓN", id: "retiradosoft", name: "Retirado de Soft Gel", price: 9000, time: 35, desc: "Remoción técnica segura. Liberamos tu uña natural del producto anterior con suavidad, priorizando siempre la salud y nutrición de la placa.", fotos: ["https://i.ibb.co/k2zwqSP4/Retiradosemi.jpg"] },
             
@@ -853,7 +864,6 @@
         let seleccionados = [];
         let horarioSeleccionado = null;
 
-        // Inicialización del Catálogo
         function renderCatalog() {
             const container = document.getElementById('servicesContainer');
             let html = "";
@@ -884,7 +894,6 @@
                 `;
             });
 
-            // Inyección de la sección FAQ al final
             html += `<div class="faq-section"><div class="faq-title">Información Importante</div>`;
             faqData.forEach((f, idx) => {
                 html += `
@@ -900,7 +909,6 @@
             container.innerHTML = html;
         }
 
-        // Lógica de Solapas
         function switchTab(tabName) {
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
@@ -916,7 +924,6 @@
             }
         }
 
-        // Control del Carrito de Servicios
         function toggleService(id) {
             const card = document.getElementById(`card-${id}`);
             const servicio = baseServicios.find(s => s.id === id);
@@ -945,7 +952,6 @@
             }
         }
 
-        // Lógica del Pop-Up de Galería de Fotos (Opción 2)
         function openGallery(id) {
             const servicio = baseServicios.find(s => s.id === id);
             const carousel = document.getElementById('modalCarousel');
@@ -965,14 +971,12 @@
             document.getElementById('galleryModal').classList.remove('active');
         }
 
-        // Lógica de Acordeón FAQ
         function toggleFaq(idx) {
             const content = document.getElementById(`faq-content-${idx}`);
             const isVisible = content.style.display === 'block';
             content.style.display = isVisible ? 'none' : 'block';
         }
 
-        // Copiado de un toque
         function copyData(text) {
             navigator.clipboard.writeText(text);
             const toast = document.getElementById('toast');
@@ -980,16 +984,15 @@
             setTimeout(() => { toast.style.display = 'none'; }, 2000);
         }
 
-        // --- APARTADO AGENDA INTEGRADA CON APPS SCRIPT (CEREBRO) ---
+        // CONTROL DE AGENDA CON PUENTE APPS SCRIPT
         async function procesarSeleccionHorario() {
-            // Eliminar contenedor de horarios viejo si existiera
             const oldHeadline = document.getElementById('headlineHorarios');
             if(oldHeadline) oldHeadline.remove();
             const oldGrid = document.getElementById('gridHorarios');
             if(oldGrid) oldGrid.remove();
 
             const btnAvanzar = document.getElementById('btnAvanzarTurno');
-            btnAvanzar.innerText = "Consultando Disponibilidad...";
+            btnAvanzar.innerText = "Buscando Bloques...";
             btnAvanzar.disabled = true;
 
             try {
@@ -1008,14 +1011,12 @@
                     grid.id = "gridHorarios";
                     grid.className = "slots-grid";
 
-                    // Filtro Inteligente del Guardián de 24 horas en el celular de la clienta
                     const ahora = new Date();
                     const limite24hs = new Date(ahora.getTime() + (24 * 60 * 60 * 1000));
 
                     let contTurnosVisibles = 0;
 
                     result.data.forEach(t => {
-                        // Procesamos la fecha del Sheets (formato DD/MM/AAAA)
                         const partesFecha = t.fecha.split('/');
                         const fechaFormateada = `${partesFecha[2]}-${partesFecha[1]}-${partesFecha[0]}T${t.hora}:00`;
                         const fechaTurno = new Date(fechaFormateada);
@@ -1035,21 +1036,19 @@
                         container.appendChild(grid);
                         btnAvanzar.innerText = "Confirmar Reserva";
                         btnAvanzar.onclick = ejecutarReservaBloqueada;
-                        
-                        // Scrollear automáticamente hacia los horarios
                         grid.scrollIntoView({ behavior: 'smooth' });
                     } else {
-                        alert("No se encontraron turnos disponibles con las 24hs de anticipación obligatorias.");
+                        alert("Por políticas de exclusividad, no hay turnos disponibles dentro de las próximas 24hs.");
                         btnAvanzar.innerText = "Seleccionar Horario";
                         btnAvanzar.onclick = procesarSeleccionHorario;
                     }
                 } else {
-                    alert("En este momento no hay bloques libres cargados en la agenda.");
+                    alert("No hay bloques libres cargados en la agenda para esta quincena.");
                     btnAvanzar.innerText = "Seleccionar Horario";
                     btnAvanzar.onclick = procesarSeleccionHorario;
                 }
             } catch(e) {
-                alert("Error de comunicación con el servidor de agenda.");
+                alert("Error de comunicación: Verifica que el Apps Script tenga el acceso configurado como 'Cualquiera' (Anyone).");
                 btnAvanzar.innerText = "Seleccionar Horario";
                 btnAvanzar.onclick = procesarSeleccionHorario;
             } finally {
@@ -1069,14 +1068,14 @@
                 return;
             }
 
-            const nombreClienta = prompt("Ingresá tu Nombre y Apellido para la reserva:");
+            const nombreClienta = prompt("Ingresá tu Nombre y Apellido para congelar el bloque:");
             if(!nombreClienta || nombreClienta.trim() === "") {
-                alert("El nombre es requerido para congelar el bloque.");
+                alert("El nombre es obligatorio para reservar.");
                 return;
             }
 
             const btnAvanzar = document.getElementById('btnAvanzarTurno');
-            btnAvanzar.innerText = "Bloqueando Turno...";
+            btnAvanzar.innerText = "Bloqueando...";
             btnAvanzar.disabled = true;
 
             const nombresServicios = seleccionados.map(s => s.name).join(', ');
@@ -1087,15 +1086,14 @@
                 const result = await response.json();
 
                 if(result.status === "success") {
-                    // Turno pasado a Pendiente con éxito. Abrimos Checkout.
                     horarioSeleccionado.clientaReal = nombreClienta;
                     abrirCheckout();
                 } else {
-                    alert("Este turno acaba de ser tomado por otra clienta. Por favor, selecciona una nueva opción.");
+                    alert("Este turno acaba de ser reservado por otra clienta. Selecciona otra opción.");
                     procesarSeleccionHorario();
                 }
             } catch(e) {
-                alert("Error de conexión al reservar el espacio.");
+                alert("Error al congelar el espacio en la base de datos.");
             } finally {
                 btnAvanzar.disabled = false;
             }
@@ -1134,7 +1132,7 @@
             window.open(finalLink, '_blank');
         }
 
-        // --- CÓDIGO DE SOLAPA FIDELIZACIÓN (CLUB VIP) ---
+        // SOLAPA FIDELIZACIÓN: REGALOS EN 4, 8 Y 10 CON ESTRELLAS GRANDES
         function normalizar(txt) {
             return txt.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, ' ').trim();
         }
@@ -1180,7 +1178,7 @@
                     renderCard(clientaEncontrada.sellos);
                     cardElement.style.display = "block";
                 } else {
-                    errorElement.innerText = "✦ Acceso Restringido: Este identificador no se encuentra en nuestro registro VIP activo. Si ya eres clienta del estudio, por favor solicita tu alta personalizada a Daiana por canales privados.";
+                    errorElement.innerText = "✦ Acceso Restringido: Este identificador no se encuentra en nuestro registro VIP activo. Si ya eres clienta del estudio, solicita tu alta por canales privados.";
                     errorElement.style.display = "block";
                 }
 
@@ -1199,23 +1197,26 @@
                 const slot = document.createElement('div');
                 slot.classList.add('stamp-slot');
                 
-                if(i === 8) {
+                // Mimos VIP en 4, 8 y 10
+                if(i === 4 || i === 8 || i === 10) {
                     slot.classList.add('gift-slot');
                     slot.innerText = "🎁";
                 } else {
                     slot.innerText = i;
                 }
 
+                // Si ya visitó, se transforma en la estrella gigante que llena el círculo
                 if(i <= sellos) {
                     slot.className = "stamp-slot active";
+                    slot.innerText = ""; 
                 }
                 grid.appendChild(slot);
             }
 
-            if(sellos < 5) {
-                txt.innerHTML = `Llevás <strong>${sellos} de 10</strong> visitas.<br>¡Faltan ${5 - sellos} para tu mimo sorpresa intermedio!`;
-            } else if(sellos === 5) {
-                txt.innerHTML = `¡Llegaste al <strong>Hito 5</strong>!<br>Tenés un beneficio sorpresa listo para usar hoy. 🎁`;
+            if(sellos < 4) {
+                txt.innerHTML = `Llevás <strong>${sellos} de 10</strong> visitas.<br>¡Faltan ${4 - sellos} para tu mimo sorpresa intermedio! 🎁`;
+            } else if(sellos === 4) {
+                txt.innerHTML = `¡Llegaste al <strong>Hito 4</strong>!<br>Tenés un beneficio sorpresa listo para usar hoy. 💝`;
             } else if(sellos < 8) {
                 txt.innerHTML = `Llevás <strong>${sellos} de 10</strong> visitas.<br>Estás a ${8 - sellos} pasos de tu obsequio físico exclusivo. 🎁`;
             } else if(sellos === 8) {
@@ -1223,12 +1224,12 @@
             } else if(sellos < 10) {
                 txt.innerHTML = `Llevás <strong>${sellos} de 10</strong> visitas.<br>Estás a solo ${10 - sellos} pasos de tu servicio GRATIS.`;
             } else {
-                txt.innerHTML = `¡Tarjeta completa! 🌟<br>Reclamá tu <strong>Servicio GRATIS</strong> en tu visita de hoy.`;
+                txt.innerHTML = `¡Tarjeta VIP completa! 🌟<br>Reclamá tu <strong>Servicio GRATIS</strong> en tu visita de hoy.`;
             }
         }
 
-        // Renderizar catálogo al cargar
         window.onload = renderCatalog;
     </script>
 </body>
 </html>
+
