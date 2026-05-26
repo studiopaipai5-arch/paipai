@@ -557,7 +557,7 @@
             <img src="https://i.ibb.co/7x5rV7Rg/Logo-PP-B.png" alt="Pai Pai" class="header-logo">
             <h1>Pai Pai <span>Beauty</span></h1>
             <div class="ubi-badge">Zona Centro · 8 de Diciembre 1111</div><br>
-            <a href="https://maps.app.goo.gl/ChIJtXJBWLHbJ5QRrHyjYeCjr40" target="_blank" class="btn-gps">✦ Ver Ubicación GPS</a>
+            <a href="https://maps.app.goo.gl/uP6gDqshhA5fCqD56" target="_blank" class="btn-gps">✦ Ver Ubicación GPS</a>
         </header>
 
         <div class="tabs">
@@ -617,7 +617,7 @@
             <div id="agendaFlow" style="display:none; margin-bottom:120px;">
                 <button class="btn-back-step" onclick="volverAlCatalogo()">← Volver al menú</button>
                 <div class="time-headline" id="titHorarios">Horarios Disponibles</div>
-                <span class="time-scarcity-msg">⏳ Cupos exclusivos y limitados para esta quincena. Asegurá tu bloque con anticipación.</span>
+                <span class="time-scarcity-msg">⏳ Cupos exclusivos y limitedos para esta quincena. Asegurá tu bloque con anticipación.</span>
                 <div class="skeleton-loader" id="skLoader"><div class="skeleton-block"></div><div class="skeleton-block"></div><div class="skeleton-block"></div></div>
                 <div class="slots-grid" id="gridHorarios"></div>
             </div>
@@ -669,7 +669,6 @@
     <script>
         const SHEET_ID = '1b2qrrO0enYZlhgYFZAnQr5fUcQpTavGNJ3rE28CGAw0'; 
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxvuH7InPFxg24EVMCiQuo9p0Djx0LKPfkTl2slLP-nXM07xgXtj2dNFerytQy9QsPdWw/exec';
-        const WHATSAPP_BASE_URL = 'https://wa.me/message/F22HEMGFOBN6J1';
 
         // BASE DE DATOS ACTUALIZADA CON SEMI PIES EN NAILS Y TAGS PREMIUM
         const baseServicios = [
@@ -988,7 +987,9 @@
             let total = seleccionados.reduce((acc, s) => acc + s.price, 0);
             let rest = total - 5000;
             let texto = `¡Hola Dai! Quiero confirmar mi turno. Elegí: ${seleccionados.map(s => s.name).join(', ')}. Para el día ${horarioSeleccionado.fecha} a las ${horarioSeleccionado.hora} hs. Nombre: ${horarioSeleccionado.clientaReal}. (Total: $${total.toLocaleString('es-AR')} / Seña: $5.000 / Saldo en estudio: $${rest.toLocaleString('es-AR')}). Acá te adjunto la captura de la transferencia.`;
-            window.open(`${WHATSAPP_BASE_URL}&text=${encodeURIComponent(texto)}`, '_blank');
+            
+            // Método blindado directo por número sin intermediarios
+            window.location.href = `https://api.whatsapp.com/send?phone=5493804235811&text=${encodeURIComponent(texto)}`;
         }
 
         // MOTOR CLUB VIP GAMIFICADO
