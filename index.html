@@ -244,11 +244,11 @@
 
         .input-group input {
             width: 100%;
-            background-color: var(--gris-galactico); /* Modificación Solicitada */
+            background-color: var(--gris-galactico);
             border: 2px solid transparent;
             border-radius: 12px;
             padding: 16px;
-            color: var(--bg-principal); /* Contraste oscuro sobre gris */
+            color: var(--bg-principal);
             font-size: 15px;
             font-weight: 600;
             outline: none;
@@ -360,7 +360,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(26, 26, 26, 0.75); /* Glassmorphism Activado */
+            background: rgba(26, 26, 26, 0.75);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255, 27, 167, 0.15);
@@ -457,7 +457,7 @@
             transform: translateX(-50%);
             width: 100%;
             max-width: 440px;
-            background: rgba(26, 26, 26, 0.75); /* Glassmorphism Activado */
+            background: rgba(26, 26, 26, 0.75);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border-top: 1px solid rgba(255, 27, 167, 0.15);
@@ -526,7 +526,7 @@
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
         .shake { animation: shake 0.4s ease-in-out; }
 
-        /* FOOTER ESCUDO confianza */
+        /* FOOTER ESCUDO CONFIANZA */
         footer { text-align: center; padding: 20px 0 40px 0; border-top: 1px solid var(--borde); margin-top: 20px; font-size: 9px; color: var(--texto-mutado); letter-spacing: 1px; line-height: 1.8; }
 
         /* CANVAS CONFETTI */
@@ -557,7 +557,7 @@
             <img src="https://i.ibb.co/7x5rV7Rg/Logo-PP-B.png" alt="Pai Pai" class="header-logo">
             <h1>Pai Pai <span>Beauty</span></h1>
             <div class="ubi-badge">Zona Centro · 8 de Diciembre 1111</div><br>
-            <a href="http://googleusercontent.com/maps.google.com/2" target="_blank" class="btn-gps">✦ Ver Ubicación GPS</a>
+            <a href="https://maps.app.goo.gl/ChIJtXJBWLHbJ5QRrHyjYeCjr40" target="_blank" class="btn-gps">✦ Ver Ubicación GPS</a>
         </header>
 
         <div class="tabs">
@@ -572,7 +572,7 @@
                 <div class="input-group">
                     <input type="text" id="clientNameInput" placeholder="Ej: María Pérez 455">
                 </div>
-                <span class="input-hint">*Escribilo tal cual te dimos de alta en el estudio para sincronizar tus mimos.</span>
+                <span class="input-hint">*Asegurate de escribirlo tal cual te dimos de alta en el estudio para sincronizar tus mimos.</span>
                 <button class="btn-buscar" id="btnSelloVIP" onclick="consultarProgreso()">Consultar Estatus</button>
             </div>
 
@@ -668,7 +668,7 @@
 
     <script>
         const SHEET_ID = '1b2qrrO0enYZlhgYFZAnQr5fUcQpTavGNJ3rE28CGAw0'; 
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzOuOHPh5Gl8IwEgXJswrhnTd3QwvqOB9aH4spVZTXLGCJFUjp8xksEI-quNTWnyQzPng/exec';
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxvuH7InPFxg24EVMCiQuo9p0Djx0LKPfkTl2slLP-nXM07xgXtj2dNFerytQy9QsPdWw/exec';
         const WHATSAPP_BASE_URL = 'https://wa.me/message/F22HEMGFOBN6J1';
 
         // BASE DE DATOS ACTUALIZADA CON SEMI PIES EN NAILS Y TAGS PREMIUM
@@ -786,7 +786,7 @@
                 `;
             });
 
-            // Inyección Informativa FAQ
+            // FAQ
             html += `<div class="faq-section"><div class="faq-title">Información Importante</div>`;
             faqData.forEach((f, idx) => {
                 html += `
@@ -991,7 +991,7 @@
             window.open(`${WHATSAPP_BASE_URL}&text=${encodeURIComponent(texto)}`, '_blank');
         }
 
-        // MOTOR CLUB VIP GAMIFICADO (CON ESTRELLAS POP & BARRA LÁSER)
+        // MOTOR CLUB VIP GAMIFICADO
         async function consultarProgreso() {
             const input = document.getElementById('clientNameInput').value;
             const btn = document.getElementById('btnSelloVIP');
