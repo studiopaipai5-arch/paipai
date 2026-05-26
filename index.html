@@ -10,19 +10,23 @@
             --bg-principal: #121212; /* Negro Grafito */
             --bg-card: #1A1A1A;
             --fucsia-power: #FF1BA7; /* Fucsia de Acción */
-            --fucsia-glow: rgba(255, 27, 167, 0.3);
+            --fucsia-glow: rgba(255, 27, 167, 0.35);
             --blanco-perla: #F8FAFC;
-            --gris-galactico: #E2E8F0;
-            --texto-mutado: #8E8E93;
+            --gris-galactico: #E8EEF5; /* Suavizado para accesibilidad */
+            --texto-mutado: #9A9A9F; /* Contraste mejorado */
             --borde: #2C2C2E;
         }
 
+        /* Suavizado de Fuentes Premium */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Montserrat', sans-serif;
             -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
         }
 
         body {
@@ -33,6 +37,7 @@
             align-items: flex-start;
             min-height: 100vh;
             padding: 20px 15px;
+            background: linear-gradient(135deg, #0A0A0A 0%, #121212 50%, #1A1A1A 100%);
         }
 
         .wrapper {
@@ -40,26 +45,114 @@
             max-width: 440px;
         }
 
-        /* Encabezado Estilo Boutique */
+        /* SPLASH SCREEN DE BIENVENIDA */
+        .splash-screen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #0A0A0A 0%, #121212 50%, #1A1A1A 100%);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            transition: opacity 0.8s ease;
+        }
+
+        .splash-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .splash-content {
+            text-align: center;
+            animation: contentEntrance 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes contentEntrance {
+            0% { opacity: 0; transform: scale(0.8) translateY(30px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .splash-logo {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px var(--fucsia-glow));
+            animation: logoPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes logoPulse {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(255, 27, 167, 0.4)); }
+            50% { filter: drop-shadow(0 0 35px rgba(255, 27, 167, 0.7)); }
+        }
+
+        .splash-claim {
+            font-family: 'League Spartan', sans-serif;
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--blanco-perla);
+            margin-bottom: 8px;
+        }
+
+        .splash-location {
+            font-size: 11px;
+            color: var(--texto-mutado);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+        }
+
+        .splash-loader {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .loader-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--fucsia-power);
+            border-radius: 50%;
+            animation: dotBounce 1.4s infinite ease-in-out;
+        }
+
+        .loader-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loader-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes dotBounce {
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.4; }
+            40% { transform: scale(1.3); opacity: 1; }
+        }
+
+        /* ENCABEZADO BOUTIQUE */
         header {
             text-align: center;
-            padding: 25px 0 15px 0;
+            padding: 20px 0 15px 0;
+        }
+
+        .header-logo {
+            width: 85px;
+            height: 85px;
+            object-fit: contain;
+            margin: 0 auto 15px;
+            filter: drop-shadow(0 0 10px rgba(255, 27, 167, 0.2));
+            animation: contentEntrance 0.8s ease;
         }
 
         header h1 {
             font-family: 'League Spartan', sans-serif;
-            font-size: 30px;
+            font-size: 28px;
             font-weight: 900;
             letter-spacing: 3px;
             text-transform: uppercase;
             color: var(--blanco-perla);
         }
 
-        header h1 span {
-            color: var(--fucsia-power);
-        }
+        header h1 span { color: var(--fucsia-power); }
 
-        /* Badge de Ubicación con GPS */
         .ubi-badge {
             display: inline-block;
             margin-top: 10px;
@@ -86,19 +179,14 @@
             transition: all 0.2s ease;
         }
 
-        .btn-gps:active {
-            transform: scale(0.95);
-            background-color: var(--fucsia-glow);
-        }
-
-        /* Navegación por Solapas */
+        /* SOLAPAS */
         .tabs {
             display: flex;
             background-color: var(--bg-card);
             border: 1px solid var(--borde);
             border-radius: 14px;
             padding: 4px;
-            margin: 25px 0;
+            margin: 25px 0 15px 0;
         }
 
         .tab-btn {
@@ -113,7 +201,7 @@
             text-transform: uppercase;
             cursor: pointer;
             border-radius: 10px;
-            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: all 0.3s ease;
         }
 
         .tab-btn.active {
@@ -124,13 +212,13 @@
 
         .content-section {
             display: none;
+            opacity: 1;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        .content-section.active {
-            display: block;
-        }
+        .content-section.active { display: block; }
 
-        /* Buscador Club VIP */
+        /* IDENTIFICACIÓN VIP CON FONDO GRIS GALÁCTICO */
         .search-container {
             background-color: var(--bg-card);
             border: 1px solid var(--borde);
@@ -156,57 +244,42 @@
 
         .input-group input {
             width: 100%;
-            background-color: var(--bg-principal);
-            border: 1px solid var(--borde);
+            background-color: var(--gris-galactico); /* Modificación Solicitada */
+            border: 2px solid transparent;
             border-radius: 12px;
             padding: 16px;
-            color: var(--blanco-perla);
+            color: var(--bg-principal); /* Contraste oscuro sobre gris */
             font-size: 15px;
+            font-weight: 600;
             outline: none;
-            margin-bottom: 15px;
+            margin-bottom: 6px;
             text-align: center;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
         }
 
-        .input-group input:focus {
-            border-color: var(--fucsia-power);
+        .input-group input:focus { border-color: var(--fucsia-power); background-color: white; }
+
+        .input-hint {
+            font-size: 10px;
+            color: var(--texto-mutado);
+            margin-bottom: 15px;
+            display: block;
         }
 
-        .btn-buscar {
-            width: 100%;
-            background-color: var(--fucsia-power);
-            color: var(--blanco-perla);
-            border: none;
-            border-radius: 12px;
-            padding: 16px;
-            font-size: 14px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-buscar:active {
-            transform: scale(0.97);
-        }
-
-        /* Tarjeta de Fidelización Premium */
+        /* TARJETA VIP GAMIFICADA */
         .loyalty-card {
             display: none;
             background-color: var(--bg-card);
             border: 1px solid var(--fucsia-power);
             border-radius: 24px;
-            padding: 30px 20px;
+            padding: 25px 20px;
             margin-top: 25px;
             box-shadow: 0 0 25px var(--fucsia-glow);
         }
 
         .card-header {
             text-align: center;
-            margin-bottom: 25px;
-            border-bottom: 1px solid var(--borde);
-            padding-bottom: 15px;
+            margin-bottom: 15px;
         }
 
         .card-header .client-name {
@@ -216,24 +289,29 @@
             letter-spacing: 1px;
         }
 
-        .card-header .status-tag {
-            display: inline-block;
-            background-color: rgba(255, 27, 167, 0.1);
-            color: var(--fucsia-power);
-            font-size: 9px;
-            font-weight: 700;
-            padding: 5px 12px;
-            border-radius: 20px;
-            margin-top: 6px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+        /* Barra de Progreso Láser */
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: #2C2C2E;
+            border-radius: 10px;
+            margin: 15px 0 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar-laser {
+            width: 0%;
+            height: 100%;
+            background: var(--fucsia-power);
+            box-shadow: 0 0 8px var(--fucsia-power);
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .stamps-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 12px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .stamp-slot {
@@ -244,26 +322,17 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 14px;
-            color: #3A3A3C;
+            font-size: 13px;
+            color: #48484A;
             font-weight: 700;
-            transition: all 0.4s ease;
         }
 
-        /* Ajuste UX: Estrella gigante que abarca bien el círculo */
+        /* Estrella Real de Sello */
         .stamp-slot.active {
             border-color: var(--fucsia-power);
-            background-color: var(--fucsia-power);
-            color: var(--blanco-perla);
+            background: url('https://i.ibb.co/cK8F6sjW/Logoestrella.png') no-repeat center;
+            background-size: 78%;
             box-shadow: 0 0 15px var(--fucsia-glow);
-        }
-
-        .stamp-slot.active::before {
-            content: "★";
-            font-size: 28px;
-            line-height: 1;
-            display: block;
-            margin-top: -2px;
         }
 
         .stamp-slot.gift-slot {
@@ -271,187 +340,116 @@
             font-size: 16px;
         }
 
-        .progress-text {
-            text-align: center;
-            font-size: 13px;
-            line-height: 1.6;
-            color: var(--gris-galactico);
-        }
-
-        .progress-text strong {
-            color: var(--fucsia-power);
-        }
-
-        .error-message {
-            display: none;
-            color: #FF453A;
-            font-size: 12px;
-            margin-bottom: 15px;
-            font-weight: 600;
-            line-height: 1.4;
-        }
-
-        /* Catálogo de Servicios */
-        .catalog-container {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            padding-bottom: 140px;
-        }
-
-        .category-title {
-            font-family: 'League Spartan', sans-serif;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--fucsia-power);
-            margin-top: 20px;
-            font-weight: 900;
-        }
-
-        .service-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--borde);
-            border-radius: 16px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            transition: border-color 0.3s;
-        }
-
-        .service-card.selected {
-            border-color: var(--fucsia-power);
-        }
-
-        .service-main-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .service-title h3 {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--blanco-perla);
-        }
-
-        .service-meta {
-            font-size: 11px;
-            color: var(--texto-mutado);
-            margin-top: 4px;
-            font-weight: 600;
-        }
-
-        .service-price {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--fucsia-power);
-        }
-
-        .service-description {
-            font-size: 12px;
-            color: var(--gris-galactico);
-            line-height: 1.5;
-            font-weight: 300;
-        }
-
-        .service-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 5px;
-            border-top: 1px solid #222;
-            padding-top: 12px;
-        }
-
-        .btn-inline-gallery {
+        .btn-share-vip {
             background: none;
-            border: none;
-            color: var(--gris-galactico);
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-
-        .select-trigger {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--texto-mutado);
-            cursor: pointer;
-        }
-
-        .service-card.selected .select-trigger {
-            color: var(--fucsia-power);
-        }
-
-        .card-checkbox {
-            width: 18px;
-            height: 18px;
-            border: 2px solid var(--borde);
-            border-radius: 5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .service-card.selected .card-checkbox {
-            border-color: var(--fucsia-power);
-            background-color: var(--fucsia-power);
-        }
-
-        .service-card.selected .card-checkbox::after {
-            content: "✓";
-            color: white;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        /* Grilla de Horarios */
-        .time-headline {
-            font-family: 'League Spartan', sans-serif;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--blanco-perla);
-            margin: 25px 0 10px 0;
-        }
-
-        .slots-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .slot-btn {
-            background-color: var(--bg-card);
             border: 1px solid var(--borde);
             color: var(--blanco-perla);
-            padding: 12px 5px;
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
             font-size: 11px;
             font-weight: 600;
-            border-radius: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 15px;
             cursor: pointer;
-            text-align: center;
+        }
+
+        /* BREADCRUMBS GLASSMORPHISM */
+        .progress-breadcrumb {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(26, 26, 26, 0.75); /* Glassmorphism Activado */
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 27, 167, 0.15);
+            border-radius: 16px;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 15px;
+            z-index: 500;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .breadcrumb-step { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; }
+        .step-number { width: 26px; height: 26px; border-radius: 50%; background: var(--bg-principal); border: 2px solid var(--borde); color: var(--texto-mutado); display: flex; justify-content: center; align-items: center; font-size: 11px; font-weight: 700; }
+        .step-label { font-size: 9px; color: var(--texto-mutado); text-transform: uppercase; font-weight: 600; }
+        .breadcrumb-step.active .step-number { background: var(--fucsia-power); border-color: var(--fucsia-power); color: white; box-shadow: 0 0 10px var(--fucsia-power); }
+        .breadcrumb-step.active .step-label { color: var(--fucsia-power); }
+        .breadcrumb-step.completed .step-number { background: rgba(255, 27, 167, 0.2); border-color: var(--fucsia-power); color: var(--fucsia-power); }
+        .breadcrumb-step.completed .step-number::after { content: "✓"; }
+        .breadcrumb-divider { color: var(--borde); font-size: 12px; padding-bottom: 15px; }
+
+        /* FILTROS DE CATEGORÍA DESLIZABLES */
+        .filter-scroll-wrapper {
+            overflow-x: auto;
+            display: flex;
+            gap: 8px;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+            scrollbar-width: none;
+        }
+        .filter-scroll-wrapper::-webkit-scrollbar { display: none; }
+        
+        .filter-chip {
+            background-color: var(--bg-card);
+            border: 1px solid var(--borde);
+            color: var(--texto-mutado);
+            padding: 8px 16px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 20px;
+            white-space: nowrap;
+            text-transform: uppercase;
+            cursor: pointer;
             transition: all 0.2s;
         }
-
-        .slot-btn.selected {
-            background-color: var(--blanco-perla);
-            color: var(--bg-principal);
-            border-color: var(--blanco-perla);
-            font-weight: 700;
+        .filter-chip.active {
+            background-color: var(--fucsia-power);
+            border-color: var(--fucsia-power);
+            color: white;
         }
 
-        /* Panel Sticky Inferior (Glassmorphism) */
+        /* CATÁLOGO DE SERVICIOS */
+        .catalog-container { display: flex; flex-direction: column; gap: 16px; padding-bottom: 140px; }
+        .service-card { background-color: var(--bg-card); border: 1px solid var(--borde); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 12px; transition: border-color 0.3s; position: relative; }
+        .service-card.selected { border-color: var(--fucsia-power); }
+        
+        /* Tags de Popularidad y Nuevo */
+        .service-tag { position: absolute; top: -10px; left: 15px; background-color: var(--fucsia-power); color: white; font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.5px; box-shadow: 0 2px 8px var(--fucsia-glow); }
+        .service-tag.tag-new { background-color: #00E5FF; color: #121212; }
+
+        .service-main-info { display: flex; justify-content: space-between; align-items: flex-start; }
+        .service-title h3 { font-size: 16px; font-weight: 600; }
+        .service-meta { font-size: 11px; color: var(--texto-mutado); margin-top: 4px; font-weight: 600; }
+        
+        /* Efecto Neón en Precios Activado */
+        .service-price { 
+            font-size: 16px; 
+            font-weight: 700; 
+            color: var(--fucsia-power); 
+            text-shadow: 0 0 8px rgba(255, 27, 167, 0.5), 0 0 15px rgba(255, 27, 167, 0.2);
+            filter: brightness(1.1);
+        }
+
+        .service-description { font-size: 12px; color: var(--gris-galactico); line-height: 1.5; font-weight: 300; }
+        .service-actions { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #222; padding-top: 12px; }
+        .btn-inline-gallery { background: none; border: none; color: var(--gris-galactico); font-size: 11px; font-weight: 600; cursor: pointer; min-height: 44px; text-transform: uppercase; }
+        .select-trigger { display: flex; align-items: center; cursor: pointer; }
+        .card-checkbox { width: 20px; height: 20px; border: 2px solid var(--borde); border-radius: 6px; display: flex; justify-content: center; align-items: center; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .service-card.selected .card-checkbox { border-color: var(--fucsia-power); background-color: var(--fucsia-power); transform: scale(1.1); }
+        .service-card.selected .card-checkbox::after { content: "✓"; color: white; font-size: 12px; font-weight: bold; }
+
+        /* GRILLA DE HORARIOS ESCASEZ */
+        .time-headline { font-family: 'League Spartan', sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; color: var(--blanco-perla); margin-top: 10px; }
+        .time-scarcity-msg { font-size: 11px; color: var(--texto-mutado); margin-bottom: 15px; text-transform: uppercase; display: block; }
+        .slots-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 25px; }
+        .slot-btn { background-color: var(--bg-card); border: 1px solid var(--borde); color: var(--blanco-perla); padding: 12px 5px; font-size: 11px; font-weight: 600; border-radius: 10px; cursor: pointer; text-align: center; }
+        .slot-btn.selected { background-color: var(--blanco-perla); color: var(--bg-principal); font-weight: 700; }
+
+        /* PANEL RESUMEN STICKY GLASSMORPHISM */
         .resume-bar {
             position: fixed;
             bottom: 0;
@@ -459,10 +457,10 @@
             transform: translateX(-50%);
             width: 100%;
             max-width: 440px;
-            background-color: rgba(26, 26, 26, 0.75);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-top: 1px solid var(--borde);
+            background: rgba(26, 26, 26, 0.75); /* Glassmorphism Activado */
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-top: 1px solid rgba(255, 27, 167, 0.15);
             padding: 20px;
             box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
             display: none;
@@ -470,262 +468,96 @@
             border-radius: 20px 20px 0 0;
         }
 
-        .resume-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            font-size: 11px;
-            color: var(--texto-mutado);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .resume-info { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 11px; color: var(--texto-mutado); text-transform: uppercase; }
+        .resume-info strong { color: var(--fucsia-power); font-size: 14px; }
+        
+        .btn-next-flow { 
+            position: relative; overflow: hidden;
+            background-color: var(--fucsia-power); color: white; border: none; padding: 16px; border-radius: 12px; font-size: 13px; font-weight: 700; width: 100%; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; box-shadow: 0 4px 15px var(--fucsia-glow); 
         }
 
-        .resume-info strong {
-            color: var(--fucsia-power);
-            font-size: 14px;
-        }
+        /* CHECKOUT */
+        .checkout-container { background-color: var(--bg-card); border: 1px solid var(--borde); border-radius: 20px; padding: 25px; }
+        .checkout-title { font-family: 'League Spartan', sans-serif; font-size: 18px; text-transform: uppercase; text-align: center; margin-bottom: 15px; }
+        .breakdown-box { background-color: var(--bg-principal); border: 1px solid var(--borde); border-radius: 12px; padding: 15px; margin-bottom: 20px; font-size: 13px; line-height: 1.8; }
+        .breakdown-row { display: flex; justify-content: space-between; }
+        .breakdown-row.highlight { border-top: 1px dashed var(--borde); margin-top: 8px; padding-top: 8px; color: var(--fucsia-power); font-weight: 700; }
+        .bank-details-card { border: 1px solid var(--borde); border-radius: 12px; padding: 15px; margin-bottom: 20px; font-size: 12px; }
+        .bank-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; }
+        .btn-copy { background-color: #2C2C2E; border: none; color: var(--gris-galactico); padding: 6px 12px; font-size: 10px; font-weight: 700; border-radius: 4px; min-height: 32px; cursor: pointer; text-transform: uppercase; }
 
-        .btn-next-flow {
-            background-color: var(--fucsia-power);
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: 700;
-            width: 100%;
-            text-align: center;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            cursor: pointer;
-            box-shadow: 0 4px 15px var(--fucsia-glow);
-        }
+        /* INTERFACES DE CARGA SKELETON */
+        .skeleton-loader { display: none; flex-direction: column; gap: 12px; margin-top: 15px; }
+        .skeleton-block { height: 45px; background: linear-gradient(90deg, #1A1A1A 25%, #2C2C2E 50%, #1A1A1A 75%); background-size: 200% 100%; animation: loadingSkeleton 1.5s infinite; border-radius: 10px; }
+        @keyframes loadingSkeleton { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-        .btn-next-flow:active {
-            transform: scale(0.98);
-        }
+        /* TOAST FLOATING NOTIFICATION */
+        .toast-notification { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background-color: var(--blanco-perla); color: var(--bg-principal); padding: 12px 24px; border-radius: 30px; font-size: 11px; font-weight: 700; text-transform: uppercase; display: none; z-index: 1100; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
 
-        /* Pantalla de Checkout / Pago */
-        .checkout-container {
-            background-color: var(--bg-card);
-            border: 1px solid var(--borde);
-            border-radius: 20px;
-            padding: 25px;
-        }
+        /* RIPPLE EFFECT WAVE */
+        .ripple-effect { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.35); transform: scale(0); animation: ripple-animation 0.5s ease-out; pointer-events: none; }
+        @keyframes ripple-animation { to { transform: scale(4); opacity: 0; } }
 
-        .checkout-title {
-            font-family: 'League Spartan', sans-serif;
-            font-size: 18px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            text-align: center;
-            margin-bottom: 15px;
-        }
+        /* MODAL GALERÍA GLASSMORPHISM */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(12, 12, 12, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 1000; }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-wrapper { width: 90%; max-width: 380px; background: rgba(26, 26, 26, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 27, 167, 0.15); border-radius: 24px; padding: 15px; position: relative; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); }
+        .modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; color: var(--fucsia-power); font-size: 22px; font-weight: bold; cursor: pointer; z-index: 1010; }
+        .modal-carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; border-radius: 16px; margin-top: 20px; scrollbar-width: none; }
+        .modal-carousel::-webkit-scrollbar { display: none; }
+        .modal-carousel img { width: 100%; flex-shrink: 0; scroll-snap-align: start; aspect-ratio: 1; object-fit: cover; border-radius: 16px; }
+        .swipe-hint { text-align: center; font-size: 10px; color: var(--texto-mutado); margin-top: 10px; text-transform: uppercase; }
 
-        .breakdown-box {
-            background-color: var(--bg-principal);
-            border: 1px solid var(--borde);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 20px;
-            font-size: 13px;
-            line-height: 1.8;
-        }
+        /* FAQ */
+        .faq-section { margin-top: 30px; border-top: 1px solid var(--borde); padding: 20px 0 120px 0; }
+        .faq-title { font-family: 'League Spartan', sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; color: var(--texto-mutado); margin-bottom: 15px; }
+        .faq-item { border-bottom: 1px solid var(--borde); padding: 14px 0; }
+        .faq-trigger { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; cursor: pointer; }
+        .faq-content { font-size: 12px; color: var(--texto-mutado); line-height: 1.6; margin-top: 8px; display: none; font-weight: 300; }
 
-        .breakdown-row {
-            display: flex;
-            justify-content: space-between;
-        }
+        /* BOTONES VOLVER */
+        .btn-back-step { display: inline-flex; align-items: center; gap: 6px; background: none; border: none; color: var(--texto-mutado); font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 15px; cursor: pointer; }
 
-        .breakdown-row.highlight {
-            border-top: 1px dashed var(--borde);
-            margin-top: 8px;
-            padding-top: 8px;
-            color: var(--fucsia-power);
-            font-weight: 700;
-        }
+        /* MICRO SPINNER LOADER */
+        .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255, 255, 255, 0.2); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        .breakdown-row style {
-            font-size: 11px; 
-            color: var(--texto-mutado); 
-            margin-top: 5px;
-        }
+        /* SHAKE ERRORES */
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+        .shake { animation: shake 0.4s ease-in-out; }
 
-        .bank-details-card {
-            border: 1px solid var(--borde);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 20px;
-            font-size: 12px;
-            line-height: 1.6;
-        }
+        /* FOOTER ESCUDO confianza */
+        footer { text-align: center; padding: 20px 0 40px 0; border-top: 1px solid var(--borde); margin-top: 20px; font-size: 9px; color: var(--texto-mutado); letter-spacing: 1px; line-height: 1.8; }
 
-        .bank-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 6px 0;
-        }
-
-        .btn-copy {
-            background-color: #2C2C2E;
-            border: none;
-            color: var(--gris-galactico);
-            padding: 4px 8px;
-            font-size: 9px;
-            font-weight: 700;
-            border-radius: 4px;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-
-        .toast-notification {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--blanco-perla);
-            color: var(--bg-principal);
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            display: none;
-            z-index: 1100;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        /* Modal Galería Transparente (Opción 2) */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(18, 18, 18, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 1000;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .modal-wrapper {
-            width: 90%;
-            max-width: 380px;
-            background-color: var(--bg-card);
-            border: 1px solid var(--borde);
-            border-radius: 24px;
-            padding: 15px;
-            position: relative;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            color: var(--fucsia-power);
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            z-index: 1010;
-        }
-
-        .modal-carousel {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            gap: 10px;
-            border-radius: 16px;
-            margin-top: 20px;
-            scrollbar-width: none;
-        }
-
-        .modal-carousel::-webkit-scrollbar {
-            display: none;
-        }
-
-        .modal-carousel img {
-            width: 100%;
-            flex-shrink: 0;
-            scroll-snap-align: start;
-            aspect-ratio: 1;
-            object-fit: cover;
-            border-radius: 16px;
-        }
-
-        .swipe-hint {
-            text-align: center;
-            font-size: 10px;
-            color: var(--texto-mutado);
-            margin-top: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* FAQ Accordion */
-        .faq-section {
-            margin-top: 35px;
-            border-top: 1px solid var(--borde);
-            padding-top: 25px;
-            padding-bottom: 120px;
-        }
-
-        .faq-title {
-            font-family: 'League Spartan', sans-serif;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--texto-mutado);
-            margin-bottom: 15px;
-        }
-
-        .faq-item {
-            border-bottom: 1px solid var(--borde);
-            padding: 15px 0;
-        }
-
-        .faq-trigger {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--blanco-perla);
-            cursor: pointer;
-        }
-
-        .faq-content {
-            font-size: 12px;
-            color: var(--texto-mutado);
-            line-height: 1.6;
-            margin-top: 10px;
-            font-weight: 300;
-            display: none;
-        }
+        /* CANVAS CONFETTI */
+        #confettiCanvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; display: none; }
     </style>
 </head>
 <body>
 
-    <div class="toast-notification" id="toast">✦ Copiado con éxito</div>
+    <canvas id="confettiCanvas"></canvas>
+
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-content">
+            <img src="https://i.ibb.co/7x5rV7Rg/Logo-PP-B.png" alt="Pai Pai Beauty" class="splash-logo">
+            <h2 class="splash-claim">Pai Pai Beauty</h2>
+            <p class="splash-location">La Rioja, Argentina</p>
+            <div class="splash-loader">
+                <div class="loader-dot"></div>
+                <div class="loader-dot"></div>
+                <div class="loader-dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-notification" id="toast">✦ Hecho</div>
 
     <div class="wrapper">
         <header>
+            <img src="https://i.ibb.co/7x5rV7Rg/Logo-PP-B.png" alt="Pai Pai" class="header-logo">
             <h1>Pai Pai <span>Beauty</span></h1>
-            <div class="ubi-badge">Zona Centro · 8 de Diciembre 1111, La Rioja</div><br>
-            <a href="https://maps.google.com/?q=8+de+Diciembre+1111,+F5300+La+Rioja" target="_blank" class="btn-gps">✦ Ver en mapa GPS</a>
+            <div class="ubi-badge">Zona Centro · 8 de Diciembre 1111</div><br>
+            <a href="http://googleusercontent.com/maps.google.com/2" target="_blank" class="btn-gps">✦ Ver Ubicación GPS</a>
         </header>
 
         <div class="tabs">
@@ -734,148 +566,208 @@
         </div>
 
         <div id="sec-fidelizacion" class="content-section active">
-            <div class="search-container">
+            <div class="search-container" id="searchBoxVIP">
                 <h2>Identificación VIP</h2>
-                <p>Ingresá tu nombre, apellido y los últimos 3 números de tu celular para abrir tu tarjeta.</p>
-                
+                <p>Ingresá tu nombre, apellido y los últimos 3 números de tu celular.</p>
                 <div class="input-group">
                     <input type="text" id="clientNameInput" placeholder="Ej: María Pérez 455">
-                    <div id="errorMessage" class="error-message"></div>
                 </div>
-                
-                <button class="btn-buscar" onclick="consultarProgreso()">Consultar Estatus</button>
+                <span class="input-hint">*Escribilo tal cual te dimos de alta en el estudio para sincronizar tus mimos.</span>
+                <button class="btn-buscar" id="btnSelloVIP" onclick="consultarProgreso()">Consultar Estatus</button>
             </div>
 
             <div id="loyaltyCard" class="loyalty-card">
                 <div class="card-header">
                     <div class="client-name" id="displayClientName"></div>
-                    <div class="status-tag">Miembro de Honor</div>
+                    <div class="status-tag" style="color: var(--fucsia-power); font-size: 10px; font-weight:700; margin-top:5px; text-transform:uppercase;">✦ Miembro de Honor ✦</div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-laser" id="laserBar"></div>
                 </div>
                 <div class="stamps-grid" id="stampsGrid"></div>
-                <div class="progress-text" id="progressText"></div>
+                <div class="progress-text" id="progressText" style="text-align:center; font-size:13px;"></div>
+                <button class="btn-share-vip" onclick="compartirPortalVIP()">✦ Compartir mi secreto VIP con una amiga</button>
+                <div style="font-size:10px; color:var(--texto-mutado); text-align:center; margin-top:15px; line-height:1.4;">
+                    ✦ Alquimia Compartida: Por cada invitada nueva que agende un servicio de tu parte, recibirás una Estrella de Honor extra de forma inmediata al confirmar su visita.
+                </div>
             </div>
         </div>
 
         <div id="sec-catalogo" class="content-section">
+            <div class="progress-breadcrumb" id="progressBreadcrumb" style="display: none;">
+                <div class="breadcrumb-step active" data-step="1"><span class="step-number">1</span><span class="step-label">Menú</span></div>
+                <div class="breadcrumb-divider">→</div>
+                <div class="breadcrumb-step" data-step="2"><span class="step-number">2</span><span class="step-label">Horario</span></div>
+                <div class="breadcrumb-divider">→</div>
+                <div class="breadcrumb-step" data-step="3"><span class="step-number">3</span><span class="step-label">Garantía</span></div>
+            </div>
+
             <div id="catalogFlow">
-                <div class="catalog-container" id="servicesContainer">
-                    </div>
+                <div class="filter-scroll-wrapper" id="filterWrapper">
+                    <button class="filter-chip active" onclick="filtrarCategoria('TODOS', this)">Todas</button>
+                    <button class="filter-chip" onclick="filtrarCategoria('NAILS', this)">Nails</button>
+                    <button class="filter-chip" onclick="filtrarCategoria('REMOCIÓN', this)">Remoción</button>
+                    <button class="filter-chip" onclick="filtrarCategoria('MIRADAS', this)">Miradas</button>
+                    <button class="filter-chip" onclick="filtrarCategoria('MASAJES', this)">Masajes</button>
+                </div>
+
+                <div class="catalog-container" id="servicesContainer"></div>
+            </div>
+
+            <div id="agendaFlow" style="display:none; margin-bottom:120px;">
+                <button class="btn-back-step" onclick="volverAlCatalogo()">← Volver al menú</button>
+                <div class="time-headline" id="titHorarios">Horarios Disponibles</div>
+                <span class="time-scarcity-msg">⏳ Cupos exclusivos y limitados para esta quincena. Asegurá tu bloque con anticipación.</span>
+                <div class="skeleton-loader" id="skLoader"><div class="skeleton-block"></div><div class="skeleton-block"></div><div class="skeleton-block"></div></div>
+                <div class="slots-grid" id="gridHorarios"></div>
             </div>
 
             <div id="checkoutFlow" style="display: none; padding-bottom: 140px;">
+                <button class="btn-back-step" onclick="volverALosHorarios()">← Volver a horarios</button>
                 <div class="checkout-container">
                     <h2 class="checkout-title">Garantía de Reserva</h2>
-                    
                     <div class="breakdown-box">
-                        <div class="breakdown-row">
-                            <span>Servicios seleccionados:</span>
-                            <span id="chkServicios">0</span>
-                        </div>
-                        <div class="breakdown-row">
-                            <span>Total de la experiencia:</span>
-                            <span id="chkTotal">$0</span>
-                        </div>
-                        <div class="breakdown-row highlight">
-                            <span>Inversión de Seña requerida:</span>
-                            <span>$5.000</span>
-                        </div>
-                        <div class="breakdown-row" style="font-size: 11px; color: var(--texto-mutado); margin-top: 5px;">
-                            <span>Saldo a liquidar en el estudio:</span>
-                            <span id="chkRestante">$0</span>
-                        </div>
+                        <div class="breakdown-row"><span>Servicios seleccionados:</span><span id="chkServicios">0</span></div>
+                        <div class="breakdown-row"><span>Total de la experiencia:</span><span id="chkTotal">$0</span></div>
+                        <div class="breakdown-row highlight"><span>Inversión de Seña requerida:</span><span>$5.000</span></div>
+                        <div class="breakdown-row" style="font-size: 11px; color: var(--texto-mutado); margin-top: 5px;"><span>Saldo a liquidar en el estudio:</span><span id="chkRestante">$0</span></div>
                     </div>
-
-                    <p style="font-size: 12px; color: var(--texto-mutado); text-align: center; margin-bottom: 15px; line-height: 1.4;">
-                        Realizá tu transferencia por el monto exacto de la seña ($5.000) a los siguientes datos:
-                    </p>
-
+                    <p style="font-size: 12px; color: var(--texto-mutado); text-align: center; margin-bottom: 15px; line-height: 1.4;"> Realizá tu transferencia por el monto exacto de la seña ($5.000): </p>
                     <div class="bank-details-card">
-                        <div class="bank-row">
-                            <span><strong>Titular:</strong> Daiana Lazarte</span>
-                        </div>
-                        <div class="bank-row">
-                            <span><strong>Entidad:</strong> Personal Pay</span>
-                        </div>
-                        <div class="bank-row">
-                            <span><strong>Alias:</strong> Paipai20</span>
-                            <button class="btn-copy" onclick="copyData('Paipai20')">Copiar</button>
-                        </div>
-                        <div class="bank-row">
-                            <span><strong>CUIL:</strong> 27-38247046-5</span>
-                            <button class="btn-copy" onclick="copyData('27-38247046-5')">Copiar</button>
-                        </div>
+                        <div class="bank-row"><span><strong>Titular:</strong> Daiana Lazarte</span></div>
+                        <div class="bank-row"><span><strong>Entidad:</strong> Personal Pay</span></div>
+                        <div class="bank-row"><span><strong>Alias:</strong> Paipai20</span><button class="btn-copy" onclick="copyData('Paipai20')">Copiar</button></div>
+                        <div class="bank-row"><span><strong>CUIL:</strong> 27-38247046-5</span><button class="btn-copy" onclick="copyData('27-38247046-5')">Copiar</button></div>
                     </div>
-
-                    <button class="btn-next-flow" onclick="finalizarWhatsApp()">Confirmar Turno y Enviar Captura</button>
-                    <button class="btn-inline-gallery" onclick="cancelarCheckout()" style="width: 100%; margin-top: 15px; text-align: center; color: var(--texto-mutado);">Volver al Catálogo</button>
+                    <button class="btn-next-flow" onclick="finalizarWhatsApp()">✦ AGENDAR Y CONGELAR MI ESPACIO</button>
                 </div>
             </div>
 
-            <div id="resumeBar" class="resume-bar">
+            <div id="resumeBar" class="resume-bar" onclick="togglePreviewCarrito(event)">
                 <div class="resume-info">
-                    <div>Bloque: <span id="resTiempo">0</span> min</div>
+                    <div style="cursor:pointer;">🕒 <span id="resTiempo">0</span> min (ver detalle)</div>
                     <div>Seña Fija: <strong>$5.000</strong></div>
                 </div>
-                <button class="btn-next-flow" id="btnAvanzarTurno" onclick="procesarSeleccionHorario()">Seleccionar Horario</button>
+                <div id="miniPreviewText" style="font-size:11px; color:var(--texto-mutado); margin-bottom:12px; display:none; text-transform:uppercase;"></div>
+                <button class="btn-next-flow" id="btnAvanzarTurno" onclick="irAAgendaFlow(event)">Seleccionar Horario</button>
             </div>
         </div>
+
+        <footer>
+            🔒 CONEXIÓN ENCRIPTADA SSL · ESTUDIO VERIFICADO · PAI PAI BEAUTY © 2026
+        </footer>
     </div>
 
     <div class="modal-overlay" id="galleryModal" onclick="closeGallery()">
         <div class="modal-wrapper" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeGallery()">×</button>
             <div class="modal-carousel" id="modalCarousel"></div>
-            <div class="swipe-hint">✦ Deslizá para ver más inspiración ✦</div>
+            <div class="swipe-hint">✦ Deslizá para ver inspiración ✦</div>
         </div>
     </div>
 
     <script>
-        // CONFIGURACIONES ESTRUCTURALES PROTEGIDAS
         const SHEET_ID = '1b2qrrO0enYZlhgYFZAnQr5fUcQpTavGNJ3rE28CGAw0'; 
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxr4AHXTni_PlgC9v4iVOy1ZDsxQF4LFWnBoHrzgDSPosXR5bungwmAGrcz9Inn3zy2/exec';
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzOuOHPh5Gl8IwEgXJswrhnTd3QwvqOB9aH4spVZTXLGCJFUjp8xksEI-quNTWnyQzPng/exec';
         const WHATSAPP_BASE_URL = 'https://wa.me/message/F22HEMGFOBN6J1';
 
-        // BASE DE DATOS INYECTADA DE SERVICIOS - SEMI PIES UBICADO EN NAILS CORRECTAMENTE
+        // BASE DE DATOS ACTUALIZADA CON SEMI PIES EN NAILS Y TAGS PREMIUM
         const baseServicios = [
-            { cat: "NAILS", id: "softgel", name: "Soft Gel", price: 18500, time: 120, desc: "Incluye manicuría, aplicación de uñas soft gel, esmaltado semipermanente & diseño sencillo.", fotos: ["https://i.ibb.co/dSyvKSH/Softgelblanco.jpg", "https://i.ibb.co/YT4G2vPX/Softgel1.jpg", "https://i.ibb.co/0pfMQMkB/Softgel2.png", "https://i.ibb.co/0RDtRqw3/Softgel3.png", "https://i.ibb.co/m5jf27Jd/Softgel5.jpg"] },
-            { cat: "NAILS", id: "capping", name: "Capping", price: 17500, time: 120, desc: "Incluye manicuría, Capping & esmaltado semipermanente con diseño sencillo. Tu uña natural, blindada. Protección de alta resistencia y brillo espejo.", fotos: ["https://i.ibb.co/QFd3k0Pd/Capping2.jpg", "https://i.ibb.co/7tCzy9Pp/Capping3.png", "https://i.ibb.co/x8tGD1W2/Capping.jpg"] },
-            { cat: "NAILS", id: "semi", name: "Semi", price: 15000, time: 90, desc: "Color de alta gama y brillo duradero. Una manicuría técnica enfocada en la perfección del esmaltado para manos que buscan protagonismo diario.", fotos: ["https://i.ibb.co/JRjRkS6H/Semi4.jpg", "https://i.ibb.co/cPWrR3x/Semimanos1.png", "https://i.ibb.co/tMt107tz/Semi2.png", "https://i.ibb.co/gbN4d3v9/Semi3.jpg"] },
-            { cat: "NAILS", id: "semipies", name: "Semi pies", price: 15000, time: 90, desc: "Esmaltado de larga duración para pies impecables. Protección, color y un acabado profesional que resiste tu ritmo de vida.", fotos: ["https://i.ibb.co/Tqvy8Ycw/Semipies1.jpg"] },
-            { cat: "NAILS", id: "presson", name: "Set Press on nails reutilizables", price: 16000, time: 5, desc: "Fácil aplicación (15 minutos). Ideales para cualquier tipo de evento. Duración hasta por 15 días. Sin reacciones alérgicas. Retiro súper fácil. Reutilizables.", fotos: ["https://i.ibb.co/DPfMbtbm/Presson2.jpg", "https://i.ibb.co/tp2vL9By/Presson4.jpg", "https://i.ibb.co/prGPW0nV/Presson1.jpg", "https://i.ibb.co/39kNwdVt/Presson3.jpg"] },
+            { cat: "NAILS", id: "softgel", name: "Soft Gel", price: 18500, time: 120, tag: "POPULAR", desc: "Incluye manicuría, aplicación de uñas soft gel, esmaltado semipermanente & diseño sencillo.", fotos: ["https://i.ibb.co/dSyvKSH/Softgelblanco.jpg", "https://i.ibb.co/YT4G2vPX/Softgel1.jpg", "https://i.ibb.co/0pfMQMkB/Softgel2.png", "https://i.ibb.co/0RDtRqw3/Softgel3.png", "https://i.ibb.co/m5jf27Jd/Softgel5.jpg"] },
+            { cat: "NAILS", id: "capping", name: "Capping", price: 17500, time: 120, tag: null, desc: "Incluye manicuría, Capping & esmaltado semipermanente con diseño sencillo. Tu uña natural, blindada.", fotos: ["https://i.ibb.co/QFd3k0Pd/Capping2.jpg", "https://i.ibb.co/7tCzy9Pp/Capping3.png", "https://i.ibb.co/x8tGD1W2/Capping.jpg"] },
+            { cat: "NAILS", id: "semi", name: "Semi", price: 15000, time: 90, tag: null, desc: "Color de alta gama y brillo duradero. Una manicuría técnica enfocada en la perfección del esmaltado.", fotos: ["https://i.ibb.co/JRjRkS6H/Semi4.jpg", "https://i.ibb.co/cPWrR3x/Semimanos1.png", "https://i.ibb.co/tMt107tz/Semi2.png", "https://i.ibb.co/gbN4d3v9/Semi3.jpg"] },
+            { cat: "NAILS", id: "semipies", name: "Semi pies", price: 15000, time: 90, tag: null, desc: "Esmaltado de larga duración para pies impecables. Acabado impecable y profesional.", fotos: ["https://i.ibb.co/Tqvy8Ycw/Semipies1.jpg"] },
+            { cat: "NAILS", id: "presson", name: "Set Press on nails reutilizables", price: 16000, time: 5, tag: "TENDENCIA", desc: "Fácil aplicación (15 minutos). Ideales para cualquier tipo de evento. Reutilizables.", fotos: ["https://i.ibb.co/DPfMbtbm/Presson2.jpg", "https://i.ibb.co/tp2vL9By/Presson4.jpg", "https://i.ibb.co/prGPW0nV/Presson1.jpg", "https://i.ibb.co/39kNwdVt/Presson3.jpg"] },
             
-            { cat: "REMOCIÓN", id: "retiradosemi", name: "Retirado de Semi/Capping", price: 6000, time: 25, desc: "Remoción técnica segura. Liberamos tu uña natural del producto anterior con suavidad, priorizando siempre la salud y nutrición de la placa.", fotos: ["https://i.ibb.co/k2zwqSP4/Retiradosemi.jpg"] },
-            { cat: "REMOCIÓN", id: "retiradosoft", name: "Retirado de Soft Gel", price: 9000, time: 35, desc: "Remoción técnica segura. Liberamos tu uña natural del producto anterior con suavidad, priorizando siempre la salud y nutrición de la placa.", fotos: ["https://i.ibb.co/k2zwqSP4/Retiradosemi.jpg"] },
+            { cat: "REMOCIÓN", id: "retiradosemi", name: "Retirado de Semi/Capping", price: 6000, time: 25, tag: null, desc: "Remoción técnica segura. Liberamos tu uña natural del producto anterior con suavidad.", fotos: ["https://i.ibb.co/k2zwqSP4/Retiradosemi.jpg"] },
+            { cat: "REMOCIÓN", id: "retiradosoft", name: "Retirado de Soft Gel", price: 9000, time: 35, tag: null, desc: "Remoción técnica segura con productos que cuidan la salud de tu placa natural.", fotos: ["https://i.ibb.co/k2zwqSP4/Retiradosemi.jpg"] },
             
-            { cat: "MIRADAS", id: "lashlifting", name: "Lash Lifting", price: 15000, time: 100, desc: "Mirada magnética sin esfuerzo. Elevación y curvatura desde la raíz. Mayor largo e incluye tinte y botox. Duración aprox de 8 a 12 semanas.", fotos: ["https://i.ibb.co/LDNXFLTR/Lashlifting2.png", "https://i.ibb.co/1G4hVpVd/Lashlifting1.png", "https://i.ibb.co/23DcXLp2/Lifting.jpg"] },
-            { cat: "MIRADAS", id: "perfilado", name: "Diseño & Perfilado de Cejas", price: 7500, time: 30, desc: "Arquitectura de la mirada. Diseño simétrico basado en tu morfología facial.", fotos: ["https://i.ibb.co/fV60f1YM/Perfilado1.jpg"] },
-            { cat: "MIRADAS", id: "laminado", name: "Laminado de cejas", price: 13000, time: 30, desc: "Diseño y fijación de cejas para un efecto de mayor volumen y definición. Logramos una mirada sofisticada sin esfuerzo.", fotos: ["https://i.ibb.co/6cTVm9kz/Laminadodecejas.jpg"] },
+            { cat: "MIRADAS", id: "lashlifting", name: "Lash Lifting", price: 15000, time: 100, tag: "POPULAR", desc: "Mirada magnética sin esfuerzo. Curvatura desde la raíz. Incluye tinte y botox.", fotos: ["https://i.ibb.co/LDNXFLTR/Lashlifting2.png", "https://i.ibb.co/1G4hVpVd/Lashlifting1.png", "https://i.ibb.co/23DcXLp2/Lifting.jpg"] },
+            { cat: "MIRADAS", id: "perfilado", name: "Diseño & Perfilado de Cejas", price: 7500, time: 30, tag: null, desc: "Arquitectura de la mirada. Diseño simétrico basado en tu morfología facial.", fotos: ["https://i.ibb.co/fV60f1YM/Perfilado1.jpg"] },
+            { cat: "MIRADAS", id: "laminado", name: "Laminado de cejas", price: 13000, time: 30, tag: null, desc: "Diseño y fijación de cejas para un efecto de mayor volumen y definición sofisticada.", fotos: ["https://i.ibb.co/6cTVm9kz/Laminadodecejas.jpg"] },
             
-            { cat: "MASAJES", id: "relajante", name: "Masaje Relajante", price: 17000, time: 60, desc: "Masajes Reset absoluto. Desconexión profunda para restaurar cuerpo y mente.", fotos: ["https://i.ibb.co/cXwLTF3x/Masajerelajante.jpg"] },
-            { cat: "MASAJES", id: "descontracturante", name: "Masaje Descontracturante", price: 17000, time: 60, desc: "Masajes Reset absoluto. Desconexión profunda para restaurar cuerpo y mente.", fotos: ["https://i.ibb.co/7Jm5hCk5/Retirado-20260522-205939-0003.jpg"] }
+            { cat: "MASAJES", id: "relajante", name: "Masaje Relajante", price: 17000, time: 60, tag: null, desc: "Masajes Reset absoluto. Desconexión profunda para restaurar cuerpo y mente.", fotos: ["https://i.ibb.co/cXwLTF3x/Masajerelajante.jpg"] },
+            { cat: "MASAJES", id: "descontracturante", name: "Masaje Descontracturante", price: 17000, time: 60, tag: null, desc: "Masajes Reset absoluto enfocado en liberar tensiones profundas.", fotos: ["https://i.ibb.co/7Jm5hCk5/Retirado-20260522-205939-0003.jpg"] }
         ];
 
         const faqData = [
-            { q: "✦ Garantía de Exclusividad", a: "Tu inversión de reserva de $5.000 asegura la preparación personalizada de nuestro laboratorio de belleza y el bloqueo absoluto de tu horario. Dicho monto es deducible del total de tu experiencia y no es reembolsable." },
-            { q: "✦ Coordinación Anticipada", a: "Entendemos que los planes cambian. Podrás reprogramar tu cita con un mínimo de 24 hs de antelación, manteniendo tu reserva vigente. Cambios con menor tiempo implicarán la pérdida de la seña." },
-            { q: "✦ Protocolo de Puntualidad", a: "Ofrecemos una tolerancia estricta de 15 minutos. Pasado este tiempo, para resguardar la agenda de la siguiente clienta, la sesión se considerará como no asistida." },
-            { q: "✦ Espacio de Desconexión Privado", a: "Para garantizar el clima de silencio, cordialidad y seguridad técnica de nuestro laboratorio, el estudio opera bajo atención estrictamente individual. Agradecemos asistir sin acompañantes." }
+            { q: "✦ Protocolo de Llegada y Cortesía", a: "Ofrecemos una tolerancia de 15 minutos por respeto a la agenda de nuestra próxima invitada. Pasado este margen, la sesión se considerará como no asistida para preservar la calidad del servicio." },
+            { q: "✦ Garantía de Exclusividad VIP", a: "Tu inversión de reserva de $5.000 asegura la preparación personalizada de nuestro laboratorio de belleza y el bloqueo absoluto de tu horario. Dicho monto es deducible del total de tu experiencia." },
+            { q: "✦ Política de Reprogramación", a: "Podrás ajustar tu cita con un mínimo de 24 hs de antelación, manteniendo tu reserva vigente. Modificaciones con menor tiempo implican la pérdida de la seña por costos operativos." },
+            { q: "✦ Espacio de Desconexión Privado", a: "Para garantizar un clima de silencio, privacidad y concentración técnica, nuestro estudio opera bajo atención estrictamente individual. Solicitamos asistir sin acompañantes." }
         ];
 
         let seleccionados = [];
         let horarioSeleccionado = null;
+        let categoriaActual = "TODOS";
 
+        // SPLASH SCREEN LOGIC
+        function initSplashScreen() {
+            const splash = document.getElementById('splashScreen');
+            const hasSeenSplash = localStorage.getItem('paiPaiSplashSeen2026');
+            if (hasSeenSplash) {
+                splash.style.display = 'none';
+            } else {
+                setTimeout(() => {
+                    splash.classList.add('fade-out');
+                    localStorage.setItem('paiPaiSplashSeen2026', 'true');
+                    setTimeout(() => { splash.style.display = 'none'; }, 800);
+                }, 2500);
+            }
+        }
+
+        // CONTROL RIPPLE EFFECT
+        function applyRippleEffect() {
+            document.querySelectorAll('.btn-buscar, .btn-next-flow, .slot-btn, .filter-chip').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+                    const ripple = document.createElement('span');
+                    ripple.classList.add('ripple-effect');
+                    this.appendChild(ripple);
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px'; ripple.style.top = y + 'px';
+                    setTimeout(() => ripple.remove(), 500);
+                });
+            });
+        }
+
+        // BREADCRUMBS
+        function updateBreadcrumb(step) {
+            document.getElementById('progressBreadcrumb').style.display = 'flex';
+            document.querySelectorAll('.breadcrumb-step').forEach((s, idx) => {
+                const sNum = idx + 1;
+                s.classList.remove('active', 'completed');
+                if(sNum < step) s.classList.add('completed');
+                else if(sNum === step) s.classList.add('active');
+            });
+        }
+
+        // RENDERIZADO CATÁLOGO CON FILTROS Y TAGS
         function renderCatalog() {
             const container = document.getElementById('servicesContainer');
             let html = "";
             let currentCat = "";
 
             baseServicios.forEach(s => {
-                if (s.cat !== currentCat) {
+                if (categoriaActual !== "TODOS" && s.cat !== categoriaActual) return;
+
+                if (s.cat !== currentCat && categoriaActual === "TODOS") {
                     currentCat = s.cat;
                     html += `<div class="category-title">${currentCat}</div>`;
                 }
+
+                const isSelected = seleccionados.some(item => item.id === s.id);
+                let tagHtml = "";
+                if(s.tag === "POPULAR") tagHtml = `<div class="service-tag">✦ MÁS SOLICITADO</div>`;
+                else if(s.tag === "TENDENCIA") tagHtml = `<div class="service-tag tag-new">✦ TENDENCIA</div>`;
+
                 html += `
-                    <div class="service-card" id="card-${s.id}">
+                    <div class="service-card ${isSelected ? 'selected' : ''}" id="card-${s.id}">
+                        ${tagHtml}
                         <div class="service-main-info">
                             <div class="service-title">
                                 <h3>${s.name}</h3>
@@ -894,32 +786,41 @@
                 `;
             });
 
+            // Inyección Informativa FAQ
             html += `<div class="faq-section"><div class="faq-title">Información Importante</div>`;
             faqData.forEach((f, idx) => {
                 html += `
                     <div class="faq-item">
-                        <div class="faq-trigger" onclick="toggleFaq(${idx})">
-                            <span>${f.q}</span><span>+</span>
-                        </div>
+                        <div class="faq-trigger" onclick="toggleFaq(${idx})"><span>${f.q}</span><span>+</span></div>
                         <div class="faq-content" id="faq-content-${idx}">${f.a}</div>
                     </div>
                 `;
             });
             html += `</div>`;
             container.innerHTML = html;
+            applyRippleEffect();
+        }
+
+        function filtrarCategoria(cat, btn) {
+            document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            categoriaActual = cat;
+            renderCatalog();
         }
 
         function switchTab(tabName) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            const fSec = document.getElementById('sec-fidelizacion');
+            const cSec = document.getElementById('sec-catalogo');
             
             if(tabName === 'fidelizacion') {
                 document.querySelectorAll('.tab-btn')[0].classList.add('active');
-                document.getElementById('sec-fidelizacion').classList.add('active');
+                document.querySelectorAll('.tab-btn')[1].classList.remove('active');
+                fSec.classList.add('active'); cSec.classList.remove('active');
                 document.getElementById('resumeBar').style.display = 'none';
             } else {
                 document.querySelectorAll('.tab-btn')[1].classList.add('active');
-                document.getElementById('sec-catalogo').classList.add('active');
+                document.querySelectorAll('.tab-btn')[0].classList.remove('active');
+                cSec.classList.add('active'); fSec.classList.remove('active');
                 actualizarResumen();
             }
         }
@@ -927,7 +828,6 @@
         function toggleService(id) {
             const card = document.getElementById(`card-${id}`);
             const servicio = baseServicios.find(s => s.id === id);
-
             if(card.classList.contains('selected')) {
                 card.classList.remove('selected');
                 seleccionados = seleccionados.filter(item => item.id !== id);
@@ -940,296 +840,326 @@
 
         function actualizarResumen() {
             const bar = document.getElementById('resumeBar');
-            const isCatalogoActive = document.getElementById('sec-catalogo').classList.contains('active');
             const isCheckoutActive = document.getElementById('checkoutFlow').style.display === 'block';
+            const isAgendaActive = document.getElementById('agendaFlow').style.display === 'block';
 
-            if(seleccionados.length > 0 && isCatalogoActive && !isCheckoutActive) {
+            if(seleccionados.length > 0 && !isCheckoutActive && !isAgendaActive) {
                 let totalTiempo = seleccionados.reduce((acc, s) => acc + s.time, 0);
                 document.getElementById('resTiempo').innerText = totalTiempo;
                 bar.style.display = 'block';
+                updateBreadcrumb(1);
             } else {
                 bar.style.display = 'none';
             }
         }
 
-        function openGallery(id) {
-            const servicio = baseServicios.find(s => s.id === id);
-            const carousel = document.getElementById('modalCarousel');
-            carousel.innerHTML = "";
-            
-            servicio.fotos.forEach(f => {
-                const img = document.createElement('img');
-                img.src = f;
-                img.loading = "lazy";
-                carousel.appendChild(img);
-            });
-
-            document.getElementById('galleryModal').classList.add('active');
+        function togglePreviewCarrito(e) {
+            if(e.target.tagName === 'BUTTON') return;
+            const preview = document.getElementById('miniPreviewText');
+            if(preview.style.display === 'block') {
+                preview.style.display = 'none';
+            } else {
+                preview.innerText = "Llevás: " + seleccionados.map(s => s.name).join(' + ');
+                preview.style.display = 'block';
+            }
         }
 
-        function closeGallery() {
-            document.getElementById('galleryModal').classList.remove('active');
+        // PASO DE FLUJOS INTERNOS CON BOTONES VOLVER
+        function irAAgendaFlow(e) {
+            e.stopPropagation();
+            const btn = document.getElementById('btnAvanzarTurno');
+            btn.innerHTML = '<span class="spinner"></span> Buscando Bloques...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                document.getElementById('catalogFlow').style.display = 'none';
+                document.getElementById('resumeBar').style.display = 'none';
+                document.getElementById('agendaFlow').style.display = 'block';
+                btn.innerText = "Seleccionar Horario";
+                btn.disabled = false;
+                procesarSeleccionHorario();
+            }, 400);
         }
 
-        function toggleFaq(idx) {
-            const content = document.getElementById(`faq-content-${idx}`);
-            const isVisible = content.style.display === 'block';
-            content.style.display = isVisible ? 'none' : 'block';
+        function volverAlCatalogo() {
+            document.getElementById('agendaFlow').style.display = 'none';
+            document.getElementById('catalogFlow').style.display = 'block';
+            actualizarResumen();
         }
 
-        function copyData(text) {
-            navigator.clipboard.writeText(text);
-            const toast = document.getElementById('toast');
-            toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 2000);
+        function volverALosHorarios() {
+            document.getElementById('checkoutFlow').style.display = 'none';
+            document.getElementById('agendaFlow').style.display = 'block';
+            updateBreadcrumb(2);
         }
 
-        // CONTROL DE AGENDA CON PUENTE APPS SCRIPT
+        // CONTROL DE AGENDA INTERNA CON MOTOR API
         async function procesarSeleccionHorario() {
-            const oldHeadline = document.getElementById('headlineHorarios');
-            if(oldHeadline) oldHeadline.remove();
-            const oldGrid = document.getElementById('gridHorarios');
-            if(oldGrid) oldGrid.remove();
-
-            const btnAvanzar = document.getElementById('btnAvanzarTurno');
-            btnAvanzar.innerText = "Buscando Bloques...";
-            btnAvanzar.disabled = true;
+            updateBreadcrumb(2);
+            const grid = document.getElementById('gridHorarios');
+            const sk = document.getElementById('skLoader');
+            grid.innerHTML = "";
+            sk.style.display = 'flex';
 
             try {
                 const response = await fetch(`${WEB_APP_URL}?action=obtenerTurnos`);
                 const result = await response.json();
-                
-                if(result.status === "success" && result.data.length > 0) {
-                    const container = document.getElementById('catalogFlow');
-                    
-                    const headline = document.createElement('div');
-                    headline.id = "headlineHorarios";
-                    headline.className = "time-headline";
-                    headline.innerText = "Horarios Disponibles";
-                    
-                    const grid = document.createElement('div');
-                    grid.id = "gridHorarios";
-                    grid.className = "slots-grid";
+                sk.style.display = 'none';
 
+                if(result.status === "success" && result.data.length > 0) {
                     const ahora = new Date();
                     const limite24hs = new Date(ahora.getTime() + (24 * 60 * 60 * 1000));
-
-                    let contTurnosVisibles = 0;
+                    let cont = 0;
 
                     result.data.forEach(t => {
-                        const partesFecha = t.fecha.split('/');
-                        const fechaFormateada = `${partesFecha[2]}-${partesFecha[1]}-${partesFecha[0]}T${t.hora}:00`;
-                        const fechaTurno = new Date(fechaFormateada);
+                        const partes = t.fecha.split('/');
+                        const fStr = `${partes[2]}-${partes[1]}-${partes[0]}T${t.hora}:00`;
+                        const fTurno = new Date(fStr);
 
-                        if(fechaTurno >= limite24hs) {
-                            contTurnosVisibles++;
+                        if(fTurno >= limite24hs) {
+                            cont++;
                             const btn = document.createElement('button');
                             btn.className = "slot-btn";
                             btn.innerText = `${t.fecha}\n${t.hora} hs`;
-                            btn.onclick = () => seleccionarSlot(btn, t);
+                            btn.onclick = () => {
+                                document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
+                                btn.classList.add('selected');
+                                horarioSeleccionado = t;
+                                triggerToast("✦ Horario seleccionado con éxito");
+                                setTimeout(() => ejecutarReservaBloqueada(), 500);
+                            };
                             grid.appendChild(btn);
                         }
                     });
 
-                    if(contTurnosVisibles > 0) {
-                        container.appendChild(headline);
-                        container.appendChild(grid);
-                        btnAvanzar.innerText = "Confirmar Reserva";
-                        btnAvanzar.onclick = ejecutarReservaBloqueada;
-                        grid.scrollIntoView({ behavior: 'smooth' });
-                    } else {
-                        alert("Por políticas de exclusividad, no hay turnos disponibles dentro de las próximas 24hs.");
-                        btnAvanzar.innerText = "Seleccionar Horario";
-                        btnAvanzar.onclick = procesarSeleccionHorario;
+                    if(cont === 0) {
+                        grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; font-size:12px; color:var(--texto-mutado); padding:20px;">✦ Studio en pausa: Agenda completa por el momento. Muy pronto abriremos nuevos bloques exclusivos.</div>`;
                     }
                 } else {
-                    alert("No hay bloques libres cargados en la agenda para esta quincena.");
-                    btnAvanzar.innerText = "Seleccionar Horario";
-                    btnAvanzar.onclick = procesarSeleccionHorario;
+                    grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; font-size:12px; color:var(--texto-mutado); padding:20px;">✦ Studio en pausa: Agenda completa por el momento. Muy pronto abriremos nuevos bloques exclusivos.</div>`;
                 }
             } catch(e) {
-                alert("Error de comunicación: Verifica que el Apps Script tenga el acceso configurado como 'Cualquiera' (Anyone).");
-                btnAvanzar.innerText = "Seleccionar Horario";
-                btnAvanzar.onclick = procesarSeleccionHorario;
-            } finally {
-                btnAvanzar.disabled = false;
+                sk.style.display = 'none';
+                grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; font-size:12px; color:#FF453A; padding:20px;">✦ Ajustando sintonía: Breve interrupción en la red. Intenta nuevamente en unos instantes.</div>`;
             }
-        }
-
-        function seleccionarSlot(btn, dataTurno) {
-            document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-            horarioSeleccionado = dataTurno;
+            applyRippleEffect();
         }
 
         async function ejecutarReservaBloqueada() {
-            if(!horarioSeleccionado) {
-                alert("Por favor, selecciona un horario de la grilla.");
-                return;
-            }
+            const nombre = prompt("Ingresá tu Nombre y Apellido para la reserva:");
+            if(!nombre || nombre.trim() === "") return;
 
-            const nombreClienta = prompt("Ingresá tu Nombre y Apellido para congelar el bloque:");
-            if(!nombreClienta || nombreClienta.trim() === "") {
-                alert("El nombre es obligatorio para reservar.");
-                return;
-            }
-
-            const btnAvanzar = document.getElementById('btnAvanzarTurno');
-            btnAvanzar.innerText = "Bloqueando...";
-            btnAvanzar.disabled = true;
-
+            document.getElementById('gridHorarios').style.opacity = '0.5';
             const nombresServicios = seleccionados.map(s => s.name).join(', ');
 
             try {
-                const url = `${WEB_APP_URL}?action=reservarTurno&fecha=${encodeURIComponent(horarioSeleccionado.fecha)}&hora=${encodeURIComponent(horarioSeleccionado.hora)}&clienta=${encodeURIComponent(nombreClienta)}&servicios=${encodeURIComponent(nombresServicios)}`;
+                const url = `${WEB_APP_URL}?action=reservarTurno&fecha=${encodeURIComponent(horarioSeleccionado.fecha)}&hora=${encodeURIComponent(horarioSeleccionado.hora)}&clienta=${encodeURIComponent(nombre)}&servicios=${encodeURIComponent(nombresServicios)}`;
                 const response = await fetch(url);
                 const result = await response.json();
 
                 if(result.status === "success") {
-                    horarioSeleccionado.clientaReal = nombreClienta;
+                    horarioSeleccionado.clientaReal = nombre;
                     abrirCheckout();
                 } else {
-                    alert("Este turno acaba de ser reservado por otra clienta. Selecciona otra opción.");
+                    alert("Este bloque acaba de ser tomado. Elige otro horario.");
                     procesarSeleccionHorario();
                 }
             } catch(e) {
-                alert("Error al congelar el espacio en la base de datos.");
+                alert("Error al congelar el espacio.");
             } finally {
-                btnAvanzar.disabled = false;
+                document.getElementById('gridHorarios').style.opacity = '1';
             }
         }
 
         function abrirCheckout() {
-            document.getElementById('catalogFlow').style.display = "none";
-            document.getElementById('resumeBar').style.display = "none";
-            
-            let totalPrecio = seleccionados.reduce((acc, s) => acc + s.price, 0);
-            let restante = totalPrecio - 5000;
+            updateBreadcrumb(3);
+            document.getElementById('agendaFlow').style.display = "none";
+            let total = seleccionados.reduce((acc, s) => acc + s.price, 0);
+            let restante = total - 5000;
 
             document.getElementById('chkServicios').innerText = seleccionados.length;
-            document.getElementById('chkTotal').innerText = `$${totalPrecio.toLocaleString('es-AR')}`;
+            document.getElementById('chkTotal').innerText = `$${total.toLocaleString('es-AR')}`;
             document.getElementById('chkRestante').innerText = `$${restante.toLocaleString('es-AR')}`;
-            
             document.getElementById('checkoutFlow').style.display = "block";
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function cancelarCheckout() {
-            document.getElementById('checkoutFlow').style.display = "none";
-            document.getElementById('catalogFlow').style.display = "block";
-            horarioSeleccionado = null;
-            procesarSeleccionHorario();
-        }
-
         function finalizarWhatsApp() {
-            let totalPrecio = seleccionados.reduce((acc, s) => acc + s.price, 0);
-            let restante = totalPrecio - 5000;
-            let nombresServicios = seleccionados.map(s => s.name).join(', ');
-
-            let textoMensaje = `¡Hola Dai! Quiero confirmar mi turno. Elegí: ${nombresServicios}. Para el día ${horarioSeleccionado.fecha} a las ${horarioSeleccionado.hora} hs. Nombre: ${horarioSeleccionado.clientaReal}. (Total: $${totalPrecio.toLocaleString('es-AR')} / Seña: $5.000 / Saldo en estudio: $${restante.toLocaleString('es-AR')}). Acá te adjunto la captura de la transferencia.`;
-
-            let finalLink = `${WHATSAPP_BASE_URL}&text=${encodeURIComponent(textoMensaje)}`;
-            window.open(finalLink, '_blank');
+            let total = seleccionados.reduce((acc, s) => acc + s.price, 0);
+            let rest = total - 5000;
+            let texto = `¡Hola Dai! Quiero confirmar mi turno. Elegí: ${seleccionados.map(s => s.name).join(', ')}. Para el día ${horarioSeleccionado.fecha} a las ${horarioSeleccionado.hora} hs. Nombre: ${horarioSeleccionado.clientaReal}. (Total: $${total.toLocaleString('es-AR')} / Seña: $5.000 / Saldo en estudio: $${rest.toLocaleString('es-AR')}). Acá te adjunto la captura de la transferencia.`;
+            window.open(`${WHATSAPP_BASE_URL}&text=${encodeURIComponent(texto)}`, '_blank');
         }
 
-        // SOLAPA FIDELIZACIÓN: REGALOS EN 4, 8 Y 10 CON ESTRELLAS GRANDES
-        function normalizar(txt) {
-            return txt.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, ' ').trim();
-        }
-
+        // MOTOR CLUB VIP GAMIFICADO (CON ESTRELLAS POP & BARRA LÁSER)
         async function consultarProgreso() {
             const input = document.getElementById('clientNameInput').value;
-            const inputNorm = normalizar(input);
-            const errorElement = document.getElementById('errorMessage');
-            const cardElement = document.getElementById('loyaltyCard');
-
-            if(!inputNorm) {
-                errorElement.innerText = "Por favor, ingresá tus datos.";
-                errorElement.style.display = "block";
+            const btn = document.getElementById('btnSelloVIP');
+            const box = document.getElementById('searchBoxVIP');
+            
+            if(!input.trim()) {
+                box.classList.add('shake'); setTimeout(() => box.classList.remove('shake'), 500);
                 return;
             }
 
-            errorElement.style.display = "none";
-            cardElement.style.display = "none";
+            btn.innerHTML = '<span class="spinner"></span> Verificando...';
+            btn.disabled = true;
 
             try {
                 const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
                 const response = await fetch(url);
-                if(!response.ok) throw new Error();
+                const text = await response.text();
+                const filas = text.split('\n').map(f => f.split(','));
                 
-                const dataText = await response.text();
-                const filas = dataText.split('\n').map(f => f.split(','));
-                
-                let clientaEncontrada = null;
+                let clienta = null;
+                const normIn = input.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 
                 for(let i = 1; i < filas.length; i++) {
                     if(!filas[i][0]) continue;
-                    let nombreSheet = filas[i][0].replace(/"/g, '');
-                    let sellosSheet = parseInt(filas[i][1].replace(/"/g, '')) || 0;
+                    let sName = filas[i][0].replace(/"/g, '').trim();
+                    let sStamps = parseInt(filas[i][1].replace(/"/g, '')) || 0;
+                    let normSheet = sName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 
-                    if(normalizar(nombreSheet) === inputNorm) {
-                        clientaEncontrada = { nombre: nombreSheet, sellos: sellosSheet };
+                    if(normSheet === normIn) {
+                        clienta = { nombre: sName, sellos: sStamps };
                         break;
                     }
                 }
 
-                if(clientaEncontrada) {
-                    document.getElementById('displayClientName').innerText = clientaEncontrada.nombre;
-                    renderCard(clientaEncontrada.sellos);
-                    cardElement.style.display = "block";
-                } else {
-                    errorElement.innerText = "✦ Acceso Restringido: Este identificador no se encuentra en nuestro registro VIP activo. Si ya eres clienta del estudio, solicita tu alta por canales privados.";
-                    errorElement.style.display = "block";
-                }
+                btn.innerText = "Consultar Estatus"; btn.disabled = false;
 
-            } catch (e) {
-                errorElement.innerText = "Error de conexión con la base de datos VIP.";
-                errorElement.style.display = "block";
+                if(clienta) {
+                    localStorage.setItem('lastClienteVIP', clienta.nombre);
+                    document.getElementById('displayClientName').innerText = clienta.nombre;
+                    document.getElementById('loyaltyCard').style.display = 'block';
+                    renderVipCard(clienta.sellos);
+                } else {
+                    alert("✦ Identificador VIP no encontrado. Solicita tu alta a Daiana por WhatsApp.");
+                }
+            } catch(e) {
+                btn.innerText = "Consultar Estatus"; btn.disabled = false;
+                alert("Error de conexión VIP.");
             }
         }
 
-        function renderCard(sellos) {
+        function renderVipCard(sellos) {
             const grid = document.getElementById('stampsGrid');
-            const txt = document.getElementById('progressText');
             grid.innerHTML = "";
+
+            // Barra Láser Animada
+            setTimeout(() => {
+                document.getElementById('laserBar').style.width = `${Math.min(sellos * 10, 100)}%`;
+            }, 200);
 
             for(let i = 1; i <= 10; i++) {
                 const slot = document.createElement('div');
                 slot.classList.add('stamp-slot');
-                
-                // Mimos VIP en 4, 8 y 10
-                if(i === 4 || i === 8 || i === 10) {
-                    slot.classList.add('gift-slot');
-                    slot.innerText = "🎁";
-                } else {
-                    slot.innerText = i;
-                }
+                if(i === 4 || i === 8 || i === 10) { slot.classList.add('gift-slot'); slot.innerText = "🎁"; }
+                else { slot.innerText = i; }
 
-                // Si ya visitó, se transforma en la estrella gigante que llena el círculo
                 if(i <= sellos) {
                     slot.className = "stamp-slot active";
-                    slot.innerText = ""; 
+                    slot.innerText = "";
+                    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                        slot.style.animation = `contentEntrance 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) ${i * 0.08}s backwards`;
+                    }
                 }
                 grid.appendChild(slot);
             }
 
-            if(sellos < 4) {
-                txt.innerHTML = `Llevás <strong>${sellos} de 10</strong> visitas.<br>¡Faltan ${4 - sellos} para tu mimo sorpresa intermedio! 🎁`;
-            } else if(sellos === 4) {
-                txt.innerHTML = `¡Llegaste al <strong>Hito 4</strong>!<br>Tenés un beneficio sorpresa listo para usar hoy. 💝`;
-            } else if(sellos < 8) {
-                txt.innerHTML = `Llevás <strong>${sellos} de 10</strong> visitas.<br>Estás a ${8 - sellos} pasos de tu obsequio físico exclusivo. 🎁`;
-            } else if(sellos === 8) {
-                txt.innerHTML = `¡Hito 8 Completado! 🎉<br>Reclamá tu <strong>Regalo Especial Pai Pai</strong> en la sesión de hoy.`;
-            } else if(sellos < 10) {
-                txt.innerHTML = `Llevás <strong>${sellos} de 10</strong> visitas.<br>Estás a solo ${10 - sellos} pasos de tu servicio GRATIS.`;
-            } else {
-                txt.innerHTML = `¡Tarjeta VIP completa! 🌟<br>Reclamá tu <strong>Servicio GRATIS</strong> en tu visita de hoy.`;
+            // Textos Espía Dinámicos
+            const txt = document.getElementById('progressText');
+            if(sellos < 4) txt.innerHTML = `Llevás <strong>${sellos} de 10</strong> mimos.<br>¡Faltan ${4 - sellos} para tu primer Beneficio Sorpresa! 🎁`;
+            else if(sellos === 4) txt.innerHTML = `¡Hito 4 Alcanzado! 💝<br>Reclamá tu mimo sorpresa exclusivo en la sesión de hoy.`;
+            else if(sellos < 8) txt.innerHTML = `Llevás <strong>${sellos} de 10</strong> mimos.<br>Estás a ${8 - sellos} pasos de tu Regalo Especial Pai Pai. 🎁`;
+            else if(sellos === 8) txt.innerHTML = `¡Hito 8 Completado! 🎉<br>Tu Obsequio de marca premium está listo para retirar hoy.`;
+            else if(sellos < 10) txt.innerHTML = `Llevás <strong>${sellos} de 10</strong> visitas.<br>¡A solo ${10 - sellos} pasos del Servicio Completo GRATIS!`;
+            else {
+                txt.innerHTML = `¡Tarjeta VIP Completa! 🌟<br>Hoy tu servicio es 100% BONIFICADO. ¡Disfrutalo!`;
+                lanzarFiestaConfetti();
             }
         }
 
-        window.onload = renderCatalog;
+        // PARTICLES PARTY CONFETTI PURE JS CANVAS
+        function lanzarFiestaConfetti() {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            const canvas = document.getElementById('confettiCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.style.display = 'block';
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+
+            let particles = [];
+            for(let i=0; i<120; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    r: Math.random() * 6 + 4,
+                    d: Math.random() * canvas.height,
+                    color: Math.random() > 0.5 ? '#FF1BA7' : '#FFFFFF',
+                    tilt: Math.random() * 10 - 5
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((p, idx) => {
+                    ctx.beginPath(); ctx.lineWidth = p.r; ctx.strokeStyle = p.color;
+                    ctx.moveTo(p.x + p.tilt + p.r/2, p.y); ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r/2);
+                    ctx.stroke();
+                });
+                update();
+            }
+
+            function update() {
+                let active = false;
+                particles.forEach((p) => {
+                    p.y += Math.cos(p.d) + 1 + p.r/2; p.x += Math.sin(p.d); p.tilt = Math.sin(p.d - p.r);
+                    if(p.y < canvas.height) active = true;
+                });
+                if(active) { requestAnimationFrame(draw); }
+                else { canvas.style.display = 'none'; }
+            }
+            draw();
+        }
+
+        function compartirPortalVIP() {
+            const shareData = {
+                title: 'Portal VIP Pai Pai',
+                text: 'Te comparto mi secreto mejor guardado de La Rioja: el portal exclusivo de Pai Pai Beauty. Agendá tu espacio de desconexión acá:',
+                url: window.location.href
+            };
+            if(navigator.share) { navigator.share(shareData); } 
+            else { copyData(window.location.href); triggerToast("✦ Link copiado para compartir"); }
+        }
+
+        // GALERÍA MODAL
+        function openGallery(id) {
+            const s = baseServicios.find(item => item.id === id);
+            const c = document.getElementById('modalCarousel');
+            c.innerHTML = "";
+            s.fotos.forEach(f => {
+                const img = document.createElement('img'); img.src = f; img.loading = "lazy";
+                c.appendChild(img);
+            });
+            document.getElementById('galleryModal').classList.add('active');
+        }
+        function closeGallery() { document.getElementById('galleryModal').classList.remove('active'); }
+        function toggleFaq(idx) {
+            const content = document.getElementById(`faq-content-${idx}`);
+            content.style.display = content.style.display === 'block' ? 'none' : 'block';
+        }
+        function triggerToast(msg) {
+            const t = document.getElementById('toast'); t.innerText = msg; t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 2000);
+        }
+        function copyData(txt) { navigator.clipboard.writeText(txt); triggerToast("✦ Copiado con éxito"); }
+
+        window.onload = () => {
+            initSplashScreen();
+            renderCatalog();
+            const last = localStorage.getItem('lastClienteVIP');
+            if(last) { document.getElementById('clientNameInput').value = last; }
+        };
     </script>
 </body>
 </html>
-
