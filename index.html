@@ -2,10 +2,24 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <!-- Meta tags técnicos y de ergonomía móvil -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#121212">
+    
+    <!-- Meta tags SEO y Open Graph (Para compartir en WhatsApp/Redes) -->
     <title>PAI PAI BEAUTY · Portal Premium de Reservas</title>
-    <!-- Google Fonts Premium: League Spartan para títulos con presencia y Montserrat para lectura ergonómica -->
+    <meta name="description" content="Santuario de belleza en La Rioja. Reserva tu turno exclusivo, gestiona tus sellos VIP y descubre nuestro catálogo de servicios.">
+    <meta property="og:title" content="PAI PAI BEAUTY · Portal de Reservas">
+    <meta property="og:description" content="Reserva tu turno exclusivo y gestiona tus beneficios VIP.">
+    <meta property="og:image" content="https://i.ibb.co/7x5rV7Rg/Logo-PP-B.png">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="https://i.ibb.co/7x5rV7Rg/Logo-PP-B.png" type="image/png">
+
+    <!-- Google Fonts Premium -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700;800;900&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
         /* VARIABLES DE DISEÑO PREMIUM (UI TOKENS DE ALTO CONTRASTE) */
         :root {
@@ -13,9 +27,9 @@
             --bg-card: #1A1A1C;        /* Profundidad para tarjetas */
             --fucsia-power: #FF1BA7;   /* Fucsia de Acción oficial */
             --fucsia-glow: rgba(255, 27, 167, 0.4);
-            --blanco-perla: #F8FAFC;   /* Contraste de lectura ergonómica */
+            --blanco-perla: #FFFFFF;   /* Contraste máximo para lectura */
             --gris-galactico: #F1F5F9; /* Gris ultra claro para cajas de entrada */
-            --texto-mutado: #CBD5E1;   /* Gris claro legible para seniors */
+            --texto-mutado: #D8E2ED;   /* Mejorado el contraste WCAG AA */
             --borde: #2C2C2E;
             --oro-vip: #FFB800;
         }
@@ -32,6 +46,13 @@
             text-rendering: optimizeLegibility;
         }
 
+        /* ACCESIBILIDAD: Navegación por teclado */
+        :focus-visible {
+            outline: 2px solid var(--fucsia-power);
+            outline-offset: 3px;
+            border-radius: 4px;
+        }
+
         body {
             background-color: var(--bg-principal);
             color: var(--blanco-perla);
@@ -44,10 +65,16 @@
             overflow-x: hidden;
         }
 
+        /* Bloqueo de scroll cuando modal está abierta */
+        body.no-scroll {
+            overflow: hidden;
+        }
+
         .wrapper {
             width: 100%;
             max-width: 440px;
             animation: fadeInPortal 0.8s ease forwards;
+            position: relative;
         }
 
         @keyframes fadeInPortal {
@@ -175,7 +202,6 @@
             text-transform: uppercase;
         }
 
-        /* BOTÓN GPS CON INTERCEPTOR FALLBACK */
         .btn-gps {
             display: inline-flex;
             align-items: center;
@@ -204,7 +230,7 @@
         }
 
         /* NAVEGACIÓN */
-        .tabs {
+        nav.tabs {
             display: flex;
             background-color: var(--bg-card);
             border: 1.5px solid var(--borde);
@@ -316,7 +342,6 @@
             line-height: 1.5;
         }
 
-        /* SOPORTE VIP WHATSAPP */
         .soporte-vip-box {
             margin-top: 25px;
             padding-top: 20px;
@@ -350,13 +375,6 @@
             min-height: 48px;
         }
 
-        .btn-soporte-wa:hover {
-            background-color: #25D366;
-            color: white;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
-        }
-
-        /* TARJETA VIP GAMIFICADA */
         .loyalty-card {
             display: none;
             background-color: var(--bg-card);
@@ -441,7 +459,7 @@
             box-shadow: 0 0 15px rgba(255, 184, 0, 0.45);
         }
 
-        /* BREADCRUMBS GLASSMORPHISM STICKY */
+        /* BREADCRUMBS */
         .progress-breadcrumb {
             display: flex;
             justify-content: space-between;
@@ -630,9 +648,9 @@
         .slot-btn.selected { border-color: var(--fucsia-power); background-color: rgba(255, 27, 167, 0.1); box-shadow: 0 0 15px rgba(255, 27, 167, 0.2); }
         .high-demand-badge { display: block; font-size: 9px; color: var(--fucsia-power); font-weight: 800; margin-top: 4px; }
 
-        .btn-back-step { background: none; border: none; color: var(--texto-mutado); font-size: 13px; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; cursor: pointer; min-height: 40px; }
+        .btn-back-step { background: none; border: none; color: var(--texto-mutado); font-size: 13px; font-weight: 700; text-transform: uppercase; margin-bottom: 25px; cursor: pointer; min-height: 40px; display: inline-flex; align-items: center; gap: 5px; }
 
-        /* BARRA RESUMEN STICKY */
+        /* BARRA RESUMEN STICKY MEJORADA */
         .resume-bar {
             position: fixed;
             bottom: 0; left: 50%; transform: translateX(-50%);
@@ -644,6 +662,7 @@
             box-shadow: 0 -10px 40px rgba(0,0,0,0.7);
             display: none; z-index: 900;
             border-radius: 24px 24px 0 0;
+            transition: height 0.3s ease;
         }
 
         .resume-info { 
@@ -651,18 +670,30 @@
             font-size: 12.5px; color: var(--texto-mutado); text-transform: uppercase; align-items: center;
         }
         .resume-info strong { color: var(--fucsia-power); font-size: 16px; }
-        
-        .cart-toggle-btn { color: var(--fucsia-power); font-size: 13px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
 
-        .cart-drawer-content {
-            display: none; max-height: 150px; overflow-y: auto;
-            border-top: 1.5px solid var(--borde); padding-top: 12px; margin-bottom: 12px;
+        /* Visualización de elementos seleccionados en Drawer */
+        #miniPreviewList {
+            display: none;
+            margin-bottom: 16px;
+            padding-top: 10px;
+            border-top: 1px solid var(--borde);
+            max-height: 150px;
+            overflow-y: auto;
         }
-        .cart-drawer-item {
-            display: flex; justify-content: space-between; align-items: center;
-            font-size: 14px; color: var(--blanco-perla); padding: 8px 0;
+        #miniPreviewList li {
+            font-size: 13px;
+            color: var(--blanco-perla);
+            margin-bottom: 8px;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .cart-drawer-item button { background: none; border: none; color: #FF453A; font-weight: 800; cursor: pointer; font-size: 13px; min-height: 30px; }
+        #miniPreviewList li::before {
+            content: '✦';
+            color: var(--fucsia-power);
+            font-size: 10px;
+        }
 
         .btn-next-flow { 
             background-color: var(--fucsia-power); color: white; border: none; 
@@ -683,49 +714,12 @@
         .receipt-row { display: flex; justify-content: space-between; font-size: 14px; padding: 12px 0; border-bottom: 1.5px dashed rgba(255,255,255,0.06); }
         .receipt-row strong { color: white; }
 
-        .checkout-policies-container {
-            margin-bottom: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+        .checkout-policies-container { margin-bottom: 25px; display: flex; flex-direction: column; gap: 12px; }
 
-        .policy-accordion {
-            background-color: #0E0E10;
-            border: 1.5px solid var(--borde);
-            border-radius: 16px;
-            overflow: hidden;
-            transition: border-color 0.3s;
-        }
-
-        .policy-accordion:hover {
-            border-color: rgba(255, 27, 167, 0.3);
-        }
-
-        .policy-trigger {
-            width: 100%;
-            padding: 16px 20px;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 13px;
-            font-weight: 700;
-            text-transform: uppercase;
-            text-align: left;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            min-height: 48px;
-        }
-
-        .policy-content {
-            padding: 0 20px 18px 20px;
-            font-size: 14px;
-            color: #CBD5E1;
-            line-height: 1.6;
-            display: none;
-        }
+        .policy-accordion { background-color: #0E0E10; border: 1.5px solid var(--borde); border-radius: 16px; overflow: hidden; transition: border-color 0.3s; }
+        .policy-accordion:hover { border-color: rgba(255, 27, 167, 0.3); }
+        .policy-trigger { width: 100%; padding: 16px 20px; background: none; border: none; color: white; font-size: 13px; font-weight: 700; text-transform: uppercase; text-align: left; display: flex; justify-content: space-between; align-items: center; cursor: pointer; min-height: 48px; }
+        .policy-content { padding: 0 20px 18px 20px; font-size: 14px; color: #CBD5E1; line-height: 1.6; display: none; }
 
         /* CAJA DE SEGURIDAD LEGAL UX */
         .security-filter-box {
@@ -745,6 +739,11 @@
             border-color: var(--fucsia-power);
             background-color: rgba(255, 27, 167, 0.08);
         }
+        
+        .security-filter-box.error-shake {
+            border-color: #FF453A;
+            animation: shake 0.4s ease-in-out;
+        }
 
         .security-filter-box input {
             width: 24px;
@@ -763,7 +762,7 @@
             user-select: none;
         }
 
-        /* DATOS BANCARIOS PREMIUM REESTRUCTURADOS (TITULAR COMPLETO, CUIL FIJO, CVU COPIABLE) */
+        /* DATOS BANCARIOS PREMIUM */
         .bank-details-card {
             background: linear-gradient(135deg, #1C1C21 0%, #0E0E10 100%); 
             border: 1.5px solid var(--fucsia-power);
@@ -773,43 +772,14 @@
             box-shadow: 0 4px 15px rgba(255, 27, 167, 0.15);
         }
         .bank-row { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 10px 0; 
-            font-size: 13.5px; 
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 10px 0; font-size: 13.5px; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
-        .bank-row:last-child {
-            border-bottom: none;
-        }
-        .bank-row span {
-            color: var(--blanco-perla);
-            max-width: 75%;
-            word-break: break-all;
-        }
+        .bank-row:last-child { border-bottom: none; }
+        .bank-row span { color: var(--blanco-perla); max-width: 75%; word-break: break-all; }
 
-        /* BOTONES DE COPIAR INTERACTIVOS */
-        .btn-copy {
-            background: none; 
-            border: 1.5px solid var(--fucsia-power); 
-            color: white; 
-            padding: 8px 14px;
-            font-size: 11px; 
-            font-weight: 800; 
-            text-transform: uppercase; 
-            border-radius: 18px; 
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            min-height: 36px;
-            flex-shrink: 0;
-        }
-
-        .btn-copy.success {
-            background-color: #10B981 !important;
-            border-color: #10B981 !important;
-            color: white !important;
-        }
+        .btn-copy { background: none; border: 1.5px solid var(--fucsia-power); color: white; padding: 8px 14px; font-size: 11px; font-weight: 800; text-transform: uppercase; border-radius: 18px; cursor: pointer; transition: all 0.2s ease-in-out; min-height: 36px; flex-shrink: 0; }
+        .btn-copy.success { background-color: #10B981 !important; border-color: #10B981 !important; color: white !important; }
 
         .btn-ics-calendar {
             background-color: rgba(255, 184, 0, 0.05); border: 1.5px dashed var(--oro-vip); color: var(--oro-vip);
@@ -834,7 +804,7 @@
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(12, 12, 12, 0.8); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 1000; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         .modal-wrapper { width: 90%; max-width: 380px; background: rgba(26, 26, 26, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 27, 167, 0.15); border-radius: 24px; padding: 15px; position: relative; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); }
-        .modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; color: var(--fucsia-power); font-size: 22px; font-weight: bold; cursor: pointer; z-index: 1010; }
+        .modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; color: var(--fucsia-power); font-size: 28px; font-weight: bold; cursor: pointer; z-index: 1010; line-height: 1; }
         .modal-carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; border-radius: 16px; margin-top: 20px; scrollbar-width: none; }
         .modal-carousel::-webkit-scrollbar { display: none; }
         .modal-carousel img { width: 100%; flex-shrink: 0; scroll-snap-align: start; aspect-ratio: 1; object-fit: cover; border-radius: 16px; }
@@ -844,8 +814,8 @@
         .faq-section { margin-top: 30px; border-top: 1px solid var(--borde); padding: 20px 0 120px 0; }
         .faq-title { font-family: 'League Spartan', sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; color: var(--texto-mutado); margin-bottom: 15px; }
         .faq-item { border-bottom: 1px solid var(--borde); padding: 14px 0; }
-        .faq-trigger { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; cursor: pointer; }
-        .faq-content { font-size: 12px; color: var(--texto-mutado); line-height: 1.6; margin-top: 8px; display: none; font-weight: 300; }
+        .faq-trigger { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; cursor: pointer; background:none; border:none; color:inherit; width: 100%; text-align: left; }
+        .faq-content { font-size: 12px; color: var(--texto-mutado); line-height: 1.6; margin-top: 8px; display: none; font-weight: 500; }
 
         /* DIÁLOGOS EMERGENS */
         .dialog-overlay { position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 10000; }
@@ -874,11 +844,13 @@
 
     <canvas id="confettiCanvas"></canvas>
 
-    <div class="toast-notification" id="toast">✦ Hecho</div>
-    <textarea id="invisibleTextarea" readonly style="position:fixed; top:-1000px; left:-1000px; opacity:0; pointer-events:none;"></textarea>
+    <!-- ARIA-LIVE para tecnologías de asistencia -->
+    <div class="toast-notification" id="toast" aria-live="polite">✦ Hecho</div>
+    <!-- Input oculto para copias, mejorado para accesibilidad -->
+    <textarea id="invisibleTextarea" readonly tabindex="-1" aria-hidden="true" style="position:fixed; top:-1000px; left:-1000px; opacity:0; pointer-events:none;"></textarea>
 
     <!-- DIÁLOGOS EMERGENS -->
-    <div class="dialog-overlay" id="customDialog">
+    <div class="dialog-overlay" id="customDialog" role="dialog" aria-modal="true" aria-labelledby="diagTitle">
         <div class="dialog-card">
             <h3 class="dialog-title" id="diagTitle">Atención</h3>
             <p class="dialog-text" id="diagText">Contenido</p>
@@ -892,7 +864,7 @@
     <!-- PANTALLA DE CARGA -->
     <div class="splash-screen" id="splashScreen">
         <div class="splash-content">
-            <img src="https://i.ibb.co/7x5rV7Rg/Logo-PP-B.png" alt="Pai Pai Beauty" class="splash-logo">
+            <img src="https://i.ibb.co/7x5rV7Rg/Logo-PP-B.png" alt="Pai Pai Beauty Logo" class="splash-logo">
             <h2 class="splash-claim">Pai Pai Beauty</h2>
             <p class="splash-location">La Rioja, Argentina</p>
             <div class="splash-loader">
@@ -903,27 +875,28 @@
         </div>
     </div>
 
-    <div class="wrapper">
+    <!-- Cambio semántico: MAIN engloba el contenido -->
+    <main class="wrapper">
         <header>
-            <img src="https://i.ibb.co/7x5rV7Rg/Logo-PP-B.png" alt="Pai Pai" class="header-logo">
+            <img src="https://i.ibb.co/7x5rV7Rg/Logo-PP-B.png" alt="Logotipo Pai Pai" class="header-logo">
             <h1>Pai Pai <span>Beauty</span></h1>
             <div class="ubi-badge">Zona Centro · 8 de Diciembre 1111</div><br>
-            <!-- BOTÓN GPS ACTUALIZADO DE FORMA SEGURA CON INTERCEPTOR DE FALLBACK -->
             <a href="https://maps.app.goo.gl/dDGWQ2gw1jmBmPC59" target="_blank" rel="noopener noreferrer" class="btn-gps" onclick="handleGPSClick(event)">✦ VER UBICACIÓN GPS</a>
         </header>
 
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('fidelizacion')">💖 Tarjeta VIP</button>
-            <button class="tab-btn" onclick="switchTab('catalogo')">✨ Menú & Turnos</button>
-        </div>
+        <!-- Cambio semántico: NAV para pestañas -->
+        <nav class="tabs" aria-label="Navegación principal">
+            <button class="tab-btn active" onclick="switchTab('fidelizacion')" aria-selected="true">💖 Tarjeta VIP</button>
+            <button class="tab-btn" onclick="switchTab('catalogo')" aria-selected="false">✨ Menú & Turnos</button>
+        </nav>
 
         <!-- SOLAPA 1: CLUB VIP -->
-        <div id="sec-fidelizacion" class="content-section active">
+        <section id="sec-fidelizacion" class="content-section active" aria-label="Sección VIP">
             <div class="search-container" id="searchBoxVIP">
                 <h2>Identificación VIP</h2>
                 <p>Ingresá tu nombre, apellido y los últimos 3 números de tu celular.</p>
                 <div class="input-group">
-                    <input type="text" id="clientNameInput" placeholder="Ej: María Pérez 455" onkeypress="handleSearchKeyPress(event)">
+                    <input type="text" id="clientNameInput" placeholder="Ej: María Pérez 455" onkeypress="handleSearchKeyPress(event)" aria-label="Buscar usuaria VIP">
                 </div>
                 <span class="input-hint">*Asegurate de escribirlo tal cual te dimos de alta en el estudio para sincronizar tus mimos.</span>
                 <button class="btn-buscar" id="btnSelloVIP" onclick="consultarProgreso()">Sincronizar Estatus</button>
@@ -939,21 +912,21 @@
                     <div class="client-name" id="displayClientName"></div>
                     <div class="status-tag" style="color: var(--fucsia-power); font-size: 11px; font-weight:800; margin-top:5px; text-transform:uppercase; letter-spacing:1px;">✦ Miembro de Honor ✦</div>
                 </div>
-                <div class="progress-bar-container">
+                <div class="progress-bar-container" aria-hidden="true">
                     <div class="progress-bar-laser" id="laserBar"></div>
                 </div>
-                <div class="stamps-grid" id="stampsGrid"></div>
+                <div class="stamps-grid" id="stampsGrid" aria-label="Rejilla de sellos"></div>
                 <div class="progress-text" id="progressText" style="text-align:center; font-size:14px; font-weight: 500; line-height: 1.6;"></div>
-                <button class="btn-share-vip" id="btn-share-vip" onclick="compartirPortalVIP()">✦ Compartir mi secreto VIP con una amiga</button>
+                <button class="btn-buscar" style="margin-top: 20px; min-height: 44px; padding: 14px; font-size: 13px; background-color: transparent; border: 1.5px solid var(--fucsia-power); box-shadow: none; color: var(--fucsia-power);" id="btn-share-vip" onclick="compartirPortalVIP()">✦ Compartir mi secreto VIP</button>
                 <div style="font-size:11px; color:var(--texto-mutado); text-align:center; margin-top:15px; line-height:1.5;">
-                    ✦ Alquimia Compartida: Por cada invitada nueva que agende un servicio de tu parte, recibirás una Estrella de Honor extra de forma inmediata al confirmar su visita.
+                    ✦ Alquimia Compartida: Por cada invitada nueva que agende un servicio de tu parte, recibirás una Estrella de Honor extra.
                 </div>
             </div>
-        </div>
+        </section>
 
         <!-- SOLAPA 2: RESERVAS & TURNOS -->
-        <div id="sec-catalogo" class="content-section">
-            <div class="progress-breadcrumb" id="progressBreadcrumb" style="display: none;">
+        <section id="sec-catalogo" class="content-section" aria-label="Sección de Reservas">
+            <div class="progress-breadcrumb" id="progressBreadcrumb" style="display: none;" aria-hidden="true">
                 <div class="breadcrumb-step active" data-step="1"><span class="step-number">1</span><span class="step-label">Menú</span></div>
                 <div class="breadcrumb-divider">→</div>
                 <div class="breadcrumb-step" data-step="2"><span class="step-number">2</span><span class="step-label">Horario</span></div>
@@ -963,7 +936,7 @@
 
             <!-- VISTA DE CATÁLOGO (FLUJO 1) -->
             <div id="catalogFlow">
-                <div class="filter-scroll-wrapper" id="filterWrapper">
+                <div class="filter-scroll-wrapper" id="filterWrapper" role="group" aria-label="Filtrar servicios">
                     <button class="filter-chip active" onclick="filtrarCategoria('TODOS', this)">Todas</button>
                     <button class="filter-chip" onclick="filtrarCategoria('NAILS', this)">Nails</button>
                     <button class="filter-chip" onclick="filtrarCategoria('REMOCIÓN', this)">Remoción</button>
@@ -977,17 +950,17 @@
             <!-- VISTA DE HORARIOS (FLUJO 2) -->
             <div id="agendaFlow" style="display:none; margin-bottom:120px;">
                 <button class="btn-back-step" onclick="volverAlCatalogo()">← Volver al menú</button>
-                <div class="time-headline" id="titHorarios">Horarios Disponibles</div>
+                <h2 class="time-headline" id="titHorarios">Horarios Disponibles</h2>
                 <span class="time-scarcity-msg">⏳ Cupos exclusivos y limitados para esta quincena. Asegurá tu bloque con anticipación.</span>
                 <div class="skeleton-loader" id="skLoader"><div class="skeleton-block"></div><div class="skeleton-block"></div><div class="skeleton-block"></div></div>
-                <div class="slots-grid" id="gridHorarios"></div>
+                <div class="slots-grid" id="gridHorarios" role="listbox"></div>
 
-                <!-- CAJA DE REGISTRO INTEGRADA (EVITA PROMPTS BLOQUEADOS) -->
+                <!-- CAJA DE REGISTRO INTEGRADA -->
                 <div id="namePromptBox" class="search-container" style="display: none; margin-top: 25px; animation: fadeInPortal 0.5s ease;">
                     <h2 style="font-size: 18px; color: var(--fucsia-power);">Pre-Reservar Bloque</h2>
-                    <p style="margin-bottom: 15px;">Ingresá tu Nombre y Apellido para congelar el turno de forma exclusiva.</p>
+                    <p style="margin-bottom: 15px;">Ingresá tu Nombre y Apellido real para congelar el turno de forma exclusiva.</p>
                     <div class="input-group" style="margin-bottom: 15px;">
-                        <input type="text" id="reservationClientName" placeholder="Ej: Valentina Gómez">
+                        <input type="text" id="reservationClientName" placeholder="Ej: Valentina Gómez" aria-label="Nombre y Apellido">
                     </div>
                     <button class="btn-buscar" id="btnConfirmarReserva" onclick="ejecutarReservaBloqueada()">Pre-Reservar Horario</button>
                 </div>
@@ -1033,32 +1006,32 @@
                     <!-- ACORDEONES INTERACTIVOS DE COMPROMISO -->
                     <div class="checkout-policies-container">
                         <div class="policy-accordion">
-                            <button class="policy-trigger" onclick="togglePolicy(event, 0)">🔒 Compromiso de Reserva (Seña) <span>+</span></button>
+                            <button class="policy-trigger" aria-expanded="false" onclick="togglePolicy(event, 0)">🔒 Compromiso de Reserva (Seña) <span>+</span></button>
                             <div class="policy-content" id="policy-0">Para garantizar una experiencia personalizada y sin esperas, cada cita requiere una inversión de reserva de $5.000. Este monto se descuenta del total de tu servicio el día de tu visita. Como nuestro tiempo es el recurso más valioso, esta reserva no es reembolsable, asegurando la exclusividad de tu espacio.</div>
                         </div>
                         <div class="policy-accordion">
-                            <button class="policy-trigger" onclick="togglePolicy(event, 1)">⏳ Cancelaciones y reprogramación <span>+</span></button>
+                            <button class="policy-trigger" aria-expanded="false" onclick="togglePolicy(event, 1)">⏳ Cancelaciones y reprogramación <span>+</span></button>
                             <div class="policy-content" id="policy-1">Entendemos que los planes pueden cambiar. Podrás reprogramar tu cita con un mínimo de 24 hs de antelación, manteniendo tu reserva vigente para una nueva fecha. Las cancelaciones o cambios realizados con menos de 24 hs de aviso implicarán la pérdida de la inversión de reserva para cubrir los costos operativos del espacio bloqueado.</div>
                         </div>
                         <div class="policy-accordion">
-                            <button class="policy-trigger" onclick="togglePolicy(event, 2)">⏱️ Puntualidad y protocolo de llegada <span>+</span></button>
+                            <button class="policy-trigger" aria-expanded="false" onclick="togglePolicy(event, 2)">⏱️ Puntualidad y protocolo de llegada <span>+</span></button>
                             <div class="policy-content" id="policy-2">Tu tiempo es sagrado. Ofrecemos una tolerancia de 15 minutos. Pasado este tiempo, para no afectar la calidad del servicio de la siguiente clienta, la cita se considerará como 'No asistida' y la reserva se perderá.</div>
                         </div>
                         <div class="policy-accordion">
-                            <button class="policy-trigger" onclick="togglePolicy(event, 3)">🌿 Ambiente Pai Pai <span>+</span></button>
-                            <div class="policy-content" id="policy-3">Nuestro estudio es un santuario de desconexión. Por razones de espacio y seguridad técnica, no se permiten acompañantes ni menores sin cita previa. Agradecemos mantener un clima de respeto y cordialidad para preservar la paz de nuestro studio de belleza.</div>
+                            <button class="policy-trigger" aria-expanded="false" onclick="togglePolicy(event, 3)">🌿 Ambiente Pai Pai <span>+</span></button>
+                            <div class="policy-content" id="policy-3">Nuestro estudio es un santuario de desconexión. Por razones de espacio y seguridad técnica, no se permiten acompañantes ni menores sin cita previa. Agradecemos mantener un clima de respeto y cordialidad.</div>
                         </div>
                     </div>
 
                     <!-- INTERRUPTOR DE SEGURIDAD LEGAL UX -->
-                    <div class="security-filter-box" onclick="toggleCheckboxNativo()">
-                        <input type="checkbox" id="policy-checkbox" onclick="event.stopPropagation(); validatePolicyCheck()">
+                    <div class="security-filter-box" id="securityBox" onclick="toggleCheckboxNativo()">
+                        <input type="checkbox" id="policy-checkbox" onclick="event.stopPropagation(); validatePolicyCheck()" aria-label="Aceptar términos">
                         <label for="policy-checkbox">Entiendo, acepto y me comprometo a cumplir el Protocolo de Visita de Pai Pai Beauty.</label>
                     </div>
 
                     <p style="font-size: 13px; color: var(--texto-mutado); text-align: center; margin-bottom: 15px; line-height: 1.5;"> Realizá tu seña de reserva ($5.000) por transferencia bancaria: </p>
                     
-                    <!-- DETALLES BANCARIOS MEJORADOS CON CVU COPIABLE Y TITULAR COMPLETO -->
+                    <!-- DETALLES BANCARIOS -->
                     <div class="bank-details-card">
                         <div class="bank-row">
                             <span><strong>Titular:</strong> Daiana del Carmen Lazarte</span>
@@ -1084,31 +1057,32 @@
                     </button>
 
                     <!-- BOTÓN DE CONFIRMACIÓN -->
-                    <a id="btnWhatsAppConfirmar" href="#" target="_blank" class="btn-buscar" style="background-color:#1C1C1E; border: 1.5px solid var(--borde); color:#55555A; pointer-events:none; box-shadow:none; font-size:13px; padding:18px; text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px;" onclick="handleConfirmarWASandbox(event)">
+                    <a id="btnWhatsAppConfirmar" href="#" target="_blank" class="btn-buscar" style="background-color:#1C1C1E; border: 1.5px solid var(--borde); color:#55555A; text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px;" onclick="handleConfirmarWA(event)">
                         ✦ CONFIRMAR RESERVA POR WHATSAPP
                     </a>
                 </div>
             </div>
 
-            <!-- BARRA RESUMEN STICKY -->
-            <div id="resumeBar" class="resume-bar" onclick="togglePreviewCarrito(event)">
-                <div class="resume-info">
-                    <div style="cursor:pointer; font-weight: 700;">🕒 <span id="resTiempo">0</span> min (ver mimos elegidos)</div>
+            <!-- BARRA RESUMEN STICKY MEJORADA UX -->
+            <div id="resumeBar" class="resume-bar" role="region" aria-label="Carrito de servicios">
+                <div class="resume-info" style="cursor: pointer;" onclick="togglePreviewCarrito(event)">
+                    <div>🕒 <span id="resTiempo">0</span> min <span style="font-size: 10px; color: var(--fucsia-power); text-decoration: underline; margin-left: 5px;">(Ver Ticket ⌃)</span></div>
                     <div>Seña Fija: <strong>$5.000</strong></div>
                 </div>
-                <div id="miniPreviewText" style="font-size:12px; color:var(--texto-mutado); margin-bottom:12px; display:none; text-transform:uppercase; font-weight:600; line-height: 1.4;"></div>
+                <ul id="miniPreviewList"></ul>
                 <button class="btn-next-flow" id="btnAvanzarTurno" onclick="irAAgendaFlow(event)">Buscar Horario Disponible</button>
             </div>
-        </div>
+        </section>
 
         <footer>
             🔒 CONEXIÓN ENCRIPTADA SSL · PORTAL OFICIAL · PAI PAI BEAUTY © 2026
         </footer>
-    </div>
+    </main>
 
-    <div class="modal-overlay" id="galleryModal" onclick="closeGallery()">
+    <!-- Modal con Aria Labels -->
+    <div class="modal-overlay" id="galleryModal" onclick="closeGallery()" role="dialog" aria-modal="true" aria-label="Galería de imágenes">
         <div class="modal-wrapper" onclick="event.stopPropagation()">
-            <button class="modal-close" onclick="closeGallery()">×</button>
+            <button class="modal-close" aria-label="Cerrar galería" onclick="closeGallery()">×</button>
             <div class="modal-carousel" id="modalCarousel"></div>
             <div class="swipe-hint">✦ Deslizá para ver inspiración ✦</div>
         </div>
@@ -1169,9 +1143,7 @@
                     "📍 Ubicación del Estudio",
                     "Pai Pai Beauty está ubicado en:\n📍 8 de Diciembre 1111, Zona Centro, La Rioja.\n\nSi tu navegador bloqueó el mapa automático, copiá la dirección con el botón de abajo para pegarla directamente en Google Maps.",
                     "Copiar Dirección",
-                    () => {
-                        copiarAlPortapapeles("8 de Diciembre 1111, La Rioja, Argentina", "diagActionBtn", "✦ Dirección copiada con éxito");
-                    }
+                    () => { copiarAlPortapapeles("8 de Diciembre 1111, La Rioja, Argentina", "diagActionBtn", "✦ Dirección copiada con éxito"); }
                 );
             }, 600);
         }
@@ -1182,14 +1154,26 @@
                     "💬 Chat de Soporte VIP",
                     "Si no se abrió la app de WhatsApp, podés agendar nuestro número oficial de atención:\n\n📱 +54 9 3804 235811\n\nTocá abajo para copiarlo al portapapeles.",
                     "Copiar Número Oficial",
-                    () => {
-                        copiarAlPortapapeles("+5493804235811", "diagActionBtn", "✦ Número oficial copiado");
-                    }
+                    () => { copiarAlPortapapeles("+5493804235811", "diagActionBtn", "✦ Número oficial copiado"); }
                 );
             }, 600);
         }
 
-        function handleConfirmarWASandbox(e) {
+        function handleConfirmarWA(e) {
+            const chk = document.getElementById('policy-checkbox');
+            const box = document.getElementById('securityBox');
+            
+            // UX Error Prevention: Si intenta cliquear sin aceptar
+            if(!chk.checked) {
+                e.preventDefault();
+                box.classList.add('error-shake');
+                box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(() => box.classList.remove('error-shake'), 500);
+                triggerToast("Requerido: Aceptar Protocolo");
+                return;
+            }
+
+            // Flujo original si está chequeado
             setTimeout(() => {
                 const total = seleccionados.reduce((acc, s) => acc + s.price, 0);
                 const rest = total - 5000;
@@ -1206,11 +1190,9 @@
 
                 openDialog(
                     "💬 Completá tu Reserva",
-                    "Si la aplicación de WhatsApp no se abrió, copiá el mensaje con los detalles de tu turno y envíaselo directamente a Daiana por chat.",
+                    "Si la aplicación de WhatsApp no se abrió sola, copiá el mensaje con los detalles de tu turno y envíaselo directamente a Daiana por chat.",
                     "Copiar Mensaje de Turno",
-                    () => {
-                        copiarAlPortapapeles(texto, "diagActionBtn", "✦ Detalles copiados. ¡Listos para pegar!");
-                    }
+                    () => { copiarAlPortapapeles(texto, "diagActionBtn", "✦ Detalles copiados. ¡Listos para pegar!"); }
                 );
             }, 800);
         }
@@ -1223,18 +1205,20 @@
             if (actionText && actionCallback) {
                 actionBtn.innerText = actionText;
                 actionBtn.style.display = 'block';
-                actionBtn.onclick = () => {
-                    actionCallback();
-                };
+                actionBtn.onclick = () => { actionCallback(); };
             } else {
                 actionBtn.style.display = 'none';
             }
             
             document.getElementById('customDialog').classList.add('active');
+            document.body.classList.add('no-scroll');
         }
 
         function closeDialog() {
             document.getElementById('customDialog').classList.remove('active');
+            if(!document.getElementById('galleryModal').classList.contains('active')) {
+                document.body.classList.remove('no-scroll');
+            }
         }
 
         function updateBreadcrumb(step) {
@@ -1252,48 +1236,56 @@
             let html = "";
             let currentCat = "";
 
-            baseServicios.forEach(s => {
-                if (categoriaActual !== "TODOS" && s.cat !== categoriaActual) return;
+            // Filtro dinámico
+            const filtrados = categoriaActual === "TODOS" 
+                ? baseServicios 
+                : baseServicios.filter(s => s.cat === categoriaActual);
 
-                if (s.cat !== currentCat && categoriaActual === "TODOS") {
-                    currentCat = s.cat;
-                    html += `<div class="category-title">${currentCat}</div>`;
-                }
+            if (filtrados.length === 0) {
+                html = `<div style="text-align:center; padding: 40px 20px; color: var(--texto-mutado);">No hay servicios disponibles en esta categoría por el momento.</div>`;
+            } else {
+                filtrados.forEach(s => {
+                    if (s.cat !== currentCat && categoriaActual === "TODOS") {
+                        currentCat = s.cat;
+                        html += `<h2 class="category-title">${currentCat}</h2>`;
+                    }
 
-                const isSelected = seleccionados.some(item => item.id === s.id);
-                let tagHtml = s.tag === "POPULAR" ? `<div class="service-tag">✦ MÁS SOLICITADO</div>` : (s.tag === "TENDENCIA" ? `<div class="service-tag tag-new">✦ TENDENCIA</div>` : "");
+                    const isSelected = seleccionados.some(item => item.id === s.id);
+                    let tagHtml = s.tag === "POPULAR" ? `<div class="service-tag">✦ MÁS SOLICITADO</div>` : (s.tag === "TENDENCIA" ? `<div class="service-tag tag-new">✦ TENDENCIA</div>` : "");
 
-                html += `
-                    <div class="service-card ${isSelected ? 'selected' : ''}" id="card-${s.id}" onclick="handleCardClick(event, '${s.id}')">
-                        ${tagHtml}
-                        <div class="service-main-info">
-                            <div class="service-title">
-                                <h3>${s.name}</h3>
-                                <div class="service-meta">🕒 ${s.time} min</div>
+                    // Semántica: article para cards
+                    html += `
+                        <article class="service-card ${isSelected ? 'selected' : ''}" id="card-${s.id}" onclick="handleCardClick(event, '${s.id}')">
+                            ${tagHtml}
+                            <div class="service-main-info">
+                                <div class="service-title">
+                                    <h3>${s.name}</h3>
+                                    <div class="service-meta">🕒 ${s.time} min</div>
+                                </div>
+                                <div class="service-price">$${s.price.toLocaleString('es-AR')}</div>
                             </div>
-                            <div class="service-price">$${s.price.toLocaleString('es-AR')}</div>
-                        </div>
-                        <div class="service-description">${s.desc}</div>
-                        <div class="service-actions">
-                            <button class="btn-inline-gallery" onclick="event.stopPropagation(); openGallery('${s.id}')">✨ Ver Inspiración</button>
-                            <div class="select-trigger">
-                                <span class="card-checkbox"></span>
+                            <p class="service-description">${s.desc}</p>
+                            <div class="service-actions">
+                                <button class="btn-inline-gallery" onclick="event.stopPropagation(); openGallery('${s.id}')" aria-label="Ver fotos de ${s.name}">✨ Ver Inspiración</button>
+                                <div class="select-trigger" aria-hidden="true">
+                                    <span class="card-checkbox"></span>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                `;
-            });
+                        </article>
+                    `;
+                });
+            }
 
-            html += `<div class="faq-section"><div class="faq-title">Información Importante</div>`;
+            html += `<section class="faq-section" aria-label="Preguntas Frecuentes"><h2 class="faq-title">Información Importante</h2>`;
             faqData.forEach((f, idx) => {
                 html += `
                     <div class="faq-item">
-                        <div class="faq-trigger" onclick="toggleFaq(${idx})"><span>${f.q}</span><span>+</span></div>
+                        <button class="faq-trigger" onclick="toggleFaq(${idx})" aria-expanded="false"><span>${f.q}</span><span>+</span></button>
                         <div class="faq-content" id="faq-content-${idx}">${f.a}</div>
                     </div>
                 `;
             });
-            html += `</div>`;
+            html += `</section>`;
             container.innerHTML = html;
             applyRippleEffect();
         }
@@ -1305,8 +1297,12 @@
         }
 
         function filtrarCategoria(cat, btn) {
-            document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.filter-chip').forEach(b => {
+                b.classList.remove('active');
+                b.setAttribute('aria-pressed', 'false');
+            });
             btn.classList.add('active');
+            btn.setAttribute('aria-pressed', 'true');
             categoriaActual = cat;
             renderCatalog();
         }
@@ -1314,15 +1310,16 @@
         function switchTab(tabName) {
             const fSec = document.getElementById('sec-fidelizacion');
             const cSec = document.getElementById('sec-catalogo');
+            const tabs = document.querySelectorAll('.tab-btn');
             
             if(tabName === 'fidelizacion') {
-                document.querySelectorAll('.tab-btn')[0].classList.add('active');
-                document.querySelectorAll('.tab-btn')[1].classList.remove('active');
+                tabs[0].classList.add('active'); tabs[0].setAttribute('aria-selected', 'true');
+                tabs[1].classList.remove('active'); tabs[1].setAttribute('aria-selected', 'false');
                 fSec.classList.add('active'); cSec.classList.remove('active');
                 document.getElementById('resumeBar').style.display = 'none';
             } else {
-                document.querySelectorAll('.tab-btn')[1].classList.add('active');
-                document.querySelectorAll('.tab-btn')[0].classList.remove('active');
+                tabs[1].classList.add('active'); tabs[1].setAttribute('aria-selected', 'true');
+                tabs[0].classList.remove('active'); tabs[0].setAttribute('aria-selected', 'false');
                 cSec.classList.add('active'); fSec.classList.remove('active');
                 actualizarResumen();
             }
@@ -1349,20 +1346,30 @@
             if(seleccionados.length > 0 && !isCheckoutActive && !isAgendaActive) {
                 let totalTiempo = seleccionados.reduce((acc, s) => acc + s.time, 0);
                 document.getElementById('resTiempo').innerText = totalTiempo;
+                
+                // Actualizar la lista interna del drawer
+                const ul = document.getElementById('miniPreviewList');
+                ul.innerHTML = "";
+                seleccionados.forEach(s => {
+                    const li = document.createElement('li');
+                    li.innerText = s.name;
+                    ul.appendChild(li);
+                });
+
                 bar.style.display = 'block';
                 updateBreadcrumb(1);
             } else {
                 bar.style.display = 'none';
+                document.getElementById('miniPreviewList').style.display = 'none';
             }
         }
 
         function togglePreviewCarrito(e) {
             if(e.target.tagName === 'BUTTON') return;
-            const preview = document.getElementById('miniPreviewText');
+            const preview = document.getElementById('miniPreviewList');
             if(preview.style.display === 'block') {
                 preview.style.display = 'none';
             } else {
-                preview.innerText = "Llevás: " + seleccionados.map(s => s.name).join(' + ');
                 preview.style.display = 'block';
             }
         }
@@ -1376,6 +1383,7 @@
             setTimeout(() => {
                 document.getElementById('catalogFlow').style.display = 'none';
                 document.getElementById('resumeBar').style.display = 'none';
+                document.getElementById('miniPreviewList').style.display = 'none'; // reset drawer
                 document.getElementById('agendaFlow').style.display = 'block';
                 btn.innerText = "Buscar Horario Disponible";
                 btn.disabled = false;
@@ -1395,15 +1403,14 @@
             updateBreadcrumb(2);
         }
 
-        // SISTEMA ESTRICTO DE ANULACIÓN DE FECHAS PASADAS EN TIEMPO REAL
         function normalizarFecha(fechaStr) {
             if (fechaStr.includes("-")) {
                 const partes = fechaStr.split("-");
-                if (partes[0].length === 4) { // Formato YYYY-MM-DD
+                if (partes[0].length === 4) { 
                     return `${partes[2]}/${partes[1]}/${partes[0]}`;
                 }
             }
-            return fechaStr; // Devuelve DD/MM/YYYY
+            return fechaStr; 
         }
 
         function esBloquePasado(fechaStr, horaStr) {
@@ -1417,10 +1424,9 @@
                 const hora = parseInt(partesHora[0], 10);
                 const minuto = parseInt(partesHora[1], 10);
                 
-                // Crea fecha y hora exacta del bloque propuesto
                 const fechaLimite = new Date(anio, mes, dia, hora, minuto);
-                const ahora = new Date(); // Fecha y hora actual del celular de la clienta
-                return fechaLimite < ahora; // Devuelve true si el bloque ya pasó
+                const ahora = new Date(); 
+                return fechaLimite < ahora; 
             } catch(e) {
                 return false;
             }
@@ -1433,14 +1439,12 @@
             let iteradorFecha = new Date(hoy);
             
             while (diasCargados < 7) {
-                // Descarta domingos (0)
-                if (iteradorFecha.getDay() !== 0) {
+                if (iteradorFecha.getDay() !== 0) { // No domingos
                     const dd = String(iteradorFecha.getDate()).padStart(2, '0');
                     const mm = String(iteradorFecha.getMonth() + 1).padStart(2, '0');
                     const fechaFormateada = `${dd}/${mm}/${iteradorFecha.getFullYear()}`;
                     
                     ["09:00", "11:30", "14:00", "16:30", "19:00"].forEach(hora => {
-                        // SÓLO agrega si el bloque NO está en el pasado
                         if (!esBloquePasado(fechaFormateada, hora)) {
                             fechasDinamicas.push({ fecha: fechaFormateada, hora: hora });
                         }
@@ -1468,7 +1472,6 @@
                 sk.style.display = 'none';
 
                 if(result.status === "success" && result.data && result.data.length > 0) {
-                    // Filtrar estrictamente excluyendo bloques pasados (tanto días anteriores como horas que ya pasaron de hoy)
                     const turnosFiltrados = result.data.filter(t => !esBloquePasado(t.fecha, t.hora));
                     if(turnosFiltrados.length > 0) {
                         renderizarHorarios(turnosFiltrados);
@@ -1481,7 +1484,7 @@
             } catch(e) {
                 sk.style.display = 'none';
                 renderizarHorarios(generarCalendarioDinamicoAlineado());
-                triggerToast("✦ Horarios locales listos");
+                triggerToast("✦ Mostrando agenda local");
             }
             applyRippleEffect();
         }
@@ -1490,11 +1493,17 @@
             const grid = document.getElementById('gridHorarios'); grid.innerHTML = "";
             horarios.forEach((t, idx) => {
                 const btn = document.createElement('button'); btn.className = "slot-btn";
+                btn.setAttribute("role", "option");
                 let esDemanda = (idx % 4 === 0) ? '<span class="high-demand-badge">🔥 ALTA DEMANDA</span>' : '';
                 btn.innerHTML = `<strong>${normalizarFecha(t.fecha)}</strong><br>${t.hora} hs${esDemanda}`;
                 btn.onclick = () => {
-                    document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
-                    btn.classList.add('selected'); horarioSeleccionado = t;
+                    document.querySelectorAll('.slot-btn').forEach(b => {
+                        b.classList.remove('selected');
+                        b.setAttribute('aria-selected', 'false');
+                    });
+                    btn.classList.add('selected'); 
+                    btn.setAttribute('aria-selected', 'true');
+                    horarioSeleccionado = t;
                     triggerToast("✦ Bloque seleccionado");
                     
                     const promptBox = document.getElementById('namePromptBox');
@@ -1511,9 +1520,12 @@
             const nombre = nombreInput.value.trim();
             const btn = document.getElementById('btnConfirmarReserva');
 
-            if(!nombre) {
+            // UX Validación: Prevenir errores tontos (ej. 1 sola letra)
+            if(nombre.length < 3) {
+                triggerToast("Agregá Nombre y Apellido real");
                 nombreInput.classList.add('shake');
                 setTimeout(() => nombreInput.classList.remove('shake'), 500);
+                nombreInput.focus();
                 return;
             }
 
@@ -1528,6 +1540,7 @@
                 horarioSeleccionado.clientaReal = nombre;
                 abrirCheckoutFinal();
             } catch(e) {
+                // Fallback seguro si la hoja falla
                 horarioSeleccionado.clientaReal = nombre;
                 abrirCheckoutFinal();
             } finally {
@@ -1538,15 +1551,18 @@
 
         function togglePolicy(e, idx) {
             const content = document.getElementById(`policy-${idx}`);
+            const trigger = e.currentTarget;
+            const span = trigger.querySelector('span');
             const isVisible = content.style.display === 'block';
             
+            // Cerrar todos
             document.querySelectorAll('.policy-content').forEach(el => el.style.display = 'none');
             document.querySelectorAll('.policy-trigger span').forEach(el => el.innerText = '+');
+            document.querySelectorAll('.policy-trigger').forEach(el => el.setAttribute('aria-expanded', 'false'));
 
             if (!isVisible) {
                 content.style.display = 'block';
-                const trigger = e.currentTarget || e.target;
-                const span = trigger.querySelector('span');
+                trigger.setAttribute('aria-expanded', 'true');
                 if (span) span.innerText = '−';
             }
         }
@@ -1562,16 +1578,15 @@
             const btnWA = document.getElementById('btnWhatsAppConfirmar');
             if(!btnWA) return;
             
+            // Si el cliente acepta, pintamos de verde el WhatsApp, si no, se deja habilitado pero sin resaltar para poder atrapar el error (Error Prevention)
             if(chk.checked) {
                 btnWA.style.backgroundColor = "#25D366";
                 btnWA.style.color = "#ffffff";
-                btnWA.style.pointerEvents = "auto";
                 btnWA.style.border = "none";
                 btnWA.style.boxShadow = "0 4px 20px rgba(37, 211, 102, 0.45)";
             } else {
                 btnWA.style.backgroundColor = "#1C1C1E";
                 btnWA.style.color = "#55555A";
-                btnWA.style.pointerEvents = "none";
                 btnWA.style.border = "1.5px solid var(--borde)";
                 btnWA.style.boxShadow = "none";
             }
@@ -1612,6 +1627,10 @@
             ].join("\n");
 
             document.getElementById('btnWhatsAppConfirmar').href = `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent(mensajeWhatsApp)}`;
+            
+            // Limpiamos el checkbox por si volvio atras
+            const chk = document.getElementById('policy-checkbox');
+            chk.checked = false;
             validatePolicyCheck();
         }
 
@@ -1645,7 +1664,8 @@
             const soporte = document.getElementById('soporteVIP');
             const card = document.getElementById('loyaltyCard');
             
-            if(!input.trim()) {
+            if(input.trim().length < 3) {
+                triggerToast("Ingresá un nombre válido");
                 box.classList.add('shake'); setTimeout(() => box.classList.remove('shake'), 500);
                 return;
             }
@@ -1778,7 +1798,7 @@
                 url: window.location.href
             };
             if(navigator.share) { navigator.share(shareData); } 
-            else { copyData(window.location.href, 'btn-share-vip', "✦ Enlace copiado para compartir"); }
+            else { copiarAlPortapapeles(window.location.href, 'btn-share-vip', "✦ Enlace copiado para compartir"); }
         }
 
         function openGallery(id) {
@@ -1786,20 +1806,41 @@
             const c = document.getElementById('modalCarousel');
             c.innerHTML = "";
             s.fotos.forEach(f => {
-                const img = document.createElement('img'); img.src = f; img.loading = "lazy";
+                const img = document.createElement('img'); 
+                img.src = f; 
+                img.loading = "lazy"; // Mejora de performance
+                img.alt = `Foto de inspiración de ${s.name}`;
                 c.appendChild(img);
             });
             document.getElementById('galleryModal').classList.add('active');
+            document.body.classList.add('no-scroll');
         }
-        function closeGallery() { document.getElementById('galleryModal').classList.remove('active'); }
+        
+        function closeGallery() { 
+            document.getElementById('galleryModal').classList.remove('active'); 
+            if(!document.getElementById('customDialog').classList.contains('active')) {
+                document.body.classList.remove('no-scroll');
+            }
+        }
         
         function toggleFaq(idx) {
             const content = document.getElementById(`faq-content-${idx}`);
-            content.style.display = content.style.display === 'block' ? 'none' : 'block';
+            const trigger = document.querySelectorAll('.faq-trigger')[idx];
+            if (content.style.display === 'block') {
+                content.style.display = 'none';
+                trigger.setAttribute('aria-expanded', 'false');
+                trigger.querySelector('span:last-child').innerText = '+';
+            } else {
+                content.style.display = 'block';
+                trigger.setAttribute('aria-expanded', 'true');
+                trigger.querySelector('span:last-child').innerText = '−';
+            }
         }
         
         function triggerToast(msg) {
-            const t = document.getElementById('toast'); t.innerText = msg; t.style.display = 'block';
+            const t = document.getElementById('toast'); 
+            t.innerText = msg; 
+            t.style.display = 'block';
             setTimeout(() => t.style.display = 'none', 2500);
         }
 
@@ -1868,4 +1909,4 @@
         };
     </script>
 </body>
-    </html>
+</html>
