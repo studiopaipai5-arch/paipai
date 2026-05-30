@@ -175,7 +175,7 @@
             text-transform: uppercase;
         }
 
-        /* BOTÓN GPS PREMIUM CON REDIRECCIÓN BLINDADA */
+        /* BOTÓN GPS CON INTERCEPTOR FALLBACK */
         .btn-gps {
             display: inline-flex;
             align-items: center;
@@ -1050,7 +1050,7 @@
                         </div>
                     </div>
 
-                    <!-- INTERRUPTOR DE SEGURIDAD LEGAL UX ADAPTADO PARA SENIORS -->
+                    <!-- INTERRUPTOR DE SEGURIDAD LEGAL UX -->
                     <div class="security-filter-box" onclick="toggleCheckboxNativo()">
                         <input type="checkbox" id="policy-checkbox" onclick="event.stopPropagation(); validatePolicyCheck()">
                         <label for="policy-checkbox">Entiendo, acepto y me comprometo a cumplir el Protocolo de Visita de Pai Pai Beauty.</label>
@@ -1116,7 +1116,7 @@
 
     <script>
         const SHEET_ID = '1b2qrrO0enYZlhgYFZAnQr5fUcQpTavGNJ3rE28CGAw0'; 
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxvuH7InPFxg24EVMCiQuo9p0Djx0LKPfkTl2slLP-nXM07xgXtj2dNFerytQy9QsPdWw/exec';
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxr4AHXTni_PlgC9v4iVOy1ZDsxQF4LFWnBoHrzgDSPosXR5bungwmAGrcz9Inn3zy2/exec';
         const TELEFONO_WHATSAPP = "5493804235811"; 
 
         const baseClientesMock = [
@@ -1162,7 +1162,7 @@
             }, 1200);
         }
 
-        // REDIRECCIONES BLINDADAS E INTERCEPTORES DE SEGURIDAD (SANDBOX Workaround)
+        // REDIRECCIONES SEGURAS E INTERCEPTORES DE SEGURIDAD (SANDBOX Workaround)
         function handleGPSClick(e) {
             setTimeout(() => {
                 openDialog(
@@ -1395,28 +1395,61 @@
             updateBreadcrumb(2);
         }
 
+        // SISTEMA ESTRICTO DE ANULACIÓN DE FECHAS PASADAS EN TIEMPO REAL
+        function normalizarFecha(fechaStr) {
+            if (fechaStr.includes("-")) {
+                const partes = fechaStr.split("-");
+                if (partes[0].length === 4) { // Formato YYYY-MM-DD
+                    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+                }
+            }
+            return fechaStr; // Devuelve DD/MM/YYYY
+        }
+
+        function esBloquePasado(fechaStr, horaStr) {
+            try {
+                const fechaNorm = normalizarFecha(fechaStr);
+                const partesFecha = fechaNorm.split('/');
+                const partesHora = horaStr.split(':');
+                const dia = parseInt(partesFecha[0], 10);
+                const mes = parseInt(partesFecha[1], 10) - 1;
+                const anio = parseInt(partesFecha[2], 10);
+                const hora = parseInt(partesHora[0], 10);
+                const minuto = parseInt(partesHora[1], 10);
+                
+                // Crea fecha y hora exacta del bloque propuesto
+                const fechaLimite = new Date(anio, mes, dia, hora, minuto);
+                const ahora = new Date(); // Fecha y hora actual del celular de la clienta
+                return fechaLimite < ahora; // Devuelve true si el bloque ya pasó
+            } catch(e) {
+                return false;
+            }
+        }
+
         function generarCalendarioDinamicoAlineado() {
-            const fechasDinamicas = []; const hoy = new Date(); let diasCargados = 0; let iteradorFecha = new Date(hoy);
+            const fechasDinamicas = []; 
+            const hoy = new Date(); 
+            let diasCargados = 0; 
+            let iteradorFecha = new Date(hoy);
+            
             while (diasCargados < 7) {
+                // Descarta domingos (0)
                 if (iteradorFecha.getDay() !== 0) {
                     const dd = String(iteradorFecha.getDate()).padStart(2, '0');
                     const mm = String(iteradorFecha.getMonth() + 1).padStart(2, '0');
                     const fechaFormateada = `${dd}/${mm}/${iteradorFecha.getFullYear()}`;
-                    ["09:00", "11:30", "14:00", "16:30", "19:00"].forEach(hora => { fechasDinamicas.push({ fecha: fechaFormateada, hora: hora }); });
+                    
+                    ["09:00", "11:30", "14:00", "16:30", "19:00"].forEach(hora => {
+                        // SÓLO agrega si el bloque NO está en el pasado
+                        if (!esBloquePasado(fechaFormateada, hora)) {
+                            fechasDinamicas.push({ fecha: fechaFormateada, hora: hora });
+                        }
+                    });
                     diasCargados++;
                 }
                 iteradorFecha.setDate(iteradorFecha.getDate() + 1);
             }
             return fechasDinamicas;
-        }
-
-        function esFechaPasada(fechaStr) {
-            try {
-                const partes = fechaStr.split('/');
-                const dateObj = new Date(parseInt(partes[2]), parseInt(partes[1]) - 1, parseInt(partes[0]), 23, 59, 59);
-                const hoy = new Date(); hoy.setHours(0,0,0,0);
-                return dateObj < hoy;
-            } catch(e) { return false; }
         }
 
         async function procesarSeleccionHorario() {
@@ -1434,8 +1467,9 @@
                 const result = await response.json();
                 sk.style.display = 'none';
 
-                if(result.status === "success" && result.data.length > 0) {
-                    const turnosFiltrados = result.data.filter(t => !esFechaPasada(t.fecha));
+                if(result.status === "success" && result.data && result.data.length > 0) {
+                    // Filtrar estrictamente excluyendo bloques pasados (tanto días anteriores como horas que ya pasaron de hoy)
+                    const turnosFiltrados = result.data.filter(t => !esBloquePasado(t.fecha, t.hora));
                     if(turnosFiltrados.length > 0) {
                         renderizarHorarios(turnosFiltrados);
                     } else {
@@ -1457,7 +1491,7 @@
             horarios.forEach((t, idx) => {
                 const btn = document.createElement('button'); btn.className = "slot-btn";
                 let esDemanda = (idx % 4 === 0) ? '<span class="high-demand-badge">🔥 ALTA DEMANDA</span>' : '';
-                btn.innerHTML = `<strong>${t.fecha}</strong><br>${t.hora} hs${esDemanda}`;
+                btn.innerHTML = `<strong>${normalizarFecha(t.fecha)}</strong><br>${t.hora} hs${esDemanda}`;
                 btn.onclick = () => {
                     document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
                     btn.classList.add('selected'); horarioSeleccionado = t;
@@ -1549,8 +1583,9 @@
             document.getElementById('checkoutFlow').style.display = "block";
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
+            const fechaNorm = normalizarFecha(horarioSeleccionado.fecha);
             document.getElementById('chkName').innerText = horarioSeleccionado.clientaReal.toUpperCase();
-            document.getElementById('chkDate').innerText = `${horarioSeleccionado.fecha} a las ${horarioSeleccionado.hora} hs`;
+            document.getElementById('chkDate').innerText = `${fechaNorm} a las ${horarioSeleccionado.hora} hs`;
             document.getElementById('chkServices').innerText = seleccionados.map(s => s.name).join(' + ');
             
             const tiempoTotal = seleccionados.reduce((acc, s) => acc + s.time, 0);
@@ -1566,7 +1601,7 @@
             const mensajeWhatsApp = [
                 "✨ *NUEVA RESERVA - PORTAL PAI PAI BEAUTY* ✨",
                 `👤 *Clienta:* ${horarioSeleccionado.clientaReal}`,
-                `📅 *Día y Hora:* ${horarioSeleccionado.fecha} a las ${horarioSeleccionado.hora} hs`,
+                `📅 *Día y Hora:* ${fechaNorm} a las ${horarioSeleccionado.hora} hs`,
                 `💅 *Tratamiento:* ${mimosText}`,
                 `💰 *Inversión Total:* $${inversionTotal.toLocaleString('es-AR')}`,
                 "💵 *Inversión de Reserva (Seña):* $5.000",
@@ -1578,6 +1613,23 @@
 
             document.getElementById('btnWhatsAppConfirmar').href = `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent(mensajeWhatsApp)}`;
             validatePolicyCheck();
+        }
+
+        function applyRippleEffect() {
+            document.querySelectorAll('.btn-buscar, .btn-next-flow, .slot-btn, .filter-chip').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    ripple.classList.add('ripple-effect');
+                    this.appendChild(ripple);
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px'; ripple.style.top = y + 'px';
+                    setTimeout(() => ripple.remove(), 500);
+                });
+            });
         }
 
         function handleSearchKeyPress(event) { 
@@ -1726,7 +1778,7 @@
                 url: window.location.href
             };
             if(navigator.share) { navigator.share(shareData); } 
-            else { copiarAlPortapapeles(window.location.href, 'btn-share-vip', "✦ Enlace copiado para compartir"); }
+            else { copyData(window.location.href, 'btn-share-vip', "✦ Enlace copiado para compartir"); }
         }
 
         function openGallery(id) {
@@ -1817,5 +1869,4 @@
     </script>
 </body>
 </html>
-
 
