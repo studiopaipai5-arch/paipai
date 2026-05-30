@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PAI PAI BEAUTY · Portal Premium de Reservas</title>
-    <!-- Google Fonts Premium: League Spartan para presencia de marca y Montserrat para lectura fluida -->
+    <!-- Google Fonts Premium: League Spartan para títulos con presencia y Montserrat para lectura ergonómica -->
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700;800;900&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         /* VARIABLES DE DISEÑO PREMIUM (UI TOKENS DE ALTO CONTRASTE) */
@@ -15,7 +15,7 @@
             --fucsia-glow: rgba(255, 27, 167, 0.4);
             --blanco-perla: #F8FAFC;   /* Contraste de lectura ergonómica */
             --gris-galactico: #F1F5F9; /* Gris ultra claro para cajas de entrada */
-            --texto-mutado: #CBD5E1;   /* Gris claro legible */
+            --texto-mutado: #CBD5E1;   /* Gris claro legible para seniors */
             --borde: #2C2C2E;
             --oro-vip: #FFB800;
         }
@@ -175,7 +175,7 @@
             text-transform: uppercase;
         }
 
-        /* BOTÓN GPS CON REDIRECCIÓN BLINDADA */
+        /* BOTÓN GPS PREMIUM CON REDIRECCIÓN BLINDADA */
         .btn-gps {
             display: inline-flex;
             align-items: center;
@@ -305,8 +305,6 @@
             box-shadow: 0 4px 15px var(--fucsia-glow);
             transition: all 0.3s;
             min-height: 52px;
-            position: relative;
-            overflow: hidden;
         }
 
         .input-hint {
@@ -443,23 +441,6 @@
             box-shadow: 0 0 15px rgba(255, 184, 0, 0.45);
         }
 
-        .btn-share-vip {
-            width: 100%;
-            background-color: rgba(255, 27, 167, 0.12);
-            border: 1.5px solid var(--fucsia-power);
-            color: white;
-            padding: 16px;
-            border-radius: 16px;
-            font-size: 13px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-            min-height: 48px;
-        }
-
         /* BREADCRUMBS GLASSMORPHISM STICKY */
         .progress-breadcrumb {
             display: flex;
@@ -519,7 +500,7 @@
             box-shadow: 0 4px 15px rgba(255, 27, 167, 0.3);
         }
 
-        /* CATÁLOGO DE SERVICIOS ERGONÓMICO CON ALTO CONTRASTE */
+        /* CATÁLOGO DE SERVICIOS */
         .catalog-container { display: flex; flex-direction: column; gap: 20px; padding-bottom: 160px; }
         
         .category-title {
@@ -645,7 +626,6 @@
             background-color: var(--bg-card); border: 1.5px solid var(--borde); color: var(--blanco-perla); 
             padding: 18px 8px; font-size: 13px; font-weight: 700; border-radius: 14px; cursor: pointer; text-align: center;
             min-height: 50px;
-            transition: all 0.3s ease;
         }
         .slot-btn.selected { border-color: var(--fucsia-power); background-color: rgba(255, 27, 167, 0.1); box-shadow: 0 0 15px rgba(255, 27, 167, 0.2); }
         .high-demand-badge { display: block; font-size: 9px; color: var(--fucsia-power); font-weight: 800; margin-top: 4px; }
@@ -692,7 +672,7 @@
             min-height: 52px;
         }
 
-        /* CHECKOUT MASTERPIECE (TICKET DE COMPRA ELEGANTE) */
+        /* CHECKOUT MASTERPIECE */
         .checkout-container { 
             background-color: var(--bg-card); border: 1.5px solid var(--borde); border-radius: 28px;
             padding: 30px 22px; margin-bottom: 120px;
@@ -783,18 +763,46 @@
             user-select: none;
         }
 
+        /* DATOS BANCARIOS PREMIUM REESTRUCTURADOS (TITULAR COMPLETO, CUIL FIJO, CVU COPIABLE) */
         .bank-details-card {
-            background: linear-gradient(135deg, #1C1C21 0%, #0E0E10 100%); border: 1.5px solid var(--fucsia-power);
-            border-radius: 22px; padding: 22px; margin-bottom: 25px;
+            background: linear-gradient(135deg, #1C1C21 0%, #0E0E10 100%); 
+            border: 1.5px solid var(--fucsia-power);
+            border-radius: 22px; 
+            padding: 22px; 
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(255, 27, 167, 0.15);
         }
-        .bank-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 13.5px; }
+        .bank-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 10px 0; 
+            font-size: 13.5px; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .bank-row:last-child {
+            border-bottom: none;
+        }
+        .bank-row span {
+            color: var(--blanco-perla);
+            max-width: 75%;
+            word-break: break-all;
+        }
 
         /* BOTONES DE COPIAR INTERACTIVOS */
         .btn-copy {
-            background: none; border: 1.5px solid var(--fucsia-power); color: white; padding: 8px 14px;
-            font-size: 11px; font-weight: 800; text-transform: uppercase; border-radius: 18px; cursor: pointer;
+            background: none; 
+            border: 1.5px solid var(--fucsia-power); 
+            color: white; 
+            padding: 8px 14px;
+            font-size: 11px; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            border-radius: 18px; 
+            cursor: pointer;
             transition: all 0.2s ease-in-out;
             min-height: 36px;
+            flex-shrink: 0;
         }
 
         .btn-copy.success {
@@ -839,7 +847,7 @@
         .faq-trigger { display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; cursor: pointer; }
         .faq-content { font-size: 12px; color: var(--texto-mutado); line-height: 1.6; margin-top: 8px; display: none; font-weight: 300; }
 
-        /* DIÁLOGOS EMERGENS (DISEÑO PREMIUM MODAL PROPIO) */
+        /* DIÁLOGOS EMERGENS */
         .dialog-overlay { position: fixed; inset: 0; background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 10000; }
         .dialog-overlay.active { opacity: 1; pointer-events: auto; }
         .dialog-card { width: 85%; max-width: 340px; background-color: var(--bg-card); border: 1px solid var(--borde); border-radius: 24px; padding: 25px; text-align: center; }
@@ -869,7 +877,7 @@
     <div class="toast-notification" id="toast">✦ Hecho</div>
     <textarea id="invisibleTextarea" readonly style="position:fixed; top:-1000px; left:-1000px; opacity:0; pointer-events:none;"></textarea>
 
-    <!-- POPUPS E INTERRUPTORES DE SOPORTE DIRECTOS (FALLBACKS) -->
+    <!-- DIÁLOGOS EMERGENS -->
     <div class="dialog-overlay" id="customDialog">
         <div class="dialog-card">
             <h3 class="dialog-title" id="diagTitle">Atención</h3>
@@ -881,7 +889,7 @@
         </div>
     </div>
 
-    <!-- SPLASH SCREEN CON LOGO Y CARGADORES SUTILES -->
+    <!-- PANTALLA DE CARGA -->
     <div class="splash-screen" id="splashScreen">
         <div class="splash-content">
             <img src="https://i.ibb.co/7x5rV7Rg/Logo-PP-B.png" alt="Pai Pai Beauty" class="splash-logo">
@@ -900,6 +908,7 @@
             <img src="https://i.ibb.co/7x5rV7Rg/Logo-PP-B.png" alt="Pai Pai" class="header-logo">
             <h1>Pai Pai <span>Beauty</span></h1>
             <div class="ubi-badge">Zona Centro · 8 de Diciembre 1111</div><br>
+            <!-- BOTÓN GPS ACTUALIZADO DE FORMA SEGURA CON INTERCEPTOR DE FALLBACK -->
             <a href="https://maps.app.goo.gl/dDGWQ2gw1jmBmPC59" target="_blank" rel="noopener noreferrer" class="btn-gps" onclick="handleGPSClick(event)">✦ VER UBICACIÓN GPS</a>
         </header>
 
@@ -970,11 +979,7 @@
                 <button class="btn-back-step" onclick="volverAlCatalogo()">← Volver al menú</button>
                 <div class="time-headline" id="titHorarios">Horarios Disponibles</div>
                 <span class="time-scarcity-msg">⏳ Cupos exclusivos y limitados para esta quincena. Asegurá tu bloque con anticipación.</span>
-                <div class="skeleton-loader" id="skLoader">
-                    <div class="skeleton-block"></div>
-                    <div class="skeleton-block"></div>
-                    <div class="skeleton-block"></div>
-                </div>
+                <div class="skeleton-loader" id="skLoader"><div class="skeleton-block"></div><div class="skeleton-block"></div><div class="skeleton-block"></div></div>
                 <div class="slots-grid" id="gridHorarios"></div>
 
                 <!-- CAJA DE REGISTRO INTEGRADA (EVITA PROMPTS BLOQUEADOS) -->
@@ -1051,19 +1056,34 @@
                         <label for="policy-checkbox">Entiendo, acepto y me comprometo a cumplir el Protocolo de Visita de Pai Pai Beauty.</label>
                     </div>
 
-                    <p style="font-size: 13px; color: var(--texto-mutado); text-align: center; margin-bottom: 15px; line-height: 1.5;"> Realizá tu transferencia por el monto exacto de la seña ($5.000): </p>
+                    <p style="font-size: 13px; color: var(--texto-mutado); text-align: center; margin-bottom: 15px; line-height: 1.5;"> Realizá tu seña de reserva ($5.000) por transferencia bancaria: </p>
+                    
+                    <!-- DETALLES BANCARIOS MEJORADOS CON CVU COPIABLE Y TITULAR COMPLETO -->
                     <div class="bank-details-card">
-                        <div class="bank-row"><span><strong>Titular:</strong> Daiana Lazarte</span></div>
-                        <div class="bank-row"><span><strong>Entidad:</strong> Personal Pay</span></div>
-                        <div class="bank-row"><span><strong>Alias:</strong> Paipai20</span><button id="btn-copy-alias" class="btn-copy" onclick="copiarTextoSeguro('Paipai20', 'Alias copiado con éxito', 'btn-copy-alias')">Copiar</button></div>
-                        <div class="bank-row"><span><strong>CUIL:</strong> 27-38247046-5</span><button id="btn-copy-cuil" class="btn-copy" onclick="copiarTextoSeguro('27-38247046-5', 'CUIL copiado con éxito', 'btn-copy-cuil')">Copiar</button></div>
+                        <div class="bank-row">
+                            <span><strong>Titular:</strong> Daiana del Carmen Lazarte</span>
+                        </div>
+                        <div class="bank-row">
+                            <span><strong>CUIL:</strong> 27-38247046-5</span>
+                        </div>
+                        <div class="bank-row">
+                            <span><strong>Entidad:</strong> Personal Pay</span>
+                        </div>
+                        <div class="bank-row">
+                            <span><strong>Alias:</strong> Paipai20</span>
+                            <button id="btn-copy-alias" class="btn-copy" onclick="copiarAlPortapapeles('Paipai20', 'btn-copy-alias', '✦ Alias copiado')">Copiar</button>
+                        </div>
+                        <div class="bank-row">
+                            <span><strong>CVU:</strong> 0000076500000008345736</span>
+                            <button id="btn-copy-cvu" class="btn-copy" onclick="copiarAlPortapapeles('0000076500000008345736', 'btn-copy-cvu', '✦ CVU copiado')">Copiar</button>
+                        </div>
                     </div>
 
                     <button class="btn-ics-calendar" onclick="descargarCalendarioICS()">
                         📅 AÑADIR A MI CALENDARIO (AVISO 24HS)
                     </button>
 
-                    <!-- BOTÓN DE CONFIRMACIÓN CON COMPORTAMIENTO AUTOMÁTICO Y CAPTURA DE FALLBACK -->
+                    <!-- BOTÓN DE CONFIRMACIÓN -->
                     <a id="btnWhatsAppConfirmar" href="#" target="_blank" class="btn-buscar" style="background-color:#1C1C1E; border: 1.5px solid var(--borde); color:#55555A; pointer-events:none; box-shadow:none; font-size:13px; padding:18px; text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px;" onclick="handleConfirmarWASandbox(event)">
                         ✦ CONFIRMAR RESERVA POR WHATSAPP
                     </a>
@@ -1123,49 +1143,26 @@
             { cat: "MASAJES", id: "descontracturante", name: "Masaje Descontracturante", price: 17000, time: 60, tag: null, desc: "Masajes Reset absoluto enfocado en liberar tensiones profundas.", fotos: ["https://i.ibb.co/7Jm5hCk5/Retirado-20260522-205939-0003.jpg"] }
         ];
 
-        // DEFINICIÓN DE PREGUNTAS FRECUENTES (Resuelve error en renderizado)
         const faqData = [
-            { q: "¿Cómo reservo mi turno?", a: "Elegí tus mimos en el catálogo, seleccioná un horario disponible, completá tus datos de pre-reserva, realizá la transferencia de la seña ($5.000) y tocá el botón de WhatsApp para enviarnos el comprobante." },
-            { q: "¿Se puede reprogramar un turno?", a: "Sí, podés hacerlo con hasta 24 horas de anticipación desde nuestro chat de WhatsApp. Pasado ese límite, la seña se perderá para cubrir el costo operativo del bloque bloqueado." },
-            { q: "¿Puedo ir acompañada?", a: "Para garantizar la máxima relajación y seguridad en nuestro espacio técnico, te pedimos que asistas sola, sin acompañantes ni menores de edad." },
-            { q: "¿Qué métodos de pago aceptan?", a: "Para la seña aceptamos transferencia bancaria y billeteras virtuales. El saldo restante lo podés abonar en efectivo, transferencia o débito el día de tu turno." }
+            { q: "✦ Protocolo de Llegada y Cortesía", a: "Ofrecemos una tolerancia de 15 minutos por respeto a la agenda de nuestra próxima invitada. Pasado este margen, la sesión se considerará como no asistida para preservar la calidad del servicio." },
+            { q: "✦ Garantía de Exclusividad VIP", a: "Tu inversión de reserva de $5.000 asegura la preparación personalizada de nuestro laboratorio de belleza y el bloqueo absoluto de tu horario. Dicho monto es deducible del total de tu experiencia." },
+            { q: "✦ Política de Reprogramación", a: "Podrás ajustar tu cita con un mínimo de 24 hs de antelación, manteniendo tu reserva vigente. Modificaciones con menor tiempo implican la pérdida de la seña por costos operativos." },
+            { q: "✦ Espacio de Desconexión Privado", a: "Para garantizar un clima de silencio, privacidad y concentración técnica, nuestro estudio opera bajo atención estrictamente individual. Solicitamos asistir sin acompañantes." }
         ];
 
         let seleccionados = [];
         let horarioSeleccionado = null;
         let categoriaActual = "TODOS";
 
-        function applyRippleEffect() {
-            document.querySelectorAll('.btn-buscar, .btn-next-flow, .slot-btn, .filter-chip').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    const ripple = document.createElement('span');
-                    ripple.classList.add('ripple-effect');
-                    this.appendChild(ripple);
-                    const rect = this.getBoundingClientRect();
-                    const size = Math.max(rect.width, rect.height);
-                    const x = e.clientX - rect.left - size / 2;
-                    const y = e.clientY - rect.top - size / 2;
-                    ripple.style.width = ripple.style.height = size + 'px';
-                    ripple.style.left = x + 'px'; ripple.style.top = y + 'px';
-                    setTimeout(() => ripple.remove(), 500);
-                });
-            });
-        }
-
-        // CONTROLADOR DE PANTALLA DE CARGA (Resuelve bug de pantalla colgada)
         function initSplashScreen() {
             const splash = document.getElementById('splashScreen');
-            if (splash) {
-                setTimeout(() => {
-                    splash.classList.add('fade-out');
-                    setTimeout(() => {
-                        splash.style.display = 'none';
-                    }, 600);
-                }, 1800); // 1.8 segundos para visualización de marca de lujo
-            }
+            setTimeout(() => {
+                splash.classList.add('fade-out');
+                setTimeout(() => { splash.style.display = 'none'; }, 600);
+            }, 1200);
         }
 
-        // SISTEMA DE REDIRECCIÓN Y DIÁLOGOS DE ESCAPE (FALLBACKS)
+        // REDIRECCIONES BLINDADAS E INTERCEPTORES DE SEGURIDAD (SANDBOX Workaround)
         function handleGPSClick(e) {
             setTimeout(() => {
                 openDialog(
@@ -1639,7 +1636,7 @@
                     renderVipCard(clienta.sellos);
                     soporte.style.display = 'none';
                 } else {
-                    openDialog("Miembro No Encontrado", "No encontramos coincidencia exacta en nuestro Club de Honor. Revisá que esté escrito idéntico o chateá con Daiana para ayudarte.");
+                    openDialog("Miembro No Encontrado", "No encontramos coincidencia exacta en nuestro Club de Honor. Revisá que esté idéntico o chateá con Daiana.");
                     soporte.style.display = 'block';
                 }
             } catch(e) {
@@ -1671,7 +1668,7 @@
             }
 
             const txt = document.getElementById('progressText');
-            if(sellos < 4) txt.innerHTML = `Lrevás <strong>${sellos} de 10</strong> mimos.<br>¡Faltan ${4 - sellos} para tu primer Beneficio Sorpresa! 🎁`;
+            if(sellos < 4) txt.innerHTML = `Llevás <strong>${sellos} de 10</strong> mimos.<br>¡Faltan ${4 - sellos} para tu primer Beneficio Sorpresa! 🎁`;
             else if(sellos === 4) txt.innerHTML = `¡Hito 4 Alcanzado! 💝<br>Reclamá tu mimo sorpresa exclusivo hoy.`;
             else if(sellos < 8) txt.innerHTML = `Llevás <strong>${sellos} de 10</strong> mimos.<br>Estás a ${8 - sellos} pasos de tu Regalo Especial Pai Pai. 🎁`;
             else if(sellos === 8) txt.innerHTML = `¡Hito 8 Completado! 🎉<br>Tu Obsequio de marca premium está listo para retirar hoy.`;
@@ -1729,7 +1726,7 @@
                 url: window.location.href
             };
             if(navigator.share) { navigator.share(shareData); } 
-            else { copiarAlPortapapeles(window.location.href, 'btn-share-vip', "✦ Link copiado para compartir"); }
+            else { copiarAlPortapapeles(window.location.href, 'btn-share-vip', "✦ Enlace copiado para compartir"); }
         }
 
         function openGallery(id) {
@@ -1752,10 +1749,6 @@
         function triggerToast(msg) {
             const t = document.getElementById('toast'); t.innerText = msg; t.style.display = 'block';
             setTimeout(() => t.style.display = 'none', 2500);
-        }
-
-        function copiarTextoSeguro(texto, mensajeExito, btnId) {
-            copiarAlPortapapeles(texto, btnId, mensajeExito);
         }
 
         function copiarAlPortapapeles(texto, botonId, mensaje) {
@@ -1824,3 +1817,5 @@
     </script>
 </body>
 </html>
+
+
