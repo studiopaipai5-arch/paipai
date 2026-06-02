@@ -946,7 +946,7 @@
             <div id="agendaFlow" style="display:none; margin-bottom:120px;">
                 <button class="btn-back-step" onclick="volverAlCatalogo()">← Volver al menú</button>
                 
-                <!-- PANEL DE DIAGNÓSTICO INTEGRADO EXCLUSIVO PARA DAI (OCULTO POR DEFECTO) -->
+                <!-- PANEL DE DIAGNÓSTICO INTEGRADO -->
                 <div id="debugAdminBox" style="display:none; background: rgba(255, 69, 58, 0.12); border: 2.5px solid #FF453A; border-radius: 18px; padding: 18px; margin-bottom: 20px; font-size: 13px; line-height: 1.5; color: #FF453A; text-align: left;">
                     <strong style="font-size: 14px;">⚠️ PANEL DIAGNÓSTICO OPERATIVO (Solo visible para tí):</strong><br>
                     <span id="debugAdminText" style="display: block; margin-top: 6px; font-family: monospace; font-size: 11px; white-space: pre-wrap;"></span>
@@ -1061,10 +1061,10 @@
                         📅 AÑADIR A MI CALENDARIO (AVISO 24HS)
                     </button>
 
-                    <!-- BOTÓN DE CONFIRMACIÓN -->
-                    <a id="btnWhatsAppConfirmar" href="#" target="_blank" class="btn-buscar" style="background-color:#1C1C1E; border: 1.5px solid var(--borde); color:#55555A; text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px;" onclick="handleConfirmarWA(event)">
+                    <!-- BOTÓN DE CONFIRMACIÓN (AHORA ES UN BOTÓN DIRECTO QUE EJECUTA JS) -->
+                    <button id="btnWhatsAppConfirmar" class="btn-buscar" style="background-color:#1C1C1E; border: 1.5px solid var(--borde); color:#55555A; display: flex; justify-content: center; align-items: center; gap: 8px; width: 100%; font-family: 'League Spartan', sans-serif;" onclick="enviarWhatsAppReserva(event)">
                         ✦ CONFIRMAR RESERVA POR WHATSAPP
-                    </a>
+                    </button>
                 </div>
             </div>
 
@@ -1093,12 +1093,11 @@
         </div>
     </div>
 
+    <!-- SCRIPTS JS: LA OBRA MAESTRA -->
     <script>
+        // CONFIGURACIÓN CENTRAL
         const SHEET_ID = '1b2qrrO0enYZlhgYFZAnQr5fUcQpTavGNJ3rE28CGAw0'; 
-        
-        // --- AQUÍ ESTÁ TU NUEVA URL DE GOOGLE APPS SCRIPT PEGADA ---
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxWiYSUvObs5bEQBEYR0iE1_N7oqtFaBWUTO-8SPYVQ9yAJ0T_D2hAMb9iWvtL-sP7TGg/exec';
-        
         const TELEFONO_WHATSAPP = "5493804235811"; 
 
         const baseClientesMock = [
@@ -1144,786 +1143,7 @@
             }, 1200);
         }
 
-        function handleGPSClick(e) {
-            setTimeout(() => {
-                openDialog(
-                    "📍 Ubicación del Estudio",
-                    "Pai Pai Beauty está ubicado en:\n📍 8 de Diciembre 1111, Zona Centro, La Rioja.\n\nSi tu navegador bloqueó el mapa automático, copiá la dirección con el botón de abajo para pegarla directamente en Google Maps.",
-                    "Copiar Dirección",
-                    () => { copiarAlPortapapeles("8 de Diciembre 1111, La Rioja, Argentina", "diagActionBtn", "✦ Dirección copiada con éxito"); }
-                );
-            }, 600);
-        }
-
-        function handleWhatsAppClick(e) {
-            setTimeout(() => {
-                openDialog(
-                    "💬 Chat de Soporte VIP",
-                    "Si no se abrió la app de WhatsApp, podés agendar nuestro número oficial de atención:\n\n📱 +54 9 3804 235811\n\nTocá abajo para copiarlo al portapapeles.",
-                    "Copiar Número Oficial",
-                    () => { copiarAlPortapapeles("+5493804235811", "diagActionBtn", "✦ Número oficial copiado"); }
-                );
-            }, 600);
-        }
-
-        function handleConfirmarWA(e) {
-            const chk = document.getElementById('policy-checkbox');
-            const box = document.getElementById('securityBox');
-            
-            if(!chk.checked) {
-                e.preventDefault();
-                box.classList.add('error-shake');
-                box.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                setTimeout(() => box.classList.remove('error-shake'), 500);
-                triggerToast("Requerido: Aceptar Protocolo");
-                return;
-            }
-
-            setTimeout(() => {
-                const total = seleccionados.reduce((acc, s) => acc + s.price, 0);
-                const rest = total - 5000;
-                const mimosText = seleccionados.map(s => s.name).join(' + ');
-                const texto = [
-                    "✨ *NUEVA RESERVA - PORTAL PAI PAI BEAUTY* ✨",
-                    `👤 *Clienta:* ${horarioSeleccionado.clientaReal}`,
-                    `📅 *Día y Hora:* ${horarioSeleccionado.fecha} a las ${horarioSeleccionado.hora} hs`,
-                    `💅 *Tratamiento:* ${mimosText}`,
-                    `💰 *Inversión Total:* $${total.toLocaleString('es-AR')}`,
-                    "💵 *Inversión de Reserva (Seña):* $5.000",
-                    `💳 *Saldo a abonar en el salón:* $${rest.toLocaleString('es-AR')}`
-                ].join("\n");
-
-                openDialog(
-                    "💬 Completá tu Reserva",
-                    "Si la aplicación de WhatsApp no se abrió sola, copiá el mensaje con los detalles de tu turno y envíaselo directamente a Daiana por chat.",
-                    "Copiar Mensaje de Turno",
-                    () => { copiarAlPortapapeles(texto, "diagActionBtn", "✦ Detalles copiados. ¡Listos para pegar!"); }
-                );
-            }, 800);
-        }
-
-        function openDialog(title, text, actionText = null, actionCallback = null) {
-            document.getElementById('diagTitle').innerText = title;
-            document.getElementById('diagText').innerText = text;
-            
-            const actionBtn = document.getElementById('diagActionBtn');
-            if (actionText && actionCallback) {
-                actionBtn.innerText = actionText;
-                actionBtn.style.display = 'block';
-                actionBtn.onclick = () => { actionCallback(); };
-            } else {
-                actionBtn.style.display = 'none';
-            }
-            
-            document.getElementById('customDialog').classList.add('active');
-            document.body.classList.add('no-scroll');
-        }
-
-        function closeDialog() {
-            document.getElementById('customDialog').classList.remove('active');
-            if(!document.getElementById('galleryModal').classList.contains('active')) {
-                document.body.classList.remove('no-scroll');
-            }
-        }
-
-        function updateBreadcrumb(step) {
-            document.getElementById('progressBreadcrumb').style.display = 'flex';
-            document.querySelectorAll('.breadcrumb-step').forEach((s, idx) => {
-                const sNum = idx + 1;
-                s.classList.remove('active', 'completed');
-                if(sNum < step) s.classList.add('completed');
-                else if(sNum === step) s.classList.add('active');
-            });
-        }
-
-        function renderCatalog() {
-            const container = document.getElementById('servicesContainer');
-            let html = "";
-            let currentCat = "";
-
-            const filtrados = categoriaActual === "TODOS" 
-                ? baseServicios 
-                : baseServicios.filter(s => s.cat === categoriaActual);
-
-            if (filtrados.length === 0) {
-                html = `<div style="text-align:center; padding: 40px 20px; color: var(--texto-mutado);">No hay servicios disponibles en esta categoría por el momento.</div>`;
-            } else {
-                filtrados.forEach(s => {
-                    if (s.cat !== currentCat && categoriaActual === "TODOS") {
-                        currentCat = s.cat;
-                        html += `<h2 class="category-title">${currentCat}</h2>`;
-                    }
-
-                    const isSelected = seleccionados.some(item => item.id === s.id);
-                    let tagHtml = s.tag === "POPULAR" ? `<div class="service-tag">✦ MÁS SOLICITADO</div>` : (s.tag === "TENDENCIA" ? `<div class="service-tag tag-new">✦ TENDENCIA</div>` : "");
-
-                    html += `
-                        <article class="service-card ${isSelected ? 'selected' : ''}" id="card-${s.id}" onclick="handleCardClick(event, '${s.id}')">
-                            ${tagHtml}
-                            <div class="service-main-info">
-                                <div class="service-title">
-                                    <h3>${s.name}</h3>
-                                    <div class="service-meta">🕒 ${s.time} min</div>
-                                </div>
-                                <div class="service-price">$${s.price.toLocaleString('es-AR')}</div>
-                            </div>
-                            <p class="service-description">${s.desc}</p>
-                            <div class="service-actions">
-                                <button class="btn-inline-gallery" onclick="event.stopPropagation(); openGallery('${s.id}')" aria-label="Ver fotos de ${s.name}">✨ Ver Inspiración</button>
-                                <div class="select-trigger" aria-hidden="true">
-                                    <span class="card-checkbox"></span>
-                                </div>
-                            </div>
-                        </article>
-                    `;
-                });
-            }
-
-            html += `<section class="faq-section" aria-label="Preguntas Frecuentes"><h2 class="faq-title">Información Importante</h2>`;
-            faqData.forEach((f, idx) => {
-                html += `
-                    <div class="faq-item">
-                        <button class="faq-trigger" onclick="toggleFaq(${idx})" aria-expanded="false"><span>${f.q}</span><span>+</span></button>
-                        <div class="faq-content" id="faq-content-${idx}">${f.a}</div>
-                    </div>
-                `;
-            });
-            html += `</section>`;
-            container.innerHTML = html;
-            applyRippleEffect();
-        }
-
-        function handleCardClick(event, id) {
-            if (!event.target.closest('.btn-inline-gallery') && !event.target.closest('.select-trigger')) {
-                toggleService(id);
-            }
-        }
-
-        function filtrarCategoria(cat, btn) {
-            document.querySelectorAll('.filter-chip').forEach(b => {
-                b.classList.remove('active');
-                b.setAttribute('aria-pressed', 'false');
-            });
-            btn.classList.add('active');
-            btn.setAttribute('aria-pressed', 'true');
-            categoriaActual = cat;
-            renderCatalog();
-        }
-
-        function switchTab(tabName) {
-            const fSec = document.getElementById('sec-fidelizacion');
-            const cSec = document.getElementById('sec-catalogo');
-            const tabs = document.querySelectorAll('.tab-btn');
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            if(tabName === 'fidelizacion') {
-                tabs[0].classList.add('active'); tabs[0].setAttribute('aria-selected', 'true');
-                tabs[1].classList.remove('active'); tabs[1].setAttribute('aria-selected', 'false');
-                fSec.classList.add('active'); cSec.classList.remove('active');
-                document.getElementById('resumeBar').style.display = 'none';
-            } else {
-                tabs[1].classList.add('active'); tabs[1].setAttribute('aria-selected', 'true');
-                tabs[0].classList.remove('active'); tabs[0].setAttribute('aria-selected', 'false');
-                cSec.classList.add('active'); fSec.classList.remove('active');
-                actualizarResumen();
-            }
-        }
-
-        function toggleService(id) {
-            const card = document.getElementById(`card-${id}`);
-            const servicio = baseServicios.find(s => s.id === id);
-            if(card.classList.contains('selected')) {
-                card.classList.remove('selected');
-                seleccionados = seleccionados.filter(item => item.id !== id);
-            } else {
-                card.classList.add('selected');
-                seleccionados.push(servicio);
-            }
-            actualizarResumen();
-        }
-
-        function actualizarResumen() {
-            const bar = document.getElementById('resumeBar');
-            const isCheckoutActive = document.getElementById('checkoutFlow').style.display === 'block';
-            const isAgendaActive = document.getElementById('agendaFlow').style.display === 'block';
-
-            if(seleccionados.length > 0 && !isCheckoutActive && !isAgendaActive) {
-                let totalTiempo = seleccionados.reduce((acc, s) => acc + s.time, 0);
-                document.getElementById('resTiempo').innerText = totalTiempo;
-                
-                const ul = document.getElementById('miniPreviewList');
-                ul.innerHTML = "";
-                seleccionados.forEach(s => {
-                    const li = document.createElement('li');
-                    li.innerText = s.name;
-                    ul.appendChild(li);
-                });
-
-                bar.style.display = 'block';
-                updateBreadcrumb(1);
-            } else {
-                bar.style.display = 'none';
-                document.getElementById('miniPreviewList').style.display = 'none';
-            }
-        }
-
-        function togglePreviewCarrito(e) {
-            if(e.target.tagName === 'BUTTON') return;
-            const preview = document.getElementById('miniPreviewList');
-            if(preview.style.display === 'block') {
-                preview.style.display = 'none';
-            } else {
-                preview.style.display = 'block';
-            }
-        }
-
-        function irAAgendaFlow(e) {
-            e.stopPropagation();
-            const btn = document.getElementById('btnAvanzarTurno');
-            btn.innerHTML = '<span class="spinner"></span> Buscando bloques...';
-            btn.disabled = true;
-
-            setTimeout(() => {
-                document.getElementById('catalogFlow').style.display = 'none';
-                document.getElementById('resumeBar').style.display = 'none';
-                document.getElementById('miniPreviewList').style.display = 'none'; 
-                document.getElementById('agendaFlow').style.display = 'block';
-                btn.innerText = "Buscar Horario Disponible";
-                btn.disabled = false;
-                
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                procesarSeleccionHorario();
-            }, 400);
-        }
-
-        function volverAlCatalogo() {
-            document.getElementById('agendaFlow').style.display = 'none';
-            document.getElementById('catalogFlow').style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            actualizarResumen();
-        }
-
-        function volverALosHorarios() {
-            document.getElementById('checkoutFlow').style.display = 'none';
-            document.getElementById('agendaFlow').style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            updateBreadcrumb(2);
-        }
-
-        function normalizarFecha(fechaStr) {
-            if (!fechaStr) return "";
-            let str = String(fechaStr).trim();
-            
-            if (str.includes("-")) {
-                if (str.includes("T")) {
-                    str = str.split("T")[0];
-                }
-                const partes = str.split("-");
-                if (partes.length === 3) {
-                    if (partes[0].length === 4) {
-                        return `${partes[2]}/${partes[1]}/${partes[0]}`;
-                    }
-                }
-            }
-            
-            if (str.includes("/")) {
-                const partes = str.split("/");
-                if (partes.length === 3) {
-                    let dia = partes[0].padStart(2, '0');
-                    let mes = partes[1].padStart(2, '0');
-                    let anio = partes[2];
-                    if (anio.length === 2) {
-                        anio = "20" + anio;
-                    }
-                    return `${dia}/${mes}/${anio}`;
-                }
-            }
-            return str; 
-        }
-
-        function esBloquePasado(fechaStr, horaStr) {
-            if (!fechaStr || !horaStr) return true; 
-            try {
-                const fechaNorm = normalizarFecha(fechaStr);
-                const partesFecha = fechaNorm.split('/');
-                const partesHora = String(horaStr).trim().split(':');
-                
-                if (partesFecha.length < 3) return true;
-                
-                const dia = parseInt(partesFecha[0], 10);
-                const mes = parseInt(partesFecha[1], 10) - 1;
-                let anio = parseInt(partesFecha[2], 10);
-                
-                if (anio < 100) {
-                    anio = 2000 + anio;
-                }
-                
-                const hora = parseInt(partesHora[0], 10);
-                const minuto = parseInt(partesHora[1], 10) || 0;
-                
-                if (isNaN(dia) || isNaN(mes) || isNaN(anio) || isNaN(hora)) return true;
-                
-                const fechaLimite = new Date(anio, mes, dia, hora, minuto);
-                const ahora = new Date(); 
-                return fechaLimite < ahora; 
-            } catch(e) {
-                return true;
-            }
-        }
-
-        function generarCalendarioDinamicoAlineado() {
-            const fechasDinamicas = []; 
-            const hoy = new Date(); 
-            let diasCargados = 0; 
-            let iteradorFecha = new Date(hoy);
-            
-            while (diasCargados < 7) {
-                if (iteradorFecha.getDay() !== 0) { 
-                    const dd = String(iteradorFecha.getDate()).padStart(2, '0');
-                    const mm = String(iteradorFecha.getMonth() + 1).padStart(2, '0');
-                    const fechaFormateada = `${dd}/${mm}/${iteradorFecha.getFullYear()}`;
-                    
-                    ["09:00", "11:30", "14:00", "16:30", "19:00"].forEach(hora => {
-                        if (!esBloquePasado(fechaFormateada, hora)) {
-                            fechasDinamicas.push({ fecha: fechaFormateada, hora: hora });
-                        }
-                    });
-                    diasCargados++;
-                }
-                iteradorFecha.setDate(iteradorFecha.getDate() + 1);
-            }
-            return fechasDinamicas;
-        }
-
-        function obtenerValorPropiedad(objeto, nombrePropiedad) {
-            if (!objeto) return "";
-            const claveEncontrada = Object.keys(objeto).find(key => key.toLowerCase() === nombrePropiedad.toLowerCase());
-            return claveEncontrada ? objeto[claveEncontrada] : "";
-        }
-
-        function mostrarWarningAdmin(mensaje) {
-            const box = document.getElementById('debugAdminBox');
-            const txt = document.getElementById('debugAdminText');
-            box.style.display = 'block';
-            txt.innerText = mensaje;
-        }
-
-        async function procesarSeleccionHorario() {
-            updateBreadcrumb(2);
-            const grid = document.getElementById('gridHorarios');
-            const sk = document.getElementById('skLoader');
-            const promptBox = document.getElementById('namePromptBox');
-            const debugBox = document.getElementById('debugAdminBox');
-            
-            grid.innerHTML = "";
-            promptBox.style.display = 'none';
-            debugBox.style.display = 'none'; 
-            sk.style.display = 'flex';
-
-            try {
-                const response = await fetch(`${WEB_APP_URL}?action=obtenerTurnos`);
-                if (!response.ok) {
-                    throw new Error(`HTTP Error: ${response.status} - ${response.statusText}`);
-                }
-                
-                const result = await response.json();
-                sk.style.display = 'none';
-
-                if(result.status === "success" && result.data && result.data.length > 0) {
-                    
-                    const turnosMapeados = result.data.map(t => {
-                        return {
-                            fecha: obtenerValorPropiedad(t, 'fecha'),
-                            hora: obtenerValorPropiedad(t, 'hora'),
-                            estado: obtenerValorPropiedad(t, 'estado')
-                        };
-                    });
-
-                    const turnosFiltrados = turnosMapeados.filter(t => {
-                        if (!t.fecha || !t.hora || !t.estado) return false;
-                        const estadoNorm = String(t.estado).trim().toUpperCase();
-                        return estadoNorm.includes("LIBRE") && !esBloquePasado(t.fecha, t.hora);
-                    });
-
-                    if(turnosFiltrados.length > 0) {
-                        renderizarHorarios(turnosFiltrados);
-                        mostrarWarningAdmin(`✅ ¡CONEXIÓN EXITOSA CON PESTAÑA 'AGENDA'!\nSe leyeron correctamente ${result.data.length} filas totales de tu Google Sheet.\nDe las cuales hay ${turnosFiltrados.length} bloques futuros disponibles.`);
-                    } else {
-                        mostrarWarningAdmin(`⚠️ PLANILLA CONECTADA PERO SIN TURNOS LIBRES FUTUROS:\nSe conectó de forma exitosa a tu pestaña 'Agenda', pero no encontramos turnos futuros con la palabra 'LIBRE' en la columna ESTADO.\n\n*Se activaron los horarios automáticos de simulación para las clientas.*`);
-                        renderizarHorarios(generarCalendarioDinamicoAlineado());
-                    }
-                } else {
-                    mostrarWarningAdmin(`⚠️ RESPUESTA EXTRAÑA DEL SERVIDOR:\nEl script de Google devolvió un error:\n${result.message || 'Estructura JSON inválida.'}\n\n*Mostrando calendario simulado.*`);
-                    renderizarHorarios(generarCalendarioDinamicoAlineado());
-                }
-            } catch(e) {
-                sk.style.display = 'none';
-                mostrarWarningAdmin(`🛑 ERROR CRÍTICO DE CONEXIÓN:\nNo pudimos conectarnos con tu Google Sheets.\n\nDetalle técnico: "${e.message}"\n\nPasos obligatorios para solucionar:\n1. Ve a tu Google Sheets > Extensiones > Apps Script.\n2. Pega el código de la pestaña 'Agenda' que te dio Gemini.\n3. Haz clic en 'Implementar > Nueva implementación'.\n4. Configura: Tipo = Aplicación Web, Ejecutar como = Yo, Quién tiene acceso = Cualquiera (Anyone).\n5. Haz clic en Implementar, aprueba los permisos de Google, copia el enlace largo y pégalo en la línea 555 de este portal en tu GitHub.`);
-                renderizarHorarios(generarCalendarioDinamicoAlineado());
-                triggerToast("⚠️ Conexión de Google Sheets fallida");
-            }
-            applyRippleEffect();
-        }
-
-        function renderizarHorarios(horarios) {
-            const grid = document.getElementById('gridHorarios'); 
-            grid.innerHTML = "";
-            
-            const horariosValidos = horarios.filter(t => t && t.fecha && t.hora);
-            
-            if (horariosValidos.length === 0) {
-                grid.innerHTML = `
-                    <div style="grid-column: span 3; text-align:center; padding: 30px 10px; color: var(--texto-mutado); font-size:13px; line-height: 1.6;">
-                        ⚠️ No se encontraron horarios cargados como 'LIBRE' en tu hoja para este periodo.<br>
-                        <span style="color:var(--fucsia-power); font-weight:700;">Revisá el formato en tu Google Sheets.</span>
-                    </div>
-                `;
-                return;
-            }
-
-            horariosValidos.forEach((t, idx) => {
-                const btn = document.createElement('button'); 
-                btn.className = "slot-btn";
-                btn.setAttribute("role", "option");
-                let esDemanda = (idx % 4 === 0) ? '<span class="high-demand-badge">🔥 ALTA DEMANDA</span>' : '';
-                btn.innerHTML = `<strong>${normalizarFecha(t.fecha)}</strong><br>${t.hora} hs${esDemanda}`;
-                btn.onclick = () => {
-                    document.querySelectorAll('.slot-btn').forEach(b => {
-                        b.classList.remove('selected');
-                        b.setAttribute('aria-selected', 'false');
-                    });
-                    btn.classList.add('selected'); 
-                    btn.setAttribute('aria-selected', 'true');
-                    horarioSeleccionado = t;
-                    triggerToast("✦ Bloque seleccionado");
-                    
-                    const promptBox = document.getElementById('namePromptBox');
-                    promptBox.style.display = 'block';
-                    promptBox.scrollIntoView({ behavior: 'smooth', block: 'end' });
-                    document.getElementById('reservationClientName').focus();
-                };
-                grid.appendChild(btn);
-            });
-        }
-
-        async function ejecutarReservaBloqueada() {
-            const nombreInput = document.getElementById('reservationClientName');
-            const nombre = nombreInput.value.trim();
-            const btn = document.getElementById('btnConfirmarReserva');
-
-            if(nombre.length < 3) {
-                triggerToast("Escribí Nombre y Apellido real");
-                nombreInput.classList.add('shake');
-                setTimeout(() => nombreInput.classList.remove('shake'), 500);
-                nombreInput.focus();
-                return;
-            }
-
-            btn.innerHTML = '<span class="spinner"></span> Bloqueando...';
-            btn.disabled = true;
-
-            const nombresServicios = seleccionados.map(s => s.name).join(', ');
-
-            try {
-                const url = `${WEB_APP_URL}?action=reservarTurno&fecha=${encodeURIComponent(horarioSeleccionado.fecha)}&hora=${encodeURIComponent(horarioSeleccionado.hora)}&clienta=${encodeURIComponent(nombre)}&servicios=${encodeURIComponent(nombresServicios)}`;
-                await fetch(url);
-                horarioSeleccionado.clientaReal = nombre;
-                abrirCheckoutFinal();
-            } catch(e) {
-                horarioSeleccionado.clientaReal = nombre;
-                abrirCheckoutFinal();
-            } finally {
-                btn.innerText = "Pre-Reservar Horario";
-                btn.disabled = false;
-            }
-        }
-
-        function togglePolicy(e, idx) {
-            const content = document.getElementById(`policy-${idx}`);
-            const trigger = e.currentTarget;
-            const span = trigger.querySelector('span');
-            const isVisible = content.style.display === 'block';
-            
-            document.querySelectorAll('.policy-content').forEach(el => el.style.display = 'none');
-            document.querySelectorAll('.policy-trigger span').forEach(el => el.innerText = '+');
-            document.querySelectorAll('.policy-trigger').forEach(el => el.setAttribute('aria-expanded', 'false'));
-
-            if (!isVisible) {
-                content.style.display = 'block';
-                trigger.setAttribute('aria-expanded', 'true');
-                if (span) span.innerText = '−';
-            }
-        }
-
-        function toggleCheckboxNativo() {
-            const chk = document.getElementById('policy-checkbox');
-            chk.checked = !chk.checked;
-            validatePolicyCheck();
-        }
-
-        function validatePolicyCheck() {
-            const chk = document.getElementById('policy-checkbox');
-            const btnWA = document.getElementById('btnWhatsAppConfirmar');
-            if(!btnWA) return;
-            
-            if(chk.checked) {
-                btnWA.style.backgroundColor = "#25D366";
-                btnWA.style.color = "#ffffff";
-                btnWA.style.border = "none";
-                btnWA.style.boxShadow = "0 4px 20px rgba(37, 211, 102, 0.45)";
-            } else {
-                btnWA.style.backgroundColor = "#1C1C1E";
-                btnWA.style.color = "#55555A";
-                btnWA.style.border = "1.5px solid var(--borde)";
-                btnWA.style.boxShadow = "none";
-            }
-        }
-
-        function abrirCheckoutFinal() {
-            updateBreadcrumb(3);
-            document.getElementById('agendaFlow').style.display = "none";
-            document.getElementById('checkoutFlow').style.display = "block";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            const fechaNorm = normalizarFecha(horarioSeleccionado.fecha);
-            document.getElementById('chkName').innerText = horarioSeleccionado.clientaReal.toUpperCase();
-            document.getElementById('chkDate').innerText = `${fechaNorm} a las ${horarioSeleccionado.hora} hs`;
-            document.getElementById('chkServices').innerText = seleccionados.map(s => s.name).join(' + ');
-            
-            const tiempoTotal = seleccionados.reduce((acc, s) => acc + s.time, 0);
-            document.getElementById('chkTime').innerText = `${tiempoTotal} minutos (🕒)`;
-            
-            const inversionTotal = seleccionados.reduce((acc, s) => acc + s.price, 0);
-            document.getElementById('chkTotal').innerText = `$${inversionTotal.toLocaleString('es-AR')}`;
-            
-            const saldoEnSalon = inversionTotal - 5000;
-            document.getElementById('chkSaldo').innerText = `$${saldoEnSalon.toLocaleString('es-AR')}`;
-
-            const mimosText = seleccionados.map(s => s.name).join(' + ');
-            const mensajeWhatsApp = [
-                "✨ *NUEVA RESERVA - PORTAL PAI PAI BEAUTY* ✨",
-                `👤 *Clienta:* ${horarioSeleccionado.clientaReal}`,
-                `📅 *Día y Hora:* ${fechaNorm} a las ${horarioSeleccionado.hora} hs`,
-                `💅 *Tratamiento:* ${mimosText}`,
-                `💰 *Inversión Total:* $${inversionTotal.toLocaleString('es-AR')}`,
-                "💵 *Inversión de Reserva (Seña):* $5.000",
-                `💳 *Saldo a abonar en el salón:* $${saldoEnSalon.toLocaleString('es-AR')}`,
-                "",
-                "📍 *Ubicación:* Zona Centro · 8 de Diciembre 1111, La Rioja.",
-                "📱 _Ya realicé la transferencia de la seña, aquí adjunto el comprobante._"
-            ].join("\n");
-
-            document.getElementById('btnWhatsAppConfirmar').href = `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent(mensajeWhatsApp)}`;
-            
-            const chk = document.getElementById('policy-checkbox');
-            chk.checked = false;
-            validatePolicyCheck();
-        }
-
-        function applyRippleEffect() {
-            document.querySelectorAll('.btn-buscar, .btn-next-flow, .slot-btn, .filter-chip').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    const ripple = document.createElement('span');
-                    ripple.classList.add('ripple-effect');
-                    this.appendChild(ripple);
-                    const rect = this.getBoundingClientRect();
-                    const size = Math.max(rect.width, rect.height);
-                    const x = e.clientX - rect.left - size / 2;
-                    const y = e.clientY - rect.top - size / 2;
-                    ripple.style.width = ripple.style.height = size + 'px';
-                    ripple.style.left = x + 'px'; ripple.style.top = y + 'px';
-                    setTimeout(() => ripple.remove(), 500);
-                });
-            });
-        }
-
-        function handleSearchKeyPress(event) { 
-            if (event.key === "Enter") { 
-                consultarProgreso(); 
-            } 
-        }
-
-        async function consultarProgreso() {
-            const input = document.getElementById('clientNameInput').value;
-            const btn = document.getElementById('btnSelloVIP');
-            const box = document.getElementById('searchBoxVIP');
-            const soporte = document.getElementById('soporteVIP');
-            const card = document.getElementById('loyaltyCard');
-            
-            if(input.trim().length < 3) {
-                triggerToast("Ingresá un nombre válido");
-                box.classList.add('shake'); setTimeout(() => box.classList.remove('shake'), 500);
-                return;
-            }
-
-            card.style.display = 'none';
-            btn.innerHTML = '<span class="spinner"></span> Sincronizando...';
-            btn.disabled = true;
-
-            try {
-                const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
-                const response = await fetch(url);
-                const text = await response.text();
-                const filas = text.split('\n').map(f => f.split(',').map(cell => cell.replace(/^"|"$/g, '').trim()));
-                
-                let clienta = null;
-                const normIn = input.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
-
-                for(let i = 1; i < filas.length; i++) {
-                    if(!filas[i][0]) continue;
-                    let sName = filas[i][0];
-                    let sStamps = parseInt(filas[i][1]) || 0;
-                    let normSheet = sName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
-
-                    if(normSheet === normIn) {
-                        clienta = { nombre: sName, sellos: sStamps };
-                        break;
-                    }
-                }
-
-                if (!clienta) {
-                    clienta = baseClientesMock.find(c => c.nombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim() === normIn);
-                }
-
-                btn.innerText = "Sincronizar Estatus"; btn.disabled = false;
-
-                if(clienta) {
-                    localStorage.setItem('lastClienteVIP', clienta.nombre);
-                    document.getElementById('displayClientName').innerText = clienta.nombre;
-                    card.style.display = 'block';
-                    renderVipCard(clienta.sellos);
-                    soporte.style.display = 'none';
-                } else {
-                    openDialog("Miembro No Encontrado", "No encontramos coincidencia exacta en nuestro Club de Honor. Revisá que esté idéntico o chateá con Daiana.");
-                    soporte.style.display = 'block';
-                }
-            } catch(e) {
-                btn.innerText = "Sincronizar Estatus"; btn.disabled = false;
-                soporte.style.display = 'block';
-                openDialog("Sincronización VIP", "No pudimos conectarnos al servidor de mimos VIP de forma remota. Cargando base de resguardo local.");
-            }
-        }
-
-        function renderVipCard(sellos) {
-            const grid = document.getElementById('stampsGrid');
-            grid.innerHTML = "";
-
-            setTimeout(() => {
-                document.getElementById('laserBar').style.width = `${Math.min(sellos * 10, 100)}%`;
-            }, 200);
-
-            for(let i = 1; i <= 10; i++) {
-                const slot = document.createElement('div');
-                slot.classList.add('stamp-slot');
-                if(i === 4 || i === 8 || i === 10) { slot.classList.add('gift-slot'); slot.innerText = "🎁"; }
-                else { slot.innerText = i; }
-
-                if(i <= sellos) {
-                    slot.className = "stamp-slot active";
-                    slot.innerText = "";
-                }
-                grid.appendChild(slot);
-            }
-
-            const txt = document.getElementById('progressText');
-            if(sellos < 4) txt.innerHTML = `Llevás <strong>${sellos} de 10</strong> mimos.<br>¡Faltan ${4 - sellos} para tu primer Beneficio Sorpresa! 🎁`;
-            else if(sellos === 4) txt.innerHTML = `¡Hito 4 Alcanzado! 💝<br>Reclamá tu mimo sorpresa exclusivo hoy.`;
-            else if(sellos < 8) txt.innerHTML = `Llevás <strong>${sellos} de 10</strong> mimos.<br>Estás a ${8 - sellos} pasos de tu Regalo Especial Pai Pai. 🎁`;
-            else if(sellos === 8) txt.innerHTML = `¡Hito 8 Completado! 🎉<br>Tu Obsequio de marca premium está listo para retirar hoy.`;
-            else if(sellos < 10) txt.innerHTML = `Llevás <strong>${sellos} de 10</strong> visitas.<br>¡A solo ${10 - sellos} pasos del Servicio Completo GRATIS!`;
-            else {
-                txt.innerHTML = `¡Tarjeta VIP Completa! 🌟<br>Hoy tu servicio es 100% BONIFICADO. ¡Disfrutalo!`;
-                lanzarFiestaConfetti();
-            }
-        }
-
-        function lanzarFiestaConfetti() {
-            const canvas = document.getElementById('confettiCanvas');
-            const ctx = canvas.getContext('2d');
-            canvas.style.display = 'block';
-            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-
-            let particles = [];
-            for(let i=0; i<100; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height - canvas.height,
-                    r: Math.random() * 6 + 4,
-                    d: Math.random() * canvas.height,
-                    color: Math.random() > 0.5 ? '#FF1BA7' : '#FFFFFF',
-                    tilt: Math.random() * 10 - 5
-                });
-            }
-
-            function draw() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach((p) => {
-                    ctx.beginPath(); ctx.lineWidth = p.r; ctx.strokeStyle = p.color;
-                    ctx.moveTo(p.x + p.tilt + p.r/2, p.y); ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r/2);
-                    ctx.stroke();
-                });
-                update();
-            }
-
-            function update() {
-                let active = false;
-                particles.forEach((p) => {
-                    p.y += Math.cos(p.d) + 1.5 + p.r/2; p.x += Math.sin(p.d);
-                    if(p.y < canvas.height) active = true;
-                });
-                if(active) { requestAnimationFrame(draw); }
-                else { canvas.style.display = 'none'; }
-            }
-            draw();
-        }
-
-        function compartirPortalVIP() {
-            const shareData = {
-                title: 'Portal VIP Pai Pai',
-                text: 'Te comparto el portal de reservas de Pai Pai Beauty. Agendá tu espacio de relajación aquí:',
-                url: window.location.href
-            };
-            if(navigator.share) { navigator.share(shareData); } 
-            else { copiarAlPortapapeles(window.location.href, 'btn-share-vip', "✦ Enlace copiado para compartir"); }
-        }
-
-        function openGallery(id) {
-            const s = baseServicios.find(item => item.id === id);
-            const c = document.getElementById('modalCarousel');
-            c.innerHTML = "";
-            s.fotos.forEach(f => {
-                const img = document.createElement('img'); 
-                img.src = f; 
-                img.loading = "lazy"; 
-                img.alt = `Inspiración ${s.name}`;
-                c.appendChild(img);
-            });
-            document.getElementById('galleryModal').classList.add('active');
-            document.body.classList.add('no-scroll');
-        }
-        
-        function closeGallery() { 
-            document.getElementById('galleryModal').classList.remove('active'); 
-            if(!document.getElementById('customDialog').classList.contains('active')) {
-                document.body.classList.remove('no-scroll');
-            }
-        }
-        
-        function toggleFaq(idx) {
-            const content = document.getElementById(`faq-content-${idx}`);
-            const trigger = document.querySelectorAll('.faq-trigger')[idx];
-            if (content.style.display === 'block') {
-                content.style.display = 'none';
-                trigger.setAttribute('aria-expanded', 'false');
-                trigger.querySelector('span:last-child').innerText = '+';
-            } else {
-                content.style.display = 'block';
-                trigger.setAttribute('aria-expanded', 'true');
-                trigger.querySelector('span:last-child').innerText = '−';
-            }
-        }
-        
+        // --- MANEJO DE TEXTOS Y PORTAPAPELES ---
         function triggerToast(msg) {
             const t = document.getElementById('toast'); 
             t.innerText = msg; 
@@ -1957,43 +1177,659 @@
             }
         }
 
-        function descargarCalendarioICS() {
-            if(!horarioSeleccionado) {
-                triggerToast("✦ Seleccioná un horario primero");
+        // --- MANEJO DE FECHAS (SÚPER BLINDADO) ---
+        function extraerHoraLimpia(horaStr) {
+            if (!horaStr) return "00:00";
+            let cruda = String(horaStr).trim();
+            if(cruda.includes('T')) { return cruda.split('T')[1].substring(0, 5); }
+            if(cruda.split(':').length === 3) { return cruda.substring(0, 5); }
+            return cruda;
+        }
+
+        function normalizarFecha(fechaStr) {
+            if (!fechaStr) return "";
+            let str = String(fechaStr).trim();
+            if (str.includes("-")) {
+                if (str.includes("T")) { str = str.split("T")[0]; }
+                const partes = str.split("-");
+                if (partes.length === 3 && partes[0].length === 4) { return `${partes[2]}/${partes[1]}/${partes[0]}`; }
+            }
+            if (str.includes("/")) {
+                const partes = str.split("/");
+                if (partes.length === 3) {
+                    let dia = partes[0].padStart(2, '0');
+                    let mes = partes[1].padStart(2, '0');
+                    let anio = partes[2];
+                    if (anio.length === 2) { anio = "20" + anio; }
+                    return `${dia}/${mes}/${anio}`;
+                }
+            }
+            return str; 
+        }
+
+        function esBloquePasado(fechaStr, horaStr) {
+            if (!fechaStr || !horaStr) return false; 
+            try {
+                const fechaNorm = normalizarFecha(fechaStr);
+                const horaLimpia = extraerHoraLimpia(horaStr);
+                
+                const partesFecha = fechaNorm.split('/');
+                const partesHora = horaLimpia.split(':');
+                
+                if (partesFecha.length < 3) return false;
+                
+                const dia = parseInt(partesFecha[0], 10);
+                const mes = parseInt(partesFecha[1], 10) - 1;
+                let anio = parseInt(partesFecha[2], 10);
+                if (anio < 100) { anio = 2000 + anio; }
+                
+                const hora = parseInt(partesHora[0], 10);
+                const minuto = parseInt(partesHora[1], 10) || 0;
+                if (isNaN(dia) || isNaN(mes) || isNaN(anio) || isNaN(hora)) return false;
+                
+                const fechaLimite = new Date(anio, mes, dia, hora, minuto);
+                const ahora = new Date(); 
+                return fechaLimite < ahora; 
+            } catch(e) {
+                return false;
+            }
+        }
+
+        // --- SISTEMA DE DIÁLOGOS Y MODALES ---
+        function openDialog(title, text, actionText = null, actionCallback = null) {
+            document.getElementById('diagTitle').innerText = title;
+            document.getElementById('diagText').innerText = text;
+            const actionBtn = document.getElementById('diagActionBtn');
+            if (actionText && actionCallback) {
+                actionBtn.innerText = actionText;
+                actionBtn.style.display = 'block';
+                actionBtn.onclick = () => { actionCallback(); };
+            } else {
+                actionBtn.style.display = 'none';
+            }
+            document.getElementById('customDialog').classList.add('active');
+            document.body.classList.add('no-scroll');
+        }
+
+        function closeDialog() {
+            document.getElementById('customDialog').classList.remove('active');
+            if(!document.getElementById('galleryModal').classList.contains('active')) {
+                document.body.classList.remove('no-scroll');
+            }
+        }
+
+        function handleGPSClick(e) {
+            e.preventDefault();
+            setTimeout(() => {
+                openDialog(
+                    "📍 Ubicación del Estudio",
+                    "Pai Pai Beauty está ubicado en:\n📍 8 de Diciembre 1111, Zona Centro, La Rioja.\n\nSi tu navegador bloqueó el mapa automático, copiá la dirección con el botón de abajo para pegarla directamente en Google Maps.",
+                    "Copiar Dirección",
+                    () => { copiarAlPortapapeles("8 de Diciembre 1111, La Rioja, Argentina", "diagActionBtn", "✦ Dirección copiada con éxito"); }
+                );
+            }, 600);
+        }
+
+        function handleWhatsAppClick(e) {
+            e.preventDefault();
+            setTimeout(() => {
+                openDialog(
+                    "💬 Chat de Soporte VIP",
+                    "Si no se abrió la app de WhatsApp, podés agendar nuestro número oficial de atención:\n\n📱 +54 9 3804 235811\n\nTocá abajo para copiarlo al portapapeles.",
+                    "Copiar Número Oficial",
+                    () => { copiarAlPortapapeles("+5493804235811", "diagActionBtn", "✦ Número oficial copiado"); }
+                );
+            }, 600);
+        }
+
+        function openGallery(id) {
+            const s = baseServicios.find(item => item.id === id);
+            const c = document.getElementById('modalCarousel');
+            c.innerHTML = "";
+            s.fotos.forEach(f => {
+                const img = document.createElement('img'); 
+                img.src = f; img.loading = "lazy"; img.alt = `Inspiración ${s.name}`;
+                c.appendChild(img);
+            });
+            document.getElementById('galleryModal').classList.add('active');
+            document.body.classList.add('no-scroll');
+        }
+        
+        function closeGallery() { 
+            document.getElementById('galleryModal').classList.remove('active'); 
+            if(!document.getElementById('customDialog').classList.contains('active')) {
+                document.body.classList.remove('no-scroll');
+            }
+        }
+
+        // --- NAVEGACIÓN Y FLUJO ---
+        function updateBreadcrumb(step) {
+            document.getElementById('progressBreadcrumb').style.display = 'flex';
+            document.querySelectorAll('.breadcrumb-step').forEach((s, idx) => {
+                const sNum = idx + 1;
+                s.classList.remove('active', 'completed');
+                if(sNum < step) s.classList.add('completed');
+                else if(sNum === step) s.classList.add('active');
+            });
+        }
+
+        function switchTab(tabName) {
+            const fSec = document.getElementById('sec-fidelizacion');
+            const cSec = document.getElementById('sec-catalogo');
+            const tabs = document.querySelectorAll('.tab-btn');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if(tabName === 'fidelizacion') {
+                tabs[0].classList.add('active'); tabs[0].setAttribute('aria-selected', 'true');
+                tabs[1].classList.remove('active'); tabs[1].setAttribute('aria-selected', 'false');
+                fSec.classList.add('active'); cSec.classList.remove('active');
+                document.getElementById('resumeBar').style.display = 'none';
+            } else {
+                tabs[1].classList.add('active'); tabs[1].setAttribute('aria-selected', 'true');
+                tabs[0].classList.remove('active'); tabs[0].setAttribute('aria-selected', 'false');
+                cSec.classList.add('active'); fSec.classList.remove('active');
+                actualizarResumen();
+            }
+        }
+
+        function volverAlCatalogo() {
+            document.getElementById('agendaFlow').style.display = 'none';
+            document.getElementById('catalogFlow').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            actualizarResumen();
+        }
+
+        function volverALosHorarios() {
+            document.getElementById('checkoutFlow').style.display = 'none';
+            document.getElementById('agendaFlow').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            updateBreadcrumb(2);
+        }
+
+        // --- LÓGICA DEL CATÁLOGO ---
+        function renderCatalog() {
+            const container = document.getElementById('servicesContainer');
+            let html = ""; let currentCat = "";
+            const filtrados = categoriaActual === "TODOS" ? baseServicios : baseServicios.filter(s => s.cat === categoriaActual);
+
+            if (filtrados.length === 0) {
+                html = `<div style="text-align:center; padding: 40px 20px; color: var(--texto-mutado);">No hay servicios en esta categoría.</div>`;
+            } else {
+                filtrados.forEach(s => {
+                    if (s.cat !== currentCat && categoriaActual === "TODOS") {
+                        currentCat = s.cat; html += `<h2 class="category-title">${currentCat}</h2>`;
+                    }
+                    const isSelected = seleccionados.some(item => item.id === s.id);
+                    let tagHtml = s.tag === "POPULAR" ? `<div class="service-tag">✦ MÁS SOLICITADO</div>` : (s.tag === "TENDENCIA" ? `<div class="service-tag tag-new">✦ TENDENCIA</div>` : "");
+
+                    html += `
+                        <article class="service-card ${isSelected ? 'selected' : ''}" id="card-${s.id}" onclick="handleCardClick(event, '${s.id}')">
+                            ${tagHtml}
+                            <div class="service-main-info">
+                                <div class="service-title"><h3>${s.name}</h3><div class="service-meta">🕒 ${s.time} min</div></div>
+                                <div class="service-price">$${s.price.toLocaleString('es-AR')}</div>
+                            </div>
+                            <p class="service-description">${s.desc}</p>
+                            <div class="service-actions">
+                                <button class="btn-inline-gallery" onclick="event.stopPropagation(); openGallery('${s.id}')">✨ Ver Inspiración</button>
+                                <div class="select-trigger"><span class="card-checkbox"></span></div>
+                            </div>
+                        </article>
+                    `;
+                });
+            }
+
+            html += `<section class="faq-section"><h2 class="faq-title">Información Importante</h2>`;
+            faqData.forEach((f, idx) => {
+                html += `<div class="faq-item"><button class="faq-trigger" onclick="toggleFaq(${idx})"><span>${f.q}</span><span>+</span></button><div class="faq-content" id="faq-content-${idx}">${f.a}</div></div>`;
+            });
+            html += `</section>`;
+            container.innerHTML = html;
+            applyRippleEffect();
+        }
+
+        function filtrarCategoria(cat, btn) {
+            document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active'); categoriaActual = cat; renderCatalog();
+        }
+
+        function handleCardClick(event, id) {
+            if (!event.target.closest('.btn-inline-gallery') && !event.target.closest('.select-trigger')) { toggleService(id); }
+        }
+
+        function toggleService(id) {
+            const card = document.getElementById(`card-${id}`);
+            const servicio = baseServicios.find(s => s.id === id);
+            if(card.classList.contains('selected')) {
+                card.classList.remove('selected'); seleccionados = seleccionados.filter(item => item.id !== id);
+            } else {
+                card.classList.add('selected'); seleccionados.push(servicio);
+            }
+            actualizarResumen();
+        }
+
+        function actualizarResumen() {
+            const bar = document.getElementById('resumeBar');
+            const isCheckoutActive = document.getElementById('checkoutFlow').style.display === 'block';
+            const isAgendaActive = document.getElementById('agendaFlow').style.display === 'block';
+
+            if(seleccionados.length > 0 && !isCheckoutActive && !isAgendaActive) {
+                let totalTiempo = seleccionados.reduce((acc, s) => acc + s.time, 0);
+                document.getElementById('resTiempo').innerText = totalTiempo;
+                
+                const ul = document.getElementById('miniPreviewList');
+                ul.innerHTML = "";
+                seleccionados.forEach(s => {
+                    const li = document.createElement('li'); li.innerText = s.name; ul.appendChild(li);
+                });
+                bar.style.display = 'block'; updateBreadcrumb(1);
+            } else {
+                bar.style.display = 'none'; document.getElementById('miniPreviewList').style.display = 'none';
+            }
+        }
+
+        function togglePreviewCarrito(e) {
+            if(e.target.tagName === 'BUTTON') return;
+            const preview = document.getElementById('miniPreviewList');
+            preview.style.display = preview.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function toggleFaq(idx) {
+            const content = document.getElementById(`faq-content-${idx}`);
+            const trigger = document.querySelectorAll('.faq-trigger')[idx];
+            if (content.style.display === 'block') {
+                content.style.display = 'none'; trigger.querySelector('span:last-child').innerText = '+';
+            } else {
+                content.style.display = 'block'; trigger.querySelector('span:last-child').innerText = '−';
+            }
+        }
+
+        // --- AGENDA Y CONEXIÓN CON GOOGLE SHEETS ---
+        function irAAgendaFlow(e) {
+            e.stopPropagation();
+            const btn = document.getElementById('btnAvanzarTurno');
+            btn.innerHTML = '<span class="spinner"></span> Buscando...'; btn.disabled = true;
+
+            setTimeout(() => {
+                document.getElementById('catalogFlow').style.display = 'none';
+                document.getElementById('resumeBar').style.display = 'none';
+                document.getElementById('miniPreviewList').style.display = 'none'; 
+                document.getElementById('agendaFlow').style.display = 'block';
+                btn.innerText = "Buscar Horario Disponible"; btn.disabled = false;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                procesarSeleccionHorario();
+            }, 400);
+        }
+
+        function obtenerValorPropiedad(objeto, nombrePropiedad) {
+            if (!objeto) return "";
+            const claveEncontrada = Object.keys(objeto).find(key => key.toLowerCase() === nombrePropiedad.toLowerCase());
+            return claveEncontrada ? objeto[claveEncontrada] : "";
+        }
+
+        function mostrarWarningAdmin(mensaje) {
+            const box = document.getElementById('debugAdminBox');
+            const txt = document.getElementById('debugAdminText');
+            box.style.display = 'block'; txt.innerText = mensaje;
+        }
+
+        function generarCalendarioDinamicoAlineado() {
+            const fechas = []; const hoy = new Date(); let diasCargados = 0; let iterador = new Date(hoy);
+            while (diasCargados < 7) {
+                if (iterador.getDay() !== 0) { 
+                    const dd = String(iterador.getDate()).padStart(2, '0');
+                    const mm = String(iterador.getMonth() + 1).padStart(2, '0');
+                    const fechaF = `${dd}/${mm}/${iterador.getFullYear()}`;
+                    ["09:00", "11:30", "14:00", "16:30", "19:00"].forEach(hora => {
+                        if (!esBloquePasado(fechaF, hora)) { fechas.push({ fecha: fechaF, hora: hora }); }
+                    });
+                    diasCargados++;
+                }
+                iterador.setDate(iterador.getDate() + 1);
+            }
+            return fechas;
+        }
+
+        async function procesarSeleccionHorario() {
+            updateBreadcrumb(2);
+            const grid = document.getElementById('gridHorarios');
+            const sk = document.getElementById('skLoader');
+            const promptBox = document.getElementById('namePromptBox');
+            
+            grid.innerHTML = ""; promptBox.style.display = 'none'; 
+            document.getElementById('debugAdminBox').style.display = 'none'; 
+            sk.style.display = 'flex';
+
+            try {
+                const response = await fetch(`${WEB_APP_URL}?action=obtenerTurnos`);
+                if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+                const result = await response.json();
+                sk.style.display = 'none';
+
+                if(result.status === "success" && result.data && result.data.length > 0) {
+                    const turnosFiltrados = result.data.map(t => ({
+                        fecha: obtenerValorPropiedad(t, 'fecha'), hora: obtenerValorPropiedad(t, 'hora'), estado: obtenerValorPropiedad(t, 'estado')
+                    })).filter(t => t.fecha && t.hora && t.estado && String(t.estado).trim().toUpperCase().includes("LIBRE") && !esBloquePasado(t.fecha, t.hora));
+
+                    if(turnosFiltrados.length > 0) {
+                        renderizarHorarios(turnosFiltrados);
+                        mostrarWarningAdmin(`✅ ¡CONEXIÓN EXITOSA!\nSe leyeron ${result.data.length} filas totales. ${turnosFiltrados.length} bloques libres disponibles.`);
+                    } else {
+                        mostrarWarningAdmin(`⚠️ SIN TURNOS LIBRES FUTUROS.\nMostrando calendario simulado para asegurar reservas.`);
+                        renderizarHorarios(generarCalendarioDinamicoAlineado());
+                    }
+                } else {
+                    mostrarWarningAdmin(`⚠️ RESPUESTA INVÁLIDA DEL SERVIDOR.\nMostrando calendario simulado.`);
+                    renderizarHorarios(generarCalendarioDinamicoAlineado());
+                }
+            } catch(e) {
+                sk.style.display = 'none';
+                mostrarWarningAdmin(`🛑 ERROR DE CONEXIÓN CON APP SCRIPT:\n${e.message}\nMostrando calendario simulado.`);
+                renderizarHorarios(generarCalendarioDinamicoAlineado());
+            }
+            applyRippleEffect();
+        }
+
+        function renderizarHorarios(horarios) {
+            const grid = document.getElementById('gridHorarios'); grid.innerHTML = "";
+            const validos = horarios.filter(t => t && t.fecha && t.hora);
+            
+            if (validos.length === 0) {
+                grid.innerHTML = `<div style="grid-column:span 3;text-align:center;color:var(--texto-mutado);font-size:13px;">⚠️ No hay horarios disponibles.</div>`;
                 return;
             }
-            const partesFecha = horarioSeleccionado.fecha.split('/');
-            const partesHora = horarioSeleccionado.hora.split(':');
-            const fechaInicio = new Date(parseInt(partesFecha[2]), parseInt(partesFecha[1]) - 1, parseInt(partesFecha[0]), parseInt(partesHora[0]), parseInt(partesHora[1]));
-            const tiempoTotalMinutos = seleccionados.reduce((acc, s) => acc + s.time, 0);
-            const fechaFin = new Date(fechaInicio.getTime() + (tiempoTotalMinutos * 60 * 1000));
 
-            const formatICSDate = (d) => d.toISOString().replace(/-|:|\.\d+/g, "");
-            const mimosElegidosText = seleccionados.map(s => s.name).join(' + ');
+            validos.forEach((t, idx) => {
+                const btn = document.createElement('button'); btn.className = "slot-btn";
+                let esDemanda = (idx % 4 === 0) ? '<span class="high-demand-badge">🔥 ALTA DEMANDA</span>' : '';
+                btn.innerHTML = `<strong>${normalizarFecha(t.fecha)}</strong><br>${extraerHoraLimpia(t.hora)} hs${esDemanda}`;
+                btn.onclick = () => {
+                    document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected'); horarioSeleccionado = t;
+                    triggerToast("✦ Bloque seleccionado");
+                    
+                    const promptBox = document.getElementById('namePromptBox');
+                    promptBox.style.display = 'block'; promptBox.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                    document.getElementById('reservationClientName').focus();
+                };
+                grid.appendChild(btn);
+            });
+        }
 
-            const contenidoICS = [
-                "BEGIN:VCALENDAR", "VERSION:2.0", "BEGIN:VEVENT",
-                `UID:${Date.now()}@paipaibeauty.com`, `DTSTAMP:${formatICSDate(new Date())}`,
-                `DTSTART:${formatICSDate(fechaInicio)}`, `DTEND:${formatICSDate(fechaFin)}`,
-                `SUMMARY:Turno en Pai Pai Beauty ✨`, `DESCRIPTION:Mimos reservados: ${mimosElegidosText}.`,
-                "LOCATION:8 de Diciembre 1111, La Rioja, Argentina", "BEGIN:VALARM", "ACTION:DISPLAY",
-                "DESCRIPTION:Recordatorio de Turno en Pai Pai Beauty ✨", "TRIGGER:-PT24H",
-                "END:VALARM", "END:VEVENT", "END:VCALENDAR"
-            ].join("\r\n");
+        async function ejecutarReservaBloqueada() {
+            const nombreInput = document.getElementById('reservationClientName');
+            const nombre = nombreInput.value.trim();
+            const btn = document.getElementById('btnConfirmarReserva');
 
-            const blob = new Blob([contenidoICS], { type: "text/calendar;charset=utf-8" });
-            const link = document.createElement("a"); link.href = URL.createObjectURL(blob);
-            link.download = `Turno_PaiPai_${partesFecha[0]}_${partesFecha[1]}.ics`;
-            document.body.appendChild(link); link.click(); document.body.removeChild(link);
-            triggerToast("📅 Añadido a Calendarios");
+            if(nombre.length < 3) {
+                triggerToast("Escribí Nombre y Apellido real");
+                nombreInput.classList.add('shake'); setTimeout(() => nombreInput.classList.remove('shake'), 500);
+                nombreInput.focus(); return;
+            }
+
+            btn.innerHTML = '<span class="spinner"></span> Bloqueando...'; btn.disabled = true;
+            const nombresServicios = seleccionados.map(s => s.name).join(', ');
+
+            try {
+                const url = `${WEB_APP_URL}?action=reservarTurno&fecha=${encodeURIComponent(horarioSeleccionado.fecha)}&hora=${encodeURIComponent(horarioSeleccionado.hora)}&clienta=${encodeURIComponent(nombre)}&servicios=${encodeURIComponent(nombresServicios)}`;
+                await fetch(url);
+                horarioSeleccionado.clientaReal = nombre; abrirCheckoutFinal();
+            } catch(e) {
+                horarioSeleccionado.clientaReal = nombre; abrirCheckoutFinal();
+            } finally {
+                btn.innerText = "Pre-Reservar Horario"; btn.disabled = false;
+            }
+        }
+
+        // --- CHECKOUT Y CONFIRMACIÓN POR WHATSAPP ---
+        function togglePolicy(e, idx) {
+            const content = document.getElementById(`policy-${idx}`);
+            const span = e.currentTarget.querySelector('span');
+            const isVisible = content.style.display === 'block';
+            document.querySelectorAll('.policy-content').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.policy-trigger span').forEach(el => el.innerText = '+');
+            if (!isVisible) { content.style.display = 'block'; if (span) span.innerText = '−'; }
+        }
+
+        function toggleCheckboxNativo() {
+            const chk = document.getElementById('policy-checkbox'); chk.checked = !chk.checked; validatePolicyCheck();
+        }
+
+        function validatePolicyCheck() {
+            const chk = document.getElementById('policy-checkbox');
+            const btnWA = document.getElementById('btnWhatsAppConfirmar');
+            if(chk.checked) {
+                btnWA.style.backgroundColor = "#25D366"; btnWA.style.color = "#ffffff";
+                btnWA.style.border = "none"; btnWA.style.boxShadow = "0 4px 20px rgba(37, 211, 102, 0.45)";
+            } else {
+                btnWA.style.backgroundColor = "#1C1C1E"; btnWA.style.color = "#55555A";
+                btnWA.style.border = "1.5px solid var(--borde)"; btnWA.style.boxShadow = "none";
+            }
+        }
+
+        function abrirCheckoutFinal() {
+            updateBreadcrumb(3);
+            document.getElementById('agendaFlow').style.display = "none";
+            document.getElementById('checkoutFlow').style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            const fechaNorm = normalizarFecha(horarioSeleccionado.fecha);
+            const horaLimpia = extraerHoraLimpia(horarioSeleccionado.hora);
+            
+            document.getElementById('chkName').innerText = horarioSeleccionado.clientaReal.toUpperCase();
+            document.getElementById('chkDate').innerText = `${fechaNorm} a las ${horaLimpia} hs`;
+            document.getElementById('chkServices').innerText = seleccionados.map(s => s.name).join(' + ');
+            
+            const tiempoTotal = seleccionados.reduce((acc, s) => acc + s.time, 0);
+            document.getElementById('chkTime').innerText = `${tiempoTotal} minutos (🕒)`;
+            
+            const inversionTotal = seleccionados.reduce((acc, s) => acc + s.price, 0);
+            document.getElementById('chkTotal').innerText = `$${inversionTotal.toLocaleString('es-AR')}`;
+            
+            const saldoEnSalon = inversionTotal - 5000;
+            document.getElementById('chkSaldo').innerText = `$${saldoEnSalon.toLocaleString('es-AR')}`;
+            
+            const chk = document.getElementById('policy-checkbox'); chk.checked = false; validatePolicyCheck();
+        }
+
+        // FUNCION ROBUSTA DE WHATSAPP (BOTON)
+        function enviarWhatsAppReserva(e) {
+            e.preventDefault();
+            const chk = document.getElementById('policy-checkbox');
+            const box = document.getElementById('securityBox');
+            
+            if(!chk.checked) {
+                box.classList.add('error-shake'); box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(() => box.classList.remove('error-shake'), 500);
+                triggerToast("Requerido: Aceptar Protocolo"); return;
+            }
+
+            const fechaNorm = normalizarFecha(horarioSeleccionado.fecha);
+            const horaLimpia = extraerHoraLimpia(horarioSeleccionado.hora);
+            const inversionTotal = seleccionados.reduce((acc, s) => acc + s.price, 0);
+            const saldoEnSalon = inversionTotal - 5000;
+            const mimosText = seleccionados.map(s => s.name).join(' + ');
+
+            const mensajeWhatsApp = [
+                "✨ *NUEVA RESERVA - PORTAL PAI PAI BEAUTY* ✨",
+                `👤 *Clienta:* ${horarioSeleccionado.clientaReal}`,
+                `📅 *Día y Hora:* ${fechaNorm} a las ${horaLimpia} hs`,
+                `💅 *Tratamiento:* ${mimosText}`,
+                `💰 *Inversión Total:* $${inversionTotal.toLocaleString('es-AR')}`,
+                "💵 *Inversión de Reserva (Seña):* $5.000",
+                `💳 *Saldo a abonar en el salón:* $${saldoEnSalon.toLocaleString('es-AR')}`,
+                "",
+                "📍 *Ubicación:* Zona Centro · 8 de Diciembre 1111, La Rioja.",
+                "📱 _Ya realicé la transferencia de la seña, aquí adjunto el comprobante._"
+            ].join("\n");
+
+            const url = `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent(mensajeWhatsApp)}`;
+            window.open(url, '_blank');
+        }
+
+        // --- CALENDARIO INFALIBLE (.ICS LOCAL) ---
+        function descargarCalendarioICS() {
+            if(!horarioSeleccionado) { triggerToast("✦ Seleccioná un horario primero"); return; }
+            
+            try {
+                let fechaLimpia = normalizarFecha(horarioSeleccionado.fecha); 
+                let horaLimpia = extraerHoraLimpia(horarioSeleccionado.hora);
+                
+                let partesFecha = fechaLimpia.split('/');
+                let partesHora = horaLimpia.split(':');
+                
+                if(partesFecha.length !== 3 || partesHora.length < 2) {
+                    triggerToast("Formato de fecha inválido."); return;
+                }
+
+                const dia = partesFecha[0].padStart(2, '0');
+                const mes = partesFecha[1].padStart(2, '0');
+                let anio = partesFecha[2]; if (anio.length === 2) anio = "20" + anio;
+
+                const horaInicio = partesHora[0].padStart(2, '0');
+                const minInicio = partesHora[1].padStart(2, '0');
+
+                const tiempoTotalMinutos = seleccionados.reduce((acc, s) => acc + s.time, 0);
+                let totalMinutosInicio = parseInt(horaInicio) * 60 + parseInt(minInicio);
+                let totalMinutosFin = totalMinutosInicio + tiempoTotalMinutos;
+
+                let horaFin = Math.floor(totalMinutosFin / 60).toString().padStart(2, '0');
+                let minFin = (totalMinutosFin % 60).toString().padStart(2, '0');
+
+                // Formato ICS estricto (Local, sin 'Z')
+                const dtStart = `${anio}${mes}${dia}T${horaInicio}${minInicio}00`;
+                const dtEnd = `${anio}${mes}${dia}T${horaFin}${minFin}00`;
+                const mimosElegidosText = seleccionados.map(s => s.name).join(' + ');
+
+                const contenidoICS = [
+                    "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Pai Pai Beauty//Portal VIP//ES", "BEGIN:VEVENT",
+                    `UID:${Date.now()}@paipaibeauty.com`, `DTSTAMP:${dtStart}`, `DTSTART:${dtStart}`, `DTEND:${dtEnd}`,
+                    `SUMMARY:Turno en Pai Pai Beauty ✨`, `DESCRIPTION:Mimos reservados: ${mimosElegidosText}.\\n¡Te esperamos!`,
+                    "LOCATION:8 de Diciembre 1111\\, La Rioja", "BEGIN:VALARM", "ACTION:DISPLAY",
+                    "DESCRIPTION:Recordatorio de Turno Pai Pai ✨", "TRIGGER:-PT24H", "END:VALARM", "END:VEVENT", "END:VCALENDAR"
+                ].join("\r\n");
+
+                const blob = new Blob([contenidoICS], { type: "text/calendar;charset=utf-8" });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a"); link.href = url; link.download = `Turno_PaiPai_${dia}_${mes}.ics`;
+                
+                document.body.appendChild(link); link.click(); 
+                setTimeout(() => { document.body.removeChild(link); URL.revokeObjectURL(url); }, 150);
+                triggerToast("📅 Abriendo en tu Calendario...");
+            } catch (e) {
+                console.error(e); triggerToast("Hubo un error al generar el calendario.");
+            }
+        }
+
+        // --- SECCIÓN FIDELIZACIÓN ---
+        function handleSearchKeyPress(event) { if (event.key === "Enter") consultarProgreso(); }
+
+        async function consultarProgreso() {
+            const input = document.getElementById('clientNameInput').value;
+            const btn = document.getElementById('btnSelloVIP');
+            const box = document.getElementById('searchBoxVIP');
+            const soporte = document.getElementById('soporteVIP');
+            const card = document.getElementById('loyaltyCard');
+            
+            if(input.trim().length < 3) {
+                triggerToast("Ingresá un nombre válido"); box.classList.add('shake'); 
+                setTimeout(() => box.classList.remove('shake'), 500); return;
+            }
+
+            card.style.display = 'none'; btn.innerHTML = '<span class="spinner"></span> Sincronizando...'; btn.disabled = true;
+
+            try {
+                const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
+                const response = await fetch(url); const text = await response.text();
+                const filas = text.split('\n').map(f => f.split(',').map(cell => cell.replace(/^"|"$/g, '').trim()));
+                let clienta = null; const normIn = input.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+
+                for(let i = 1; i < filas.length; i++) {
+                    if(!filas[i][0]) continue;
+                    let normSheet = filas[i][0].toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+                    if(normSheet === normIn) { clienta = { nombre: filas[i][0], sellos: parseInt(filas[i][1]) || 0 }; break; }
+                }
+
+                if (!clienta) clienta = baseClientesMock.find(c => c.nombre.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim() === normIn);
+                btn.innerText = "Sincronizar Estatus"; btn.disabled = false;
+
+                if(clienta) {
+                    localStorage.setItem('lastClienteVIP', clienta.nombre);
+                    document.getElementById('displayClientName').innerText = clienta.nombre;
+                    card.style.display = 'block'; renderVipCard(clienta.sellos); soporte.style.display = 'none';
+                } else {
+                    openDialog("Miembro No Encontrado", "No encontramos coincidencia exacta. Revisá que esté idéntico o chateá con Daiana.");
+                    soporte.style.display = 'block';
+                }
+            } catch(e) {
+                btn.innerText = "Sincronizar Estatus"; btn.disabled = false; soporte.style.display = 'block';
+                openDialog("Sincronización VIP", "No pudimos conectarnos al servidor de mimos VIP de forma remota.");
+            }
+        }
+
+        function renderVipCard(sellos) {
+            const grid = document.getElementById('stampsGrid'); grid.innerHTML = "";
+            setTimeout(() => { document.getElementById('laserBar').style.width = `${Math.min(sellos * 10, 100)}%`; }, 200);
+
+            for(let i = 1; i <= 10; i++) {
+                const slot = document.createElement('div'); slot.classList.add('stamp-slot');
+                if(i === 4 || i === 8 || i === 10) { slot.classList.add('gift-slot'); slot.innerText = "🎁"; } else { slot.innerText = i; }
+                if(i <= sellos) { slot.className = "stamp-slot active"; slot.innerText = ""; }
+                grid.appendChild(slot);
+            }
+
+            const txt = document.getElementById('progressText');
+            if(sellos < 4) txt.innerHTML = `Llevás <strong>${sellos} de 10</strong> mimos.<br>¡Faltan ${4 - sellos} para tu primer Beneficio Sorpresa! 🎁`;
+            else if(sellos === 4) txt.innerHTML = `¡Hito 4 Alcanzado! 💝<br>Reclamá tu mimo sorpresa exclusivo hoy.`;
+            else if(sellos < 8) txt.innerHTML = `Llevás <strong>${sellos} de 10</strong> mimos.<br>Estás a ${8 - sellos} pasos de tu Regalo Especial Pai Pai. 🎁`;
+            else if(sellos === 8) txt.innerHTML = `¡Hito 8 Completado! 🎉<br>Tu Obsequio de marca premium está listo para retirar hoy.`;
+            else if(sellos < 10) txt.innerHTML = `Llevás <strong>${sellos} de 10</strong> visitas.<br>¡A solo ${10 - sellos} pasos del Servicio Completo GRATIS!`;
+            else { txt.innerHTML = `¡Tarjeta VIP Completa! 🌟<br>Hoy tu servicio es 100% BONIFICADO. ¡Disfrutalo!`; lanzarFiestaConfetti(); }
+        }
+
+        function compartirPortalVIP() {
+            const shareData = { title: 'Portal VIP Pai Pai', text: 'Te comparto el portal de reservas de Pai Pai Beauty. Agendá tu espacio de relajación aquí:', url: window.location.href };
+            if(navigator.share) { navigator.share(shareData); } else { copiarAlPortapapeles(window.location.href, 'btn-share-vip', "✦ Enlace copiado para compartir"); }
+        }
+
+        function lanzarFiestaConfetti() {
+            const canvas = document.getElementById('confettiCanvas'); const ctx = canvas.getContext('2d');
+            canvas.style.display = 'block'; canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            let particles = [];
+            for(let i=0; i<100; i++) {
+                particles.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height - canvas.height, r: Math.random() * 6 + 4, d: Math.random() * canvas.height, color: Math.random() > 0.5 ? '#FF1BA7' : '#FFFFFF', tilt: Math.random() * 10 - 5 });
+            }
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((p) => { ctx.beginPath(); ctx.lineWidth = p.r; ctx.strokeStyle = p.color; ctx.moveTo(p.x + p.tilt + p.r/2, p.y); ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r/2); ctx.stroke(); });
+                update();
+            }
+            function update() {
+                let active = false;
+                particles.forEach((p) => { p.y += Math.cos(p.d) + 1.5 + p.r/2; p.x += Math.sin(p.d); if(p.y < canvas.height) active = true; });
+                if(active) { requestAnimationFrame(draw); } else { canvas.style.display = 'none'; }
+            }
+            draw();
+        }
+
+        function applyRippleEffect() {
+            document.querySelectorAll('.btn-buscar, .btn-next-flow, .slot-btn, .filter-chip').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span'); ripple.classList.add('ripple-effect'); this.appendChild(ripple);
+                    const rect = this.getBoundingClientRect(); const size = Math.max(rect.width, rect.height);
+                    ripple.style.width = ripple.style.height = size + 'px'; ripple.style.left = (e.clientX - rect.left - size / 2) + 'px'; ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+                    setTimeout(() => ripple.remove(), 500);
+                });
+            });
         }
 
         window.onload = () => {
-            initSplashScreen();
-            renderCatalog();
+            initSplashScreen(); renderCatalog();
             const last = localStorage.getItem('lastClienteVIP');
             if(last) { document.getElementById('clientNameInput').value = last; }
         };
     </script>
 </body>
 </html>
+
+
