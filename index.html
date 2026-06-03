@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -136,7 +137,7 @@
 </div>
 
 <script>
-    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwN7b8cXG0f8Z3FoMoaoX4SbfkcIguBVWTB4YL1sahHkmEAc16F_igdzeYRxZaBFkKeyw/exec";
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbxalBM1IAewodQKC-y6AKvBnRhY55XPcDvCj7_VATG8FigK7sXOvkw4Gbn-CccXmG8xdg/exec";
 
     let formularioEnviado = false;
 
@@ -155,22 +156,15 @@
         cargando.classList.remove("hidden");
         errorMsg.classList.add("hidden");
 
-        // Se agrega ?callback para jsonp como fallback si fuera necesario
-        fetch(URL_SCRIPT, {
-            method: "GET",
-            mode: "cors",
-        })
+        fetch(URL_SCRIPT, { method: "GET", mode: "cors" })
         .then(respuesta => {
-            if (!respuesta.ok) {
-                throw new Error("Respuesta no válida del servidor");
-            }
+            if (!respuesta.ok) throw new Error("Respuesta no válida");
             return respuesta.json();
         })
         .then(datos => {
             cargando.classList.add("hidden");
-
             if (!datos || datos.length === 0) {
-                errorMsg.textContent = "Lo sentimos, no hay turnos disponibles por ahora. ¡Volvé a intentarlo más tarde!";
+                errorMsg.textContent = "Lo sentimos, no hay turnos disponibles por ahora. ¡Volvé más tarde!";
                 errorMsg.classList.remove("hidden");
             } else {
                 formulario.classList.remove("hidden");
