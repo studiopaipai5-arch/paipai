@@ -93,9 +93,9 @@
         }
         .hidden { display: none; }
         .loading { color: var(--fucsia); font-weight: 600; margin: 20px 0; }
-        
-        .pantalla-exito h2 { color: #2ecc71; font-family: 'League Spartan', sans-serif; font-size: 2em;}
+        .pantalla-exito h2 { color: #2ecc71; font-family: 'League Spartan', sans-serif; font-size: 2em; }
         .pantalla-exito p { color: #555; line-height: 1.6; }
+        .error-msg { color: #e74c3c; font-weight: 600; margin: 20px 0; }
     </style>
 </head>
 <body>
@@ -105,12 +105,12 @@
     <p class="subtitulo">Reserva tu momento</p>
 
     <div id="cargandoHorarios" class="loading">Buscando lugares disponibles...</div>
+    <div id="mensajeError" class="error-msg hidden"></div>
 
-    <!-- SISTEMA BLINDADO: El iframe oculto asegura que navegadores como Safari no bloqueen el envío -->
     <iframe name="iframe_oculto" id="iframe_oculto" class="hidden" onload="if(formularioEnviado){ mostrarExito(); }"></iframe>
-    
+
     <form id="formularioReserva" method="POST" target="iframe_oculto" class="hidden" onsubmit="prepararEnvio()">
-        
+
         <label for="turnoSeleccionado">1. ¿Cuándo vienes?</label>
         <select id="turnoSeleccionado" name="fila" required>
             <option value="">Selecciona fecha y hora</option>
@@ -125,7 +125,7 @@
         <label for="telefono">4. Tu WhatsApp:</label>
         <input type="tel" id="telefono" name="telefono" placeholder="Ej: 3804123456" required>
 
-        <button type="submit" class="btn" id="botonEnviar">Reservar mi lugar</button>
+        <button type="submit" class="btn" id="botonEnviar">Reservar mi lugar ✨</button>
     </form>
 
     <div id="pantallaExito" class="pantalla-exito hidden">
@@ -136,38 +136,64 @@
 </div>
 
 <script>
-    // 👇 TU URL DE GOOGLE APPS SCRIPT YA ESTÁ INTEGRADA AQUÍ 👇
-    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwN7b8cXG0f8Z3FoMoaoX4SbfkcIguBVWTB4YL1sahHkmEAc16F_igdzeYRxZaBFkKeyw/exec"; 
-    
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwN7b8cXG0f8Z3FoMoaoX4SbfkcIguBVWTB4YL1sahHkmEAc16F_igdzeYRxZaBFkKeyw/exec";
+
     let formularioEnviado = false;
 
     document.getElementById("formularioReserva").action = URL_SCRIPT;
 
     document.addEventListener("DOMContentLoaded", () => {
-        fetch(URL_SCRIPT)
-            .then(respuesta => respuesta.json())
-            .then(datos => {
-                const cargando = document.getElementById("cargandoHorarios");
-                const select = document.getElementById("turnoSeleccionado");
-                const formulario = document.getElementById("formularioReserva");
-
-                if (datos.length === 0) {
-                    cargando.textContent = "Lo sentimos, no hay turnos disponibles por ahora.";
-                } else {
-                    cargando.classList.add("hidden");
-                    formulario.classList.remove("hidden");
-                    datos.forEach(turno => {
-                        const opcion = document.createElement("option");
-                        opcion.value = turno.fila;
-                        opcion.textContent = `${turno.fecha} - ${turno.hora} hs`;
-                        select.appendChild(opcion);
-                    });
-                }
-            })
-            .catch(error => {
-                document.getElementById("cargandoHorarios").textContent = "Error al cargar la agenda. Por favor, actualiza la página.";
-            });
+        cargarTurnos();
     });
+
+    function cargarTurnos() {
+        const cargando = document.getElementById("cargandoHorarios");
+        const errorMsg = document.getElementById("mensajeError");
+        const select = document.getElementById("turnoSeleccionado");
+        const formulario = document.getElementById("formularioReserva");
+
+        cargando.classList.remove("hidden");
+        errorMsg.classList.add("hidden");
+
+        // Se agrega ?callback para jsonp como fallback si fuera necesario
+        fetch(URL_SCRIPT, {
+            method: "GET",
+            mode: "cors",
+        })
+        .then(respuesta => {
+            if (!respuesta.ok) {
+                throw new Error("Respuesta no válida del servidor");
+            }
+            return respuesta.json();
+        })
+        .then(datos => {
+            cargando.classList.add("hidden");
+
+            if (!datos || datos.length === 0) {
+                errorMsg.textContent = "Lo sentimos, no hay turnos disponibles por ahora. ¡Volvé a intentarlo más tarde!";
+                errorMsg.classList.remove("hidden");
+            } else {
+                formulario.classList.remove("hidden");
+                datos.forEach(turno => {
+                    const opcion = document.createElement("option");
+                    opcion.value = turno.fila;
+                    opcion.textContent = `${turno.fecha} - ${turno.hora} hs`;
+                    select.appendChild(opcion);
+                });
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            cargando.classList.add("hidden");
+            errorMsg.innerHTML = `
+                ⚠️ Error al cargar la agenda.<br>
+                <small style="font-weight:400; color:#888;">Revisá tu conexión o actualizá la página.</small>
+                <br><br>
+                <button class="btn" onclick="cargarTurnos()" style="margin-top:0; padding: 12px;">🔄 Reintentar</button>
+            `;
+            errorMsg.classList.remove("hidden");
+        });
+    }
 
     function prepararEnvio() {
         formularioEnviado = true;
